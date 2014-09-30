@@ -5,10 +5,12 @@
 
 	<object id="heading"  type="image/svg+xml" data="@routes.Assets.at("images/instruments/heading.svg")" width="200px" height="200px">Cannot load or display SVG image.</object>
 
+	<object id="altitude"  type="image/svg+xml" data="@routes.Assets.at("images/instruments/altitude.svg")" width="200px" height="200px">Cannot load or display SVG image.</object>
+
 	<script type="text/javascript">
 
 		window.onload = function () {
-			var frontend = new Frontend('#attitude', '#heading')
+			var frontend = new Frontend('#attitude', '#heading', '#altitude')
 			frontend.main()
 		}
 	</script>

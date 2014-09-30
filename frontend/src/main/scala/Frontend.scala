@@ -5,12 +5,14 @@ import js.annotation.JSExport
 import org.scalajs.dom
 
 @JSExport
-class Frontend(attitudeSelector: String, azimuthSelector: String) {
+class Frontend(attitudeSelector: String, azimuthSelector: String, altitudeSelector: String) {
 
   val svg = dom.document.querySelector(attitudeSelector).asInstanceOf[dom.HTMLObjectElement]
   val svg2 = dom.document.querySelector(azimuthSelector).asInstanceOf[dom.HTMLObjectElement]
   var svgDoc = svg.contentDocument;
   var svgDoc2 = svg2.contentDocument;
+  val svg3 = dom.document.querySelector(altitudeSelector).asInstanceOf[dom.HTMLObjectElement]
+  var svgDoc3 = svg3.contentDocument;
 
   @JSExport
   def main() = {
@@ -20,17 +22,22 @@ class Frontend(attitudeSelector: String, azimuthSelector: String) {
   var a = 0.0
   var r = 0.0
   var p = 0.0
+  var h = 0.0
   def foo() = {
-    a += 3
+    h += 3
     r += 0.05
     p += 0.1
+    a += 0.2
     var roll = svgDoc.getElementById("roll");
     var pitch = svgDoc.getElementById("pitch");
     pitch.setAttribute("transform", "translate(0, " + 30 * math.sin(p) + ")");
     roll.setAttribute("transform", "rotate(" + 60 * math.sin(r) + ")");
 
     var azimuth = svgDoc2.getElementById("heading");
-    azimuth.setAttribute("transform", "rotate(" + a + ")");
+    azimuth.setAttribute("transform", "rotate(" + h + ")");
+
+    var altitude = svgDoc3.getElementById("hand")
+    altitude.setAttribute("transform", "rotate(" + a + ")")
   }
 
 }
