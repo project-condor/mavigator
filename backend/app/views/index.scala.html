@@ -1,0 +1,16 @@
+@main(""){
+	<span id='ct' ></span>
+
+	<object id="attitude" type="image/svg+xml" data="@routes.Assets.at("images/instruments/attitude.svg")" width="300px" height="300px">Cannot load or display SVG image.</object>
+
+	<object id="heading"  type="image/svg+xml" data="@routes.Assets.at("images/instruments/heading.svg")" width="200px" height="200px">Cannot load or display SVG image.</object>
+
+	<script type="text/javascript">
+
+		window.onload = function () {
+			var frontend = new Frontend('#attitude', '#heading')
+			frontend.main()
+		}
+	</script>
+}
+

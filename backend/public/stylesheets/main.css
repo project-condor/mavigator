@@ -1,0 +1,66 @@
+@font-face {
+    font-family: ds-digi;
+    src: url('../fonts/ds-digi.ttf')
+}
+
+nav.side {
+    position: absolute;
+    left: 0;
+    width: 15%;
+    height: 100%;
+    background: #FFFFCC;
+    border: 1px solid #969696;
+    box-sizing: border-box;
+    -moz-box-sizing:border-box;
+}
+
+.status-table {
+    border-collapse: collapse;
+    background: #e5e5e5;
+    border: 1px solid #969696;
+    margin-right: 10px;
+}
+
+.status-table td {
+    padding: 10px;
+}
+
+
+.status {
+    font-size: 25px;
+    font-family: ds-digi;
+}
+      
+.status.error {
+    color: #ff0000;
+}
+
+.status.critical {
+    animation-name: blinker;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+
+    -webkit-animation-name: blinker;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes blinker {  /* Decimal not necessary, 0 and 1 is enough */
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+
+@-webkit-keyframes blinker {  
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
+
+@keyframes blinker {  
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
