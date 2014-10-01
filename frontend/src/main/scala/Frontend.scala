@@ -4,6 +4,13 @@ import scala.scalajs.js
 import js.annotation.JSExport
 import org.scalajs.dom
 
+class Data extends js.Object {
+  def roll: Double = ???
+  def pitch: Double = ???
+  def heading: Double = ???
+  def altitude: Double = ???
+  def temperature: Double = ???
+}
 @JSExport
 class Frontend(attitudeSelector: String, azimuthSelector: String, altitudeSelector: String) {
 
@@ -16,28 +23,21 @@ class Frontend(attitudeSelector: String, azimuthSelector: String, altitudeSelect
 
   @JSExport
   def main() = {
-    dom.setInterval(() => foo, 50)
-  }
-
-  var a = 0.0
-  var r = 0.0
-  var p = 0.0
-  var h = 0.0
-  def foo() = {
-    h += 3
-    r += 0.05
-    p += 0.1
-    a += 0.2
     var roll = svgDoc.getElementById("roll");
     var pitch = svgDoc.getElementById("pitch");
-    pitch.setAttribute("transform", "translate(0, " + 30 * math.sin(p) + ")");
-    roll.setAttribute("transform", "rotate(" + 60 * math.sin(r) + ")");
-
-    var azimuth = svgDoc2.getElementById("heading");
-    azimuth.setAttribute("transform", "rotate(" + h + ")");
-
+    var heading = svgDoc2.getElementById("heading");
     var altitude = svgDoc3.getElementById("hand")
-    altitude.setAttribute("transform", "rotate(" + a + ")")
+    
+    val connection = new dom.WebSocket("ws://localhost:9000/socket");
+
+    connection.onmessage = (e: dom.MessageEvent) => {
+      val data = js.JSON.parse(e.data.asInstanceOf[String]).asInstanceOf[Data]
+      Console.println(data.roll);
+      roll.setAttribute("transform", "rotate(" + data.roll.toDouble + ")");
+      pitch.setAttribute("transform", "translate(0, " + data.pitch.toDouble + ")");
+      heading.setAttribute("transform", "rotate(" +  data.heading.toDouble + ")");
+      altitude.setAttribute("transform", "rotate(" +  data.altitude.toDouble * 36 + ")")
+    }
   }
 
 }

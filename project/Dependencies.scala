@@ -3,8 +3,8 @@ import scala.scalajs.sbtplugin.ScalaJSPlugin._
 
 object Dependencies {
 
-  val flow = "org.github.jodersky" %% "flow" % "2.0.5"
-  val flowNative = "org.github.jodersky" % "flow-native" % "2.0.5"
+  val flow = "com.github.jodersky" %% "flow" % "2.0.4"
+  val flowNative = "com.github.jodersky" % "flow-native" % "2.0.4"
 
   val dom = "org.scala-lang.modules.scalajs" %%%! "scalajs-dom" % "0.6"
   val rx = "com.scalarx" %%%! "scalarx" % "0.2.5"
@@ -14,6 +14,6 @@ object Dependencies {
   val jquery = "org.webjars" % "jquery" % "2.1.1"
 
 
-  def backend = Seq(bootstrap, fontawesome, jquery)
+  def backend = Seq(bootstrap, fontawesome, jquery, flow, flowNative)
   def frontend = Seq(dom, rx)
 }
