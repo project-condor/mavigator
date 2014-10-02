@@ -3,6 +3,10 @@
     src: url('../fonts/ds-digi.ttf')
 }
 
+body {
+    background-color: #e6e6e6;
+}
+
 nav.side {
     position: absolute;
     left: 0;
@@ -14,17 +18,16 @@ nav.side {
     -moz-box-sizing:border-box;
 }
 
-.status-table {
+.control-table {
     border-collapse: collapse;
     background: #e5e5e5;
     border: 1px solid #969696;
     margin-right: 10px;
 }
 
-.status-table td {
+.control-table td {
     padding: 10px;
 }
-
 
 .status {
     font-size: 25px;
@@ -33,6 +36,15 @@ nav.side {
       
 .status.error {
     color: #ff0000;
+    animation-name: blinker;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+
+    -webkit-animation-name: blinker;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
 }
 
 .status.critical {
