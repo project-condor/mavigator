@@ -31,8 +31,9 @@ class Frontend(attitudeSelector: String, azimuthSelector: String, altitudeSelect
     val connection = new dom.WebSocket("ws://localhost:9000/socket");
 
     connection.onmessage = (e: dom.MessageEvent) => {
+      Console.println(e.data);
       val data = js.JSON.parse(e.data.asInstanceOf[String]).asInstanceOf[Data]
-      Console.println(data.roll);
+      
       roll.setAttribute("transform", "rotate(" + data.roll.toDouble + ")");
       pitch.setAttribute("transform", "translate(0, " + data.pitch.toDouble + ")");
       heading.setAttribute("transform", "rotate(" +  data.heading.toDouble + ")");
