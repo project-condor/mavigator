@@ -40,10 +40,12 @@ object ApplicationBuild extends Build {
     enablePlugins(PlayScala)
     settings(common: _*)
     settings(
+      resolvers += Resolver.url("scala-js-releases", url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(Resolver.ivyStylePatterns),
       libraryDependencies ++= Seq(
         bootstrap,
         fontawesome,
-        jquery
+        jquery,
+        picklingPlay
       )
     )
     dependsOn(uav)
@@ -57,7 +59,8 @@ object ApplicationBuild extends Build {
     settings(
       libraryDependencies ++= Seq(
         rx,
-        dom
+        dom,
+        pickling
       )
     )
   )
