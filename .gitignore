@@ -17,6 +17,9 @@ project/plugins/project/
 /.cache
 /.history
 
+# ensime
+.ensime
+
 # general files
 /*.jar
 *.swp
