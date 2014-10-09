@@ -25,7 +25,7 @@ package object util {
         }
         outFiles
       }.taskValue,
-      playMonitoredFiles ++= (watchSources in reference).value.map(_.getCanonicalPath)
+      playMonitoredFiles += (scalaSource in (reference, Compile)).value.getCanonicalPath
     )
   }
 

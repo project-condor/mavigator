@@ -14,19 +14,19 @@ import plugins.UavPlugin
 
 object Application extends Controller {
 
+  implicit val dataFrameFormat = spicklerFormat[DataFrame]
+  implicit val dataFrameFormatter = FrameFormatter.jsonFrame[DataFrame]
+
   def use[A <: Plugin](implicit app: Application, m: Manifest[A]) = {
     app.plugin[A].getOrElse(throw new RuntimeException(m.runtimeClass.toString + " plugin should be available at this point"))
   }
 
-  def index() = Action {
-    Ok(views.html.index())
+  def index = Action { implicit request =>
+    Ok(views.html.index(routes.Application.socket.webSocketURL()))
   }
 
-  
-  implicit val dataFrameFormat = spicklerFormat[DataFrame]
-  implicit val dataFrameFormatter = FrameFormatter.jsonFrame[DataFrame]
 
-  def socket = WebSocket.acceptWithActor[String, DataFrame] { request =>
+  def socket = WebSocket.acceptWithActor[String, DataFrame] { implicit request =>
     out => use[UavPlugin].register(out)
   }
 }

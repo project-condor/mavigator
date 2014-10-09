@@ -60,6 +60,7 @@ object ApplicationBuild extends Build {
       libraryDependencies ++= Seq(
         rx,
         dom,
+        tag,
         pickling
       )
     )

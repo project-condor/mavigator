@@ -20,17 +20,17 @@
      id="defs4">
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath3341">
+       id="clipPath3999">
       <path
-         sodipodi:type="arc"
-         style="fill:#00ff00;fill-opacity:1;stroke:none"
-         id="path3343"
-         sodipodi:cx="55"
-         sodipodi:cy="55"
-         sodipodi:rx="50"
-         sodipodi:ry="50"
+         transform="translate(-55,-55)"
          d="M 105,55 A 50,50 0 1 1 5,55 50,50 0 1 1 105,55 z"
-         transform="translate(-55,-55)" />
+         sodipodi:ry="50"
+         sodipodi:rx="50"
+         sodipodi:cy="55"
+         sodipodi:cx="55"
+         id="path4002"
+         style="fill:#00ff00;fill-opacity:1;stroke:none"
+         sodipodi:type="arc" />
     </clipPath>
   </defs>
   <sodipodi:namedview
@@ -40,9 +40,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568542"
-     inkscape:cx="116.6015"
-     inkscape:cy="56.323079"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="-34.071266"
+     inkscape:cy="22.322089"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -87,7 +87,7 @@
      id="layer1">
     <g
        id="roll"
-       clip-path="url(#clipPath3341)">
+       clip-path="url(#clipPath3999)">
       <g
          id="pitch">
         <rect
@@ -353,6 +353,37 @@
              id="tspan3974"
              x="-21.544434"
              y="-28.301392">30</tspan></text>
+        <g
+           id="runway">
+          <path
+             inkscape:transform-center-x="-25"
+             inkscape:transform-center-y="43.30127"
+             inkscape:connector-curvature="0"
+             id="path3046"
+             d="M 50,86.60254 0,0"
+             style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.16695975;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+          <path
+             style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.16695975;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+             d="M 86.60254,50 0,0"
+             id="path3977"
+             inkscape:connector-curvature="0"
+             inkscape:transform-center-y="25"
+             inkscape:transform-center-x="-43.30127" />
+          <path
+             inkscape:transform-center-x="25"
+             style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.16695975;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+             d="M -50,86.60254 1.2675457e-8,-4.7305491e-8"
+             id="path3979"
+             inkscape:connector-curvature="0"
+             inkscape:transform-center-y="43.30127" />
+          <path
+             inkscape:transform-center-y="25"
+             inkscape:connector-curvature="0"
+             id="path3981"
+             d="M -86.60254,50 2.3652725e-8,-4.0967757e-8"
+             style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.16695975;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+             inkscape:transform-center-x="43.30127" />
+        </g>
       </g>
       <path
          sodipodi:type="star"

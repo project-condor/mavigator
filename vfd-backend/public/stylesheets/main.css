@@ -3,6 +3,14 @@
     src: url('../fonts/ds-digi.ttf')
 }
 
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+}
+
 body {
     background-color: #e6e6e6;
 }

@@ -9,17 +9,14 @@ class DummyConnection extends Actor with Connection {
   import context._
 
   var time = 0.0
-  val messageInterval = FiniteDuration(20, MILLISECONDS)
+  val messageInterval = FiniteDuration(50, MILLISECONDS)
 
   def flightData(time: Double) = {
-    val speed = 5.0 / 1000
-    val roll = 5.0/180*math.Pi
-    val pitch = 10.0/180*math.Pi
     Connection.NewDataFrame(DataFrame(
-      roll,
-      pitch,
-      (roll * time * speed) % math.Pi,
-      (pitch * time * speed),
+      math.sin(time/6000) * math.Pi,
+      math.sin(time/5050) * math.Pi/4,
+      time/5000 * 2 * math.Pi,
+      time/1000,
       22
     ))
   }
