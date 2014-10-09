@@ -1,9 +1,6 @@
 package vfd.frontend
 
-
 import scala.scalajs.js
-import js.annotation.JSExport
-
 import org.scalajs.dom
 import org.scalajs.spickling._
 import org.scalajs.spickling.jsany._
@@ -16,15 +13,10 @@ import vfd.frontend.ui._
 import vfd.frontend.util.Application
 import vfd.uav.DataFrame
 
-@JSExport
-class Frontend(rootId: String, assetsBase: String, socketUrl: String) {
-
-  lazy val root = dom.document.getElementById(rootId)
-  implicit lazy val app = new Application(root, assetsBase)
+class Frontend(socketUrl: String)(implicit app: Application) {
 
   PicklerRegistry.register[vfd.uav.DataFrame]
   
-  @JSExport
   def main() = {
     val connection = new dom.WebSocket(socketUrl);
     val input: Var[DataFrame] = Var(DataFrame(0,0,0,0,0))
@@ -70,8 +62,7 @@ class Frontend(rootId: String, assetsBase: String, socketUrl: String) {
       )
     )
 
-    root.appendChild(element.render)
-
+    app.root.appendChild(element.render)
   }
 
  
