@@ -79,6 +79,12 @@ object Panels {
         td("")
       ),
       tr(
+        td("Full Charge"),
+        td("5.000"),
+        td("Ah"),
+        td()
+      ),
+      tr(
         td("Charge"),
         td("4.800"),
         td("Ah"),
@@ -105,12 +111,16 @@ object Panels {
     )
   }
 
-  def autopilot = div(`class` := "btn-group")(
-    button(`type`:="button", `class`:="btn btn-default")("Auto"),
-    button(`type`:="button", `class`:="btn btn-default")("Position"),
-    button(`type`:="button", `class`:="btn btn-default")("Attitude"),
-    button(`type`:="button", `class`:="btn btn-default")(
-      span(`class`:="label label-default")("Manual")
+  def autopilot = div(`class` := "btn-toolbar")(
+    div(`class`:="btn-group")(
+      button(`type`:="button", `class`:="btn btn-default")("Auto"),
+      button(`type`:="button", `class`:="btn btn-default")("Position"),
+      button(`type`:="button", `class`:="btn btn-default")("Attitude")
+    ),
+    div(`class`:="btn-group")(
+      button(`type`:="button", `class`:="btn btn-default")(
+        span(`class`:="label label-default")("Manual")
+      )
     )
   )
 }
