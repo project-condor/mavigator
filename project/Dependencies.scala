@@ -15,8 +15,5 @@ object Dependencies {
   val dom = "org.scala-lang.modules.scalajs" %%%! "scalajs-dom" % "0.6"
   val tag = "com.scalatags" %%%! "scalatags" % "0.4.1"
   val rx = "com.scalarx" %%%! "scalarx" % "0.2.6"
-  val pickling = "org.scalajs" %%%! "scalajs-pickling" % "0.3.1"
-  val picklingPlay = "org.scalajs" %% "scalajs-pickling-play-json" % "0.3.1"
-
-
+  
 }

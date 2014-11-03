@@ -1,32 +1,37 @@
 import sbt._
-import sbt.Keys._
-import play._
-import play.PlayImport.PlayKeys._
-import scala.scalajs.sbtplugin.ScalaJSPlugin
-import scala.scalajs.sbtplugin.ScalaJSPlugin.ScalaJSKeys._
+import Keys._
+import play.Play._
+import scala.scalajs.sbtplugin.ScalaJSPlugin._
+import ScalaJSKeys._
+import com.typesafe.sbt.packager.universal.UniversalKeys
 
-package object util {
+package object util extends UniversalKeys {
+
+  val scalajsOutputDir = Def.settingKey[File]("directory for javascript files output by scalajs")
+
 
   implicit class ScalaJSPlayProject(val project: Project) {
-    def dependsOnJs(reference: Project): Project = project.settings(
-      resourceGenerators in Compile += Def.task{
-        val outDir: File = (resourceManaged in Compile).value / "public" / "lib"
 
-        val optimized: Seq[File] = (fastOptJS in (reference, Compile)).value.allCode.map(_.path).map(file(_))
+    private def copySourceMapsTask(scalajs: Project) = Def.task {
+      val scalaFiles = (Seq(scalajs.base) ** ("*.scala")).get
+      for (scalaFile <- scalaFiles) {
+        val target = new File((classDirectory in Compile).value, scalaFile.getPath)
+        IO.copyFile(scalaFile, target)
+      }
+    }
 
-        val outFiles = optimized.map(file => outDir / file.name)
-
-        for ((opt, out) <- optimized zip outFiles) {
-          if (!out.exists || out.lastModified < opt.lastModified) {
-            IO.copyFile(opt, out, true)
-            val map = opt.getParentFile / (out.name + ".map")
-            IO.copyFile(map, outDir / map.name)
-          }
-        }
-        outFiles
-      }.taskValue,
-      playMonitoredFiles += (scalaSource in (reference, Compile)).value.getCanonicalPath
+    def dependsOnJs(scalajs: Project): Project = project.settings(
+      scalajsOutputDir := (classDirectory in Compile).value / "public" / "lib",
+      compile in Compile <<= (compile in Compile) dependsOn (fastOptJS in (scalajs, Compile)) dependsOn copySourceMapsTask(scalajs),
+      dist <<= dist dependsOn (fullOptJS in (scalajs, Compile)),
+      stage <<= stage dependsOn (fullOptJS in (scalajs, Compile))
+    ).settings(
+      // ask scalajs project to put its outputs in scalajsOutputDir
+      Seq(packageLauncher, fastOptJS, fullOptJS) map { packageJSKey =>
+        crossTarget in (scalajs, Compile, packageJSKey) := scalajsOutputDir.value
+      } : _*
     )
+
   }
 
 }

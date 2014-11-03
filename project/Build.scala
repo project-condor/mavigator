@@ -11,10 +11,8 @@ import Dependencies._
 object ApplicationBuild extends Build {
 
   val common = Seq(
-    scalaVersion := "2.11.2",
-    scalacOptions ++= Seq("-feature"),
-    unmanagedSourceDirectories in Compile += (baseDirectory in ThisBuild).value / "vfd-shared" / "src" / "main" / "scala",
-    unmanagedResourceDirectories in Compile += (baseDirectory in ThisBuild).value / "vfd-shared" / "src" / "main" / "resources"
+    scalaVersion := "2.11.4",
+    scalacOptions ++= Seq("-feature", "-deprecation")
   )
 
   lazy val root = Project("root", file(".")).aggregate(
@@ -40,12 +38,12 @@ object ApplicationBuild extends Build {
     enablePlugins(PlayScala)
     settings(common: _*)
     settings(
+      relativeSourceMaps := true,
       resolvers += Resolver.url("scala-js-releases", url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(Resolver.ivyStylePatterns),
       libraryDependencies ++= Seq(
         bootstrap,
         fontawesome,
-        jquery,
-        picklingPlay
+        jquery
       )
     )
     dependsOn(uav)
@@ -60,8 +58,7 @@ object ApplicationBuild extends Build {
       libraryDependencies ++= Seq(
         rx,
         dom,
-        tag,
-        pickling
+        tag
       )
     )
   )
