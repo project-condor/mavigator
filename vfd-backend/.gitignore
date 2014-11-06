@@ -23,3 +23,4 @@ project/plugins/project/
 *.class
 *.log
 *~
+/bin/

@@ -1,14 +1,26 @@
 package vfd.frontend.util
 
-import scala.collection.{SortedMap, mutable}
-import scalatags.JsDom.all._
-import scala.util.{Failure, Success, Random}
-import rx._
-import rx.core.{Propagator, Obs}
-import org.scalajs.dom
-import org.scalajs.dom.{Element, DOMParser}
-import scala.scalajs.js
 import scala.language.implicitConversions
+import scala.util.Failure
+import scala.util.Success
+
+import org.scalajs.dom
+import org.scalajs.dom.Element
+
+import rx.Rx
+import rx.Rx
+import rx.core.Obs
+import scalatags.JsDom.all.Attr
+import scalatags.JsDom.all.AttrValue
+import scalatags.JsDom.all.Frag
+import scalatags.JsDom.all.HtmlTag
+import scalatags.JsDom.all.Style
+import scalatags.JsDom.all.backgroundColor
+import scalatags.JsDom.all.bindNode
+import scalatags.JsDom.all.span
+import scalatags.JsDom.all.stringFrag
+import scalatags.JsDom.all.stringStyle
+import scalatags.JsDom.all.StyleValue
 
 /**
  * A minimal binding between Scala.Rx and Scalatags and Scala-Js-Dom
@@ -36,7 +48,7 @@ object Framework {
       case Failure(e) => span(e.toString, backgroundColor := "red").render
     }
     var last = rSafe
-    Obs(r, skipInitial = true){
+    Obs(r, skipInitial = true) {
       val newLast = rSafe
       last.parentElement.replaceChild(newLast, last)
       last = newLast
@@ -44,15 +56,15 @@ object Framework {
     bindNode(last)
   }
 
-  implicit def RxAttrValue[T: AttrValue] = new AttrValue[Rx[T]]{
+  implicit def RxAttrValue[T: AttrValue] = new AttrValue[Rx[T]] {
     def apply(t: Element, a: Attr, r: Rx[T]): Unit = {
-      Obs(r){ implicitly[AttrValue[T]].apply(t, a, r())}
+      Obs(r) { implicitly[AttrValue[T]].apply(t, a, r()) }
     }
   }
 
-  implicit def RxStyleValue[T: StyleValue] = new StyleValue[Rx[T]]{
+  implicit def RxStyleValue[T: StyleValue] = new StyleValue[Rx[T]] {
     def apply(t: Element, s: Style, r: Rx[T]): Unit = {
-      Obs(r){ implicitly[StyleValue[T]].apply(t, s, r())}
+      Obs(r) { implicitly[StyleValue[T]].apply(t, s, r()) }
     }
   }
 }

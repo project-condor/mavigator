@@ -1,0 +1,19 @@
+<classpath>
+  <classpathentry kind="src" path="src/main/scala" output="target/scala-2.11/classes"/>
+  <classpathentry kind="src" path="src/main/java" output="target/scala-2.11/classes"/>
+  <classpathentry kind="src" path="src/test/scala" output="target/scala-2.11/test-classes"/>
+  <classpathentry kind="src" path="src/test/java" output="target/scala-2.11/test-classes"/>
+  <classpathentry kind="src" path="-home-jakob-quadcopter-vfd-vfd-mavlink-src-main-scala" output="target/scala-2.11/classes"/>
+  <classpathentry kind="lib" path="/home/jakob/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.4.jar"/>
+  <classpathentry kind="lib" path="/home/jakob/.ivy2/cache/com.typesafe.akka/akka-actor_2.11/jars/akka-actor_2.11-2.3.6.jar"/>
+  <classpathentry kind="lib" path="/home/jakob/.ivy2/cache/com.typesafe/config/bundles/config-1.2.1.jar"/>
+  <classpathentry kind="lib" path="/home/jakob/.ivy2/cache/com.github.jodersky/flow_2.11/jars/flow_2.11-2.0.6.jar"/>
+  <classpathentry kind="lib" path="/home/jakob/.ivy2/cache/com.github.scala-incubator.io/scala-io-core_2.11/jars/scala-io-core_2.11-0.4.3.jar"/>
+  <classpathentry kind="lib" path="/home/jakob/.ivy2/cache/org.scala-lang.modules/scala-parser-combinators_2.11/bundles/scala-parser-combinators_2.11-1.0.1.jar"/>
+  <classpathentry kind="lib" path="/home/jakob/.ivy2/cache/com.madgag/scala-arm_2.11/jars/scala-arm_2.11-1.3.3.jar"/>
+  <classpathentry kind="lib" path="/home/jakob/.ivy2/cache/org.scala-lang.plugins/scala-continuations-library_2.11/bundles/scala-continuations-library_2.11-1.0.1.jar"/>
+  <classpathentry kind="lib" path="/home/jakob/.ivy2/cache/com.github.scala-incubator.io/scala-io-file_2.11/jars/scala-io-file_2.11-0.4.3.jar"/>
+  <classpathentry kind="lib" path="/home/jakob/.ivy2/cache/com.github.jodersky/flow-native/jars/flow-native-2.0.6.jar"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="output" path="bin"/>
+</classpath>

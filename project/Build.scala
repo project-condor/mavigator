@@ -10,9 +10,15 @@ import Dependencies._
 
 object ApplicationBuild extends Build {
 
+  //settings common to all projects
   val common = Seq(
     scalaVersion := "2.11.4",
     scalacOptions ++= Seq("-feature", "-deprecation")
+  )
+
+  //settings for js/jvm projects using shared sources
+  val shared = Seq(
+    unmanagedSourceDirectories in Compile += (scalaSource in (mavlink, Compile)).value
   )
 
   lazy val root = Project("root", file(".")).aggregate(
@@ -21,9 +27,14 @@ object ApplicationBuild extends Build {
     frontend
   )
 
+  lazy val mavlink = (
+    Project("vfd-mavlink", file("vfd-mavlink"))
+  )
+
   lazy val uav = (
     Project("vfd-uav", file("vfd-uav"))
     settings(common: _*)
+    settings(shared: _*)
     settings(
       libraryDependencies ++= Seq(
         akkaActor,
@@ -38,7 +49,6 @@ object ApplicationBuild extends Build {
     enablePlugins(PlayScala)
     settings(common: _*)
     settings(
-      relativeSourceMaps := true,
       resolvers += Resolver.url("scala-js-releases", url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(Resolver.ivyStylePatterns),
       libraryDependencies ++= Seq(
         bootstrap,
@@ -54,6 +64,7 @@ object ApplicationBuild extends Build {
     Project("vfd-frontend", file("vfd-frontend"))
     settings(ScalaJSPlugin.scalaJSSettings: _*)
     settings(common: _*)
+    settings(shared: _*)
     settings(
       libraryDependencies ++= Seq(
         rx,
