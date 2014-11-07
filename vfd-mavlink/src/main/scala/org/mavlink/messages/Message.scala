@@ -1,16 +1,8 @@
 package org.mavlink.messages
 
-trait Message {}
+import org.mavlink.PayloadReader
+import org.mavlink.Packet
+import org.mavlink.PayloadBuilder
 
-case class Heartbeat(
-  `type`: Int,
-  autopilot: Int,
-  baseMode: Int,
-  customMode: Int,
-  systemStatus: Int,
-  mavlinkVersion: Int
-) extends Message
-
-object Message {
-
-}
+trait Message
+  

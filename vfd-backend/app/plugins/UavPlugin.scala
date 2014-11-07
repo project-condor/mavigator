@@ -8,8 +8,8 @@ import play.api.Application
 import play.api.Plugin
 import play.api.libs.concurrent.Akka
 import vfd.uav.Connection
-import vfd.uav.DummyConnection
 import vfd.uav.SerialConnection
+import vfd.uav.MockConnection
 
 class UavPlugin(app: Application) extends Plugin {
 
@@ -25,7 +25,7 @@ class UavPlugin(app: Application) extends Plugin {
 
     val props = tpe match {
       case "mock" =>
-        DummyConnection.apply
+        MockConnection.apply
 
       case "serial" =>
         val serial = config.flatMap(_.getConfig("serial"))
@@ -55,11 +55,7 @@ class Repeater(out: ActorRef, connection: ActorRef) extends Actor {
   }
 
   def receive = {
-    case msg =>
-      if (sender == connection)
-        out ! msg
-      else
-        connection ! msg
+    case Connection.Received(bytes) => out ! bytes
   }
 
 }

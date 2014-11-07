@@ -16,9 +16,15 @@ object Parser {
     case object GotCrc1 extends State
     case object GotPayload extends State
   }
+  
+  object ParseErrors {
+    sealed trait ParseError
+    case object CrcError extends ParseError
+    case object OverflowError extends ParseError
+  }
 }
 
-class Parser(receiver: Packet => Unit, crcErrorReceiver: () => Unit) {
+class Parser(receiver: Packet => Unit, error: Parser.ParseErrors.ParseError => Unit) {
   import Parser._
 
   private var state: ParseStates.State = ParseStates.Idle
@@ -43,6 +49,7 @@ class Parser(receiver: Packet => Unit, crcErrorReceiver: () => Unit) {
         }
 
       case GotStx =>
+        inbound.crc = new Crc()
         inbound.length = (c & 0xff)
         inbound.crc = inbound.crc.next(c)
         state = GotLength
@@ -75,6 +82,10 @@ class Parser(receiver: Packet => Unit, crcErrorReceiver: () => Unit) {
       case GotMsgId =>
         inbound.payload += c
         inbound.crc = inbound.crc.next(c)
+        if(inbound.payload.length >= Packet.MaxPayloadLength) {
+          state = Idle
+          error(ParseErrors.OverflowError)
+        }
         if (inbound.payload.length >= inbound.length) {
           state = GotPayload
         }
@@ -86,8 +97,7 @@ class Parser(receiver: Packet => Unit, crcErrorReceiver: () => Unit) {
           if (c == Packet.Stx) {
             state = GotStx
           }
-          inbound.crc = new Crc()
-          crcErrorReceiver()
+          error(ParseErrors.CrcError)
         } else {
           state = GotCrc1
         }
@@ -98,8 +108,7 @@ class Parser(receiver: Packet => Unit, crcErrorReceiver: () => Unit) {
           if (c == Packet.Stx) {
             state = GotStx
           }
-          inbound.crc = new Crc()
-          crcErrorReceiver()
+          error(ParseErrors.CrcError)
         } else {
           val packet = Packet(
             inbound.seq,
@@ -108,7 +117,6 @@ class Parser(receiver: Packet => Unit, crcErrorReceiver: () => Unit) {
             inbound.messageId,
             inbound.payload)
           state = Idle
-          inbound.crc = new Crc()
           inbound.payload = new ArrayBuffer[Byte]()
           receiver(packet)
         }

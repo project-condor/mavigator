@@ -4,21 +4,33 @@ import scala.scalajs.js.annotation.JSExport
 
 import org.scalajs.dom
 
-import vfd.frontend.util.Application
+import vfd.frontend.util.Environment
 
 @JSExport
-class Launcher {
+class Launcher(rootId: String, assetsBase: String) {
+
+  lazy val env = new Environment {
+    val root = dom.document.getElementById(rootId)
+    def asset(file: String) = assetsBase + "/" + file
+  }
 
   @JSExport
-  def launch(rootId: String, assetsBase: String, mavlinkSocketUrl: String) = {
-    val root = dom.document.getElementById(rootId)
-    val app = new Application(root, assetsBase)
-    val frontend = new Main(mavlinkSocketUrl)(app)
+  def main() = {
+    import env._
 
-    while (root.hasChildNodes) {
-      root.removeChild(root.firstChild)
+    val args: Seq[(String, String)] = for (
+      i <- 0 until root.attributes.length;
+      attr = root.attributes.item(i);
+      if attr.name.startsWith("data-")
+    ) yield {
+      attr.name.drop(5) -> attr.value
     }
-    frontend.main()
+
+    while (env.root.hasChildNodes) {
+      env.root.removeChild(env.root.firstChild)
+    }
+    
+    Main.main(args.toMap)(env)
   }
 
 }

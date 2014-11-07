@@ -15,11 +15,11 @@ import scalatags.JsDom.all.stringStyle
 import scalatags.JsDom.all.style
 import scalatags.JsDom.all.`type`
 import scalatags.JsDom.all.width
-import vfd.frontend.util.Application
+import vfd.frontend.util.Environment
 
 object Components {
 
-  def led(color: Rx[String], size: String)(implicit app: Application) = {
+  def led(color: Rx[String], size: String)(implicit app: Environment) = {
     val elem = `object`(`type` := "image/svg+xml", "data".attr := app.asset("leds/led.svg"), width := size)(
       "Error loading image.").render
 
@@ -30,7 +30,7 @@ object Components {
     elem
   }
 
-  private def instrument(name: String)(implicit app: Application) = {
+  private def instrument(name: String)(implicit app: Environment) = {
     val path = app.asset("images/instruments/" + name + ".svg")
     `object`(`type` := "image/svg+xml", "data".attr := path, width := "100%")(
       "Error loading image " + name).render
@@ -41,7 +41,7 @@ object Components {
       elem)
   }
 
-  def attitude(pitchRoll: Rx[(Double, Double)], size: String)(implicit app: Application) = {
+  def attitude(pitchRoll: Rx[(Double, Double)], size: String)(implicit app: Environment) = {
     val inst = instrument("attitude")
     Obs(pitchRoll, skipInitial = true) {
       val svg = inst.contentDocument
@@ -53,7 +53,7 @@ object Components {
     frame(inst, size)
   }
 
-  def altitude(value: Rx[Double], size: String)(implicit app: Application) = {
+  def altitude(value: Rx[Double], size: String)(implicit app: Environment) = {
     val inst = instrument("altitude")
     Obs(value, skipInitial = true) {
       val svg = inst.contentDocument
@@ -63,7 +63,7 @@ object Components {
     frame(inst, size)
   }
 
-  def heading(value: Rx[Double], size: String)(implicit app: Application) = {
+  def heading(value: Rx[Double], size: String)(implicit app: Environment) = {
     val inst = instrument("heading")
     Obs(value, skipInitial = true) {
       val svg = inst.contentDocument

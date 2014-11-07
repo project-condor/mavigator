@@ -1,0 +1,27 @@
+@(socket: String, remoteSystemId: Int)
+
+@main("Main", "Remote System " + remoteSystemId){
+
+	<div id="scalajsError" class="alert alert-danger" style="display: none;">
+		<strong><i class="fa fa-bug"></i> Warning: an uncaught error occurred in the display software!</strong> Any visible information may be
+		corrupt. The error was: "<span id="scalajsErrorMessage"></span>"
+	</div>
+
+	<div id="app" data-socketUrl="@socket" data-remoteSystemId="@remoteSystemId.toString">
+		Loading...
+	</div>
+
+	<script type="text/javascript">
+		window.onload = function () {
+			try {
+				var launcher = new Launcher('app', '@routes.Assets.at("")');
+				launcher.main();
+			} catch(err) {
+				document.getElementById("scalajsError").style.display = "block";
+				document.getElementById("scalajsErrorMessage").innerHTML = err;
+				console.log(err)
+			}
+		}
+	</script>
+}
+

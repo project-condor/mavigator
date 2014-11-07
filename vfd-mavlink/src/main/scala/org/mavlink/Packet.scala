@@ -39,6 +39,7 @@ case class Packet(
 object Packet {
 
   final val Stx: Byte = (0xfe).toByte;
+  final val MaxPayloadLength: Int = 255 
 
   final val MessageIdCrcEnds: Seq[Byte] = Array(
      50, 124, 137,   0, 237, 217, 104, 119,   0,   0,
