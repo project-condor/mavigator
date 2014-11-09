@@ -3,8 +3,11 @@
 @main("Main", "Remote System " + remoteSystemId){
 
 	<div id="scalajsError" class="alert alert-danger" style="display: none;">
-		<strong><i class="fa fa-bug"></i> Warning: an uncaught error occurred in the display software!</strong> Any visible information may be
-		corrupt. The error was: "<span id="scalajsErrorMessage"></span>"
+		<p><strong><i class="fa fa-bug"></i> Error! </strong> An uncaught exception occurred in the browser application,
+		any information displayed on this website may be corrupt. This is NOT an error that should occur under normal
+		operation, it is an indication of a bug in the software.</p>
+		<p>The error was: "<span id="scalajsErrorMessage"></span>"
+		</p>
 	</div>
 
 	<div id="app" data-socketUrl="@socket" data-remoteSystemId="@remoteSystemId.toString">

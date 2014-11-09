@@ -1,73 +1,95 @@
 package vfd.uav
 
+import java.util.concurrent.TimeUnit.MILLISECONDS
+
+import scala.concurrent.duration.FiniteDuration
+
 import com.github.jodersky.flow.Parity
+import com.github.jodersky.flow.Serial
 import com.github.jodersky.flow.SerialSettings
 
 import akka.actor.Actor
+import akka.actor.ActorRef
 import akka.actor.Props
+import akka.actor.Terminated
+import akka.actor.actorRef2Scala
+import akka.io.IO
+import akka.util.ByteString
 
-class SerialConnection(id: Byte, heartbeat: Int, port: String, settings: SerialSettings) extends Actor with Connection {
+class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String, settings: SerialSettings) extends Actor with Connection {
   import context._
-  
-  //TODO implement actor logic
 
-  def receive = {
-    case _ => ()
-  }
-/*
+  val Heartbeat = ByteString(
+    Array(-2, 9, -121, 20, -56, 0, 0, 0, 0, 0, 2, 0, 0, 3, 3, -112, 76).map(_.toByte))
+
   override def preStart() = {
-    context.system.scheduler.schedule(messageInterval, messageInterval){
-      self ! Connection.Write(Array(-2, 9, -121, 20, -56, 0, 0, 0, 0, 0, 2, 0, 0, 3, 3, -112, 76).map(_.toByte))
+    heartbeat foreach { interval =>
+      context.system.scheduler.schedule(interval, interval, self, Connection.Send(Heartbeat))
     }
   }
 
+  def _closed: Receive = {
 
-  def receive = closed
-
-  def closed: Receive = {
-    case Connection.Register(client) => 
-      register(client)
-      IO(Serial) ! Open(port, settings)
+    case Connection.Register =>
+      register(sender)
+      IO(Serial) ! Serial.Open(port, settings)
       context become opening
 
-    case Terminated(client) if (clients contains client) => unregister(client)
-
-    case Connection.Write(data) =>
-      IO(Serial) ! Open(port, settings)
+    case Connection.Send(_) =>
+      IO(Serial) ! Serial.Open(port, settings)
       context become opening
 
   }
 
-  def opening: Receive = {
-    case Connection.Register(client) => register(client)
-    case Terminated(client) if (clients contains client) => unregister(client)
-
-    case Connection.Write(data) =>
+  def _opening: Receive = {
 
     case Serial.CommandFailed(cmd: Serial.Open, reason) =>
-      Log(reason)
-      //for (c <- clients) client ! Error //TODO send proper error code
+      sendAll(Connection.Closed(reason.toString))
       context become closed
 
-    case Serial.Opened(settings) =>
-      val operator = sender
-      context watch operator
-      context become open(operator)
+    case Serial.Opened(_) =>
+      context watch (sender)
+      context become opened(sender)
+
+    case Connection.Send(_) => () // ignore
+      /*
+    	 * During opening, any outgoing messages are discarded.
+       * By using some kind of message stashing, maybe messages could be treated
+       * once the port has been opened. However, in such a case failure also needs
+       * to be considered complicating the protocol. Since opening is typically
+       * quite fast and since mavlink uses heartbeats and acknowledgements (in certain
+       * circumstances) anyway, keeping messages is not really required.  
+       */
 
   }
 
-  def open(operator: ActorRef): Receive = {
-    case Terminated(`operator`) => 
-      //for (client <- clients) ! Error //TODO send error code
+  def _opened(operator: ActorRef): Receive = {
+
+    case Terminated(`operator`) =>
+      sendAll(Connection.Closed("Serial connection crashed."))
       context become closed
 
-    case Connection.Write(data) => operator ! ByteString(data)
+    case Serial.Closed =>
+      sendAll(Connection.Closed("Serial connection was closed."))
+      context become closed
+
+    case Serial.Received(bstr) =>
+      sendAll(Connection.Received(bstr))
+
+    case Connection.Send(bstr) =>
+      operator ! Serial.Write(bstr)
+
   }
-*/
+
+  def receive = closed
+  def closed = _closed orElse registration
+  def opening = _opening orElse registration
+  def opened(op: ActorRef) = _opened(op) orElse registration
+
 }
 
 object SerialConnection {
-  def apply(id: Byte, hearbeat: Int, port: String, baud: Int, tsb: Boolean, parity: Int) = {
+  def apply(id: Byte, heartbeat: Int, port: String, baud: Int, tsb: Boolean, parity: Int) = {
     val settings = SerialSettings(
       baud,
       8,
@@ -76,8 +98,9 @@ object SerialConnection {
         case 0 => Parity.None
         case 1 => Parity.Odd
         case 2 => Parity.Even
-      }
-    )
-    Props(classOf[SerialConnection], id, hearbeat, port, settings)
+      })
+    val hb = if (heartbeat == 0) None else Some(FiniteDuration(heartbeat, MILLISECONDS))
+
+    Props(classOf[SerialConnection], id, hb, port, settings)
   }
 }

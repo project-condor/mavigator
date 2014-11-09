@@ -1,6 +1,7 @@
 package plugins
 
 import akka.actor.Actor
+import akka.actor.ActorLogging
 import akka.actor.ActorRef
 import akka.actor.Props
 import akka.actor.actorRef2Scala
@@ -8,8 +9,8 @@ import play.api.Application
 import play.api.Plugin
 import play.api.libs.concurrent.Akka
 import vfd.uav.Connection
-import vfd.uav.SerialConnection
 import vfd.uav.MockConnection
+import vfd.uav.SerialConnection
 
 class UavPlugin(app: Application) extends Plugin {
 
@@ -41,21 +42,29 @@ class UavPlugin(app: Application) extends Plugin {
     }
 
     Akka.system(app).actorOf(props, name = "uav-connection")
-
   }
 
-  def register(out: ActorRef): Props = Props(classOf[Repeater], out, connection)
+  def register(websocket: ActorRef): Props = Props(classOf[ClientConnection], websocket, connection)
 
 }
 
-class Repeater(out: ActorRef, connection: ActorRef) extends Actor {
+class ClientConnection(websocket: ActorRef, uav: ActorRef) extends Actor with ActorLogging {
 
   override def preStart = {
-    connection ! Connection.Register
+    uav ! Connection.Register
   }
 
   def receive = {
-    case Connection.Received(bytes) => out ! bytes
+
+    case Connection.Received(bstr) =>
+      log.info(bstr.toArray.mkString(","))
+      websocket ! bstr.toArray
+
+
+    case Connection.Closed(msg) =>
+      log.warning(msg)
+      context stop self
+
   }
 
 }

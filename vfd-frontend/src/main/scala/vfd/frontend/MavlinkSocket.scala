@@ -48,5 +48,8 @@ class MavlinkSocket(url: String, remoteSystemId: Int) {
       parser.push(dv.getInt8(i))
     }
   }
+  connection.onclose = (e: dom.CloseEvent) => {
+    dom.alert("closed")
+  }
 
 }
