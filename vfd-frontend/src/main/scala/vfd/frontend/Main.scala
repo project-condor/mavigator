@@ -27,16 +27,24 @@ object Main {
         div(`class` := "col-xs-12")(
           div(`class` := "panel panel-default")(
             div(`class` := "panel-body")(
-              "autopilot mode")))),
+              button(`class` := "btn")("ACK"),
+              img(`src` := env.asset("images/leds/red-on.svg"), height := "30px"))))),
       div(`class` := "row")(
         div(`class` := "col-xs-4")(
           div(`class` := "panel panel-default")(
             div(`class` := "panel-body")(
-              "navigation"))),
+              iframe(
+                width := "100%",
+                height := "350px",
+                "frameborder".attr := "0",
+                "scrolling".attr := "no",
+                "marginheight".attr := "0",
+                "marginwidth".attr := "0",
+                src := "http://www.openstreetmap.org/export/embed.html?bbox=6.5611016750335684%2C46.51718501017836%2C6.570038795471191%2C46.520577350893525&amp;layer=mapnik")))),
         div(`class` := "col-xs-5")(
           div(`class` := "panel panel-default")(
             div(`class` := "panel-body")(
-              "primary"))),
+              panels.Primary()))),
         div(`class` := "col-xs-3")(
           div(`class` := "panel panel-default")(
             div(`class` := "panel-body")(
