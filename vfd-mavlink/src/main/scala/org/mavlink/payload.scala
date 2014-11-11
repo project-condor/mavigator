@@ -10,7 +10,7 @@ trait PayloadReader {
   def nextChar: Char
 }
 
-trait PayloadBuilder {
+trait PayloadWriter {
   def writeInt8(x: Byte)
   def writeInt16(x: Short)
   def writeInt32(x: Int)

@@ -19,7 +19,7 @@ class BufferedPayloadReader(payload: Array[Byte]) extends PayloadReader {
 
 }
 
-class BufferedPayloadBuilder(payload: Array[Byte]) extends PayloadBuilder {
+class BufferedPayloadWriter(payload: Array[Byte]) extends PayloadWriter {
   private val buffer = ByteBuffer.wrap(payload)
 
   //mavlink uses little endian

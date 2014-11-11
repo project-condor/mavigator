@@ -24,7 +24,7 @@ object Parser {
   }
 }
 
-class Parser(receiver: Packet => Unit, error: Parser.ParseErrors.ParseError => Unit) {
+class Parser(receiver: Packet => Unit, error: Parser.ParseErrors.ParseError => Unit = _ => ()) {
   import Parser._
 
   private var state: ParseStates.State = ParseStates.Idle

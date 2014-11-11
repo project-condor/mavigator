@@ -1,13 +1,12 @@
 package vfd.uav
 
 import java.util.concurrent.TimeUnit.MILLISECONDS
-
 import scala.concurrent.duration.FiniteDuration
-
+import org.mavlink.Parser
+import org.mavlink.messages.Message
 import com.github.jodersky.flow.Parity
 import com.github.jodersky.flow.Serial
 import com.github.jodersky.flow.SerialSettings
-
 import akka.actor.Actor
 import akka.actor.ActorRef
 import akka.actor.Props
@@ -15,8 +14,9 @@ import akka.actor.Terminated
 import akka.actor.actorRef2Scala
 import akka.io.IO
 import akka.util.ByteString
+import akka.actor.ActorLogging
 
-class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String, settings: SerialSettings) extends Actor with Connection {
+class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String, settings: SerialSettings) extends Actor with ActorLogging with Connection {
   import context._
 
   val Heartbeat = ByteString(
@@ -62,6 +62,15 @@ class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String
        */
 
   }
+  
+  val parser = new Parser(
+      pckt => try {
+         log.info(Message.unpack(pckt).toString()) 
+      } catch {
+        case err: MatchError =>
+          log.info("unknown message: " + pckt.payload.map(_.formatted("%02x").mkString(" ")))
+      }
+  )
 
   def _opened(operator: ActorRef): Receive = {
 
@@ -74,6 +83,9 @@ class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String
       context become closed
 
     case Serial.Received(bstr) =>
+      for (b <- bstr) {
+        parser.push(b)
+      }
       sendAll(Connection.Received(bstr))
 
     case Connection.Send(bstr) =>

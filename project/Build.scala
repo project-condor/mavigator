@@ -29,6 +29,7 @@ object ApplicationBuild extends Build {
 
   lazy val mavlink = (
     Project("vfd-mavlink", file("vfd-mavlink"))
+    settings(common: _*)
   )
 
   lazy val uav = (
