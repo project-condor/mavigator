@@ -10,9 +10,9 @@ import rx.Rx
 import rx.Var
 import rx.Var
 import scalatags.JsDom.all._
-
 import vfd.frontend.ui.panels
 import vfd.frontend.util.Environment
+import org.mavlink.messages.Message
 
 object Main {
 
@@ -21,6 +21,12 @@ object Main {
     val remoteSystemId = args("remotesystemid").toInt
 
     val socket = new MavlinkSocket(socketUrl, remoteSystemId)
+    
+    val message = Rx{
+      val p = socket.packet()
+      Message.unpack(p.messageId, p.payload)
+    }
+    
 
     val element = div(`class` := "container-fluid")(
       div(`class` := "row")(
@@ -44,7 +50,7 @@ object Main {
         div(`class` := "col-xs-5")(
           div(`class` := "panel panel-default")(
             div(`class` := "panel-body")(
-              panels.Primary()))),
+              panels.Primary(message)))),
         div(`class` := "col-xs-3")(
           div(`class` := "panel panel-default")(
             div(`class` := "panel-body")(

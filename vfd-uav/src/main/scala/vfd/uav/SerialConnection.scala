@@ -63,15 +63,7 @@ class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String
 
   }
   
-  val parser = new Parser(
-      pckt => try {
-         log.info(Message.unpack(pckt).toString()) 
-      } catch {
-        case err: MatchError =>
-          log.info("unknown message: " + pckt.payload.map(_.formatted("%02x").mkString(" ")))
-      }
-  )
-
+ 
   def _opened(operator: ActorRef): Receive = {
 
     case Terminated(`operator`) =>
@@ -83,9 +75,6 @@ class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String
       context become closed
 
     case Serial.Received(bstr) =>
-      for (b <- bstr) {
-        parser.push(b)
-      }
       sendAll(Connection.Received(bstr))
 
     case Connection.Send(bstr) =>
