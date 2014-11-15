@@ -1,18 +1,22 @@
 package vfd.frontend
 
-import scala.scalajs.js
-import scala.scalajs.js.Any.fromFunction1
-import scala.scalajs.js.Any.fromString
-import org.mavlink.Packet
-import org.mavlink.Parser
-import org.scalajs.dom
-import rx.Rx
-import rx.Var
-import rx.Var
-import scalatags.JsDom.all._
+import org.mavlink.messages.Message
+
+import rx.ops.RxOps
+import scalatags.JsDom.all.ExtendedString
+import scalatags.JsDom.all.button
+import scalatags.JsDom.all.`class`
+import scalatags.JsDom.all.div
+import scalatags.JsDom.all.height
+import scalatags.JsDom.all.iframe
+import scalatags.JsDom.all.img
+import scalatags.JsDom.all.src
+import scalatags.JsDom.all.stringAttr
+import scalatags.JsDom.all.stringFrag
+import scalatags.JsDom.all.stringStyle
+import scalatags.JsDom.all.width
 import vfd.frontend.ui.panels
 import vfd.frontend.util.Environment
-import org.mavlink.messages.Message
 
 object Main {
 
@@ -21,12 +25,10 @@ object Main {
     val remoteSystemId = args("remotesystemid").toInt
 
     val socket = new MavlinkSocket(socketUrl, remoteSystemId)
-    
-    val message = Rx{
-      val p = socket.packet()
-      Message.unpack(p.messageId, p.payload)
+
+    val message = socket.packet.map { p =>
+      Message.unpack(socket.packet().messageId, socket.packet().payload)
     }
-    
 
     val element = div(`class` := "container-fluid")(
       div(`class` := "row")(

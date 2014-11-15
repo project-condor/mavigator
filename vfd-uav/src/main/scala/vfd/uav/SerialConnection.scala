@@ -24,7 +24,9 @@ class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String
 
   override def preStart() = {
     heartbeat foreach { interval =>
-      context.system.scheduler.schedule(interval, interval, self, Connection.Send(Heartbeat))
+      context.system.scheduler.schedule(interval, interval) {
+        self ! Connection.Send(Heartbeat)
+      }
     }
   }
 
@@ -63,6 +65,8 @@ class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String
 
   }
   
+  val parser = new Parser(pckt => println(Message.unpack(pckt.messageId, pckt.payload)))
+  
  
   def _opened(operator: ActorRef): Receive = {
 
@@ -75,6 +79,7 @@ class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String
       context become closed
 
     case Serial.Received(bstr) =>
+      for (b <- bstr) parser.push(b)
       sendAll(Connection.Received(bstr))
 
     case Connection.Send(bstr) =>

@@ -21,7 +21,7 @@ object Message {
       case 0 => 
         val cm = r.int32
         Heartbeat(r.int8, r.int8, r.int8, cm, SystemStatus(r.int8), r.int8)
-      case 28 =>
+      case 29 =>
         Pressure(r.int32, r.float, r.float, r.int16)
       case 30 =>
         Attitude(r.int32, r.float, r.float, r.float)

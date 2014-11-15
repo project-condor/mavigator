@@ -2,13 +2,13 @@ package vfd.frontend.ui.panels
 
 import rx.Rx
 import rx.Rx
-import scalatags.JsDom.all.style
 import scalatags.JsDom.all.`class`
 import scalatags.JsDom.all.div
 import scalatags.JsDom.all.i
 import scalatags.JsDom.all.intFrag
 import scalatags.JsDom.all.stringAttr
 import scalatags.JsDom.all.stringFrag
+import scalatags.JsDom.all.style
 import scalatags.JsDom.all.table
 import scalatags.JsDom.all.tbody
 import scalatags.JsDom.all.td
@@ -30,7 +30,7 @@ object Communication {
             td("5 ms")),
           tr(
             td("Heartbeat"),
-            td(i(`class` := "fa fa-heart", style:="color: #ff0000;"))))),
+            td(i(`class` := "fa fa-heart", style := "color: #ff0000;"))))),
       "Packet Statistics",
       table(`class` := "table table-condensed")(
         tbody(
@@ -40,9 +40,9 @@ object Communication {
             td(`class` := "danger")("CRC"),
             td(crcs),
             td("OFLW"),
-            td(packets),
+            td(overflows),
             td("BID"),
-            td(packets)))))
+            td(wrongIds)))))
   }
 
 }

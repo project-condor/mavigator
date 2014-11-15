@@ -70,6 +70,6 @@ object Packet {
      49, 170,  44,  83,  46,   0
   ).map(_.toByte)
 
-  final val Empty = Packet(0, 0, 0, 0, List())
+  final val Empty = Packet(0, 0, 0, -1, Array(0: Byte))
 
 }

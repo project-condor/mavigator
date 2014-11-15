@@ -7,7 +7,6 @@ import org.mavlink.Packet
 import org.mavlink.Parser
 import org.scalajs.dom
 
-import rx.core.Rx
 import rx.core.Var
 
 class MavlinkSocket(url: String, remoteSystemId: Int) {
