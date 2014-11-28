@@ -15,6 +15,7 @@ import akka.actor.actorRef2Scala
 import akka.io.IO
 import akka.util.ByteString
 import akka.actor.ActorLogging
+import org.mavlink.messages.Battery
 
 class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String, settings: SerialSettings) extends Actor with ActorLogging with Connection {
   import context._
@@ -65,7 +66,17 @@ class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String
 
   }
   
-  val parser = new Parser(pckt => println(Message.unpack(pckt.messageId, pckt.payload)))
+  val last = new collection.mutable.Queue[Int]
+  
+  val parser = new Parser(pckt => 
+    Message.unpack(pckt.messageId, pckt.payload) match {
+      case b: Battery =>
+        last enqueue b.voltages(0)
+        if (last.size > 20) last.dequeue
+        println("batt: " + last.sum / last.size) 
+      case _ => ()//println(pckt.messageId)
+    }
+  )
   
  
   def _opened(operator: ActorRef): Receive = {

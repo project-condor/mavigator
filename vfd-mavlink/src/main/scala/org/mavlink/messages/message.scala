@@ -10,6 +10,8 @@ case class Heartbeat(`type`: Byte, autopilot: Byte, baseMode: Byte, customMode: 
 case class RadioStatus(rssi: Byte, remoteRssi: Byte, txBuf: Byte, noise: Byte, remoteNoise: Byte, rxErrors: Short, fixed: Short) extends Message
 case class Attitude(time: Int, roll: Float, pitch: Float, heading: Float) extends Message
 case class Pressure(time: Int, pressure: Float, diffPressure: Float, temperature: Short) extends Message
+case class Battery(id: Byte, function: Byte, `type`: Byte, temperature: Short,
+    voltages: Seq[Short], current: Short, currentConsumed: Int, energyConsumed: Int, remaining: Byte) extends Message
 case class Unknown(id: Int, payload: Seq[Byte]) extends Message
 
 object Message {
@@ -17,7 +19,7 @@ object Message {
   def unpack(id: Byte,  payload: Seq[Byte])(implicit mkReader: Seq[Byte] => PayloadReader): Message = {
     val r = mkReader(payload)
     
-    id.toInt match {
+    id & 0xff match {
       case 0 => 
         val cm = r.int32
         Heartbeat(r.int8, r.int8, r.int8, cm, SystemStatus(r.int8), r.int8)
@@ -29,6 +31,17 @@ object Message {
         val re = r.int16
         val fi = r.int16 
         RadioStatus(r.int8, r.int8, r.int8, r.int8, r.int8, re, fi)
+      case 147 =>
+        val cc = r.int32
+        val ec = r.int32
+        val t = r.int16
+        val v = for (i <- 0 until 10) yield r.int16
+        val c = r.int16
+        val id = r.int8
+        val fct = r.int8
+        val tpe = r.int8
+        val rm = r.int8
+        Battery(id, fct, tpe, t, v, c, cc, ec, rm)
       
       case u => Unknown(u, payload)
     }
