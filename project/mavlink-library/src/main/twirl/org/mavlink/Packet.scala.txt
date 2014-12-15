@@ -1,0 +1,59 @@
+@(messages: Seq[parsing.Message])
+
+@messageCrcs() = @{
+  for (i <- 0 to 255) yield {
+    val crc = messages.find(_.id == i).map(_.checksum).getOrElse(0)
+    crc.toString
+  }
+}
+
+package org.mavlink
+
+case class Packet(
+  seq: Byte,
+  systemId: Byte,
+  componentId: Byte,
+  messageId: Byte,
+  payload: Seq[Byte]
+) {
+
+  lazy val crc = {
+    var c = new Crc()
+    c = c.accumulate(payload.length.toByte)
+    c = c.accumulate(seq)
+    c = c.accumulate(systemId)
+    c = c.accumulate(componentId)
+    c = c.accumulate(messageId)
+    for (p <- payload) {
+      c = c.accumulate(p)
+    }
+    c = c.accumulate(Packet.extraCrc(messageId))
+    c
+  }
+
+  def toSeq: Seq[Byte] = Seq(
+    Packet.Stx,
+    payload.length.toByte,
+    seq,
+    systemId,
+    componentId,
+    messageId
+  ) ++ payload ++ Seq(
+    crc.lsb,
+    crc.msb
+  )
+
+}
+
+object Packet {
+
+  final val Stx: Byte = (0xfe).toByte
+  final val MaxPayloadLength: Int = @messages.map(_.fields.map(_.tpe.width).sum).max
+
+  final val ExtraCrcs: Seq[Byte] = @messageCrcs().mkString("Array[Byte](", ", ", ")")
+  
+  def extraCrc(id: Byte) = ExtraCrcs(id & 0xff)
+
+  final val Empty = Packet(0, 0, 0, -1, Array(0: Byte))
+
+}

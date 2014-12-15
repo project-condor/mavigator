@@ -1,3 +1,5 @@
+@()
+
 package org.mavlink
 
 /**
@@ -7,7 +9,7 @@ package org.mavlink
  */
 case class Crc(val crc: Int = 0xffff) extends AnyVal {
 
-  def next(datum: Byte): Crc = {
+  def accumulate(datum: Byte): Crc = {
     val d = datum & 0xff
     var tmp = d ^ (crc & 0xff)
     tmp ^= (tmp << 4) & 0xff;

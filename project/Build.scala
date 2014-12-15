@@ -7,18 +7,16 @@ import scala.scalajs.sbtplugin.ScalaJSPlugin
 import scala.scalajs.sbtplugin.ScalaJSPlugin.ScalaJSKeys._
 import Dependencies._
 
+import com.github.jodersky.sbt.mavlink.MavlinkKeys._
+import com.github.jodersky.sbt.SbtMavlink
 
 object ApplicationBuild extends Build {
 
   //settings common to all projects
   val common = Seq(
     scalaVersion := "2.11.4",
-    scalacOptions ++= Seq("-feature", "-deprecation")
-  )
-
-  //settings for js/jvm projects using shared sources
-  val shared = Seq(
-    unmanagedSourceDirectories in Compile += (scalaSource in (mavlink, Compile)).value
+    scalacOptions ++= Seq("-feature", "-deprecation"),
+    mavlinkDialect := file(".") / "concise.xml"
   )
 
   lazy val root = Project("root", file(".")).aggregate(
@@ -27,15 +25,10 @@ object ApplicationBuild extends Build {
     frontend
   )
 
-  lazy val mavlink = (
-    Project("vfd-mavlink", file("vfd-mavlink"))
-    settings(common: _*)
-  )
-
   lazy val uav = (
     Project("vfd-uav", file("vfd-uav"))
+    enablePlugins(SbtMavlink)
     settings(common: _*)
-    settings(shared: _*)
     settings(
       libraryDependencies ++= Seq(
         akkaActor,
@@ -48,6 +41,7 @@ object ApplicationBuild extends Build {
   lazy val backend = (
     Project("vfd-backend", file("vfd-backend"))
     enablePlugins(PlayScala)
+    enablePlugins(SbtMavlink)
     settings(common: _*)
     settings(
       resolvers += Resolver.url("scala-js-releases", url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(Resolver.ivyStylePatterns),
@@ -64,8 +58,8 @@ object ApplicationBuild extends Build {
   lazy val frontend = (
     Project("vfd-frontend", file("vfd-frontend"))
     settings(ScalaJSPlugin.scalaJSSettings: _*)
+    enablePlugins(SbtMavlink)
     settings(common: _*)
-    settings(shared: _*)
     settings(
       libraryDependencies ++= Seq(
         rx,

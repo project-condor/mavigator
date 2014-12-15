@@ -1,3 +1,5 @@
+@()
+
 package org.mavlink
 
 import scala.collection.mutable.ArrayBuffer
@@ -51,27 +53,27 @@ class Parser(receiver: Packet => Unit, error: Parser.ParseErrors.ParseError => U
       case GotStx =>
         inbound.crc = new Crc()
         inbound.length = (c & 0xff)
-        inbound.crc = inbound.crc.next(c)
+        inbound.crc = inbound.crc.accumulate(c)
         state = GotLength
 
       case GotLength =>
         inbound.seq = c;
-        inbound.crc = inbound.crc.next(c)
+        inbound.crc = inbound.crc.accumulate(c)
         state = GotSeq
 
       case GotSeq =>
         inbound.systemId = c
-        inbound.crc = inbound.crc.next(c)
+        inbound.crc = inbound.crc.accumulate(c)
         state = GotSysId
 
       case GotSysId =>
         inbound.componentId = c
-        inbound.crc = inbound.crc.next(c)
+        inbound.crc = inbound.crc.accumulate(c)
         state = GotCompId
 
       case GotCompId =>
         inbound.messageId = c
-        inbound.crc = inbound.crc.next(c)
+        inbound.crc = inbound.crc.accumulate(c)
         if (inbound.length == 0) {
           state = GotPayload
         } else {
@@ -81,7 +83,7 @@ class Parser(receiver: Packet => Unit, error: Parser.ParseErrors.ParseError => U
 
       case GotMsgId =>
         inbound.payload += c
-        inbound.crc = inbound.crc.next(c)
+        inbound.crc = inbound.crc.accumulate(c)
         if(inbound.payload.length >= Packet.MaxPayloadLength) {
           state = Idle
           error(ParseErrors.OverflowError)
@@ -91,7 +93,7 @@ class Parser(receiver: Packet => Unit, error: Parser.ParseErrors.ParseError => U
         }
 
       case GotPayload =>
-        inbound.crc = inbound.crc.next(Packet.MessageIdCrcEnds(inbound.messageId & 0xff))
+        inbound.crc = inbound.crc.accumulate(Packet.extraCrc(inbound.messageId))
         if (c != inbound.crc.lsb) {
           state = Idle
           if (c == Packet.Stx) {

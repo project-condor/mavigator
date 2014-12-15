@@ -1,7 +1,6 @@
 package vfd.frontend
 
 import org.mavlink.messages.Message
-
 import rx.ops.RxOps
 import scalatags.JsDom.all.ExtendedString
 import scalatags.JsDom.all.button
@@ -17,6 +16,7 @@ import scalatags.JsDom.all.stringStyle
 import scalatags.JsDom.all.width
 import vfd.frontend.ui.panels
 import vfd.frontend.util.Environment
+import rx.core.Obs
 
 object Main {
 
@@ -28,6 +28,10 @@ object Main {
 
     val message = socket.packet.map { p =>
       Message.unpack(socket.packet().messageId, socket.packet().payload)
+    }
+    
+    Obs(message) {
+      println(message().toString())
     }
 
     val element = div(`class` := "container-fluid")(
