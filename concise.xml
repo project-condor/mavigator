@@ -66,6 +66,19 @@
 			<field type="uint8_t" name="target_system">System ID</field>
 			<field type="uint8_t" name="target_component">Component ID</field>
 		</message>
+		<message name="MOTOR" id="6">
+			<description>Status of motors</description>
+			<field type="uint8_t" name="m0">m0</field>
+			<field type="uint8_t" name="m1">m1</field>
+			<field type="uint8_t" name="m2">m2</field>
+			<field type="uint8_t" name="m3">m3</field>
+		</message>
+		<message id="30" name="ATTITUDE">
+            <description>The attitude in the aeronautical frame (right-handed, Z-down, X-front, Y-right).</description>
+            <field type="int16_t" name="roll">Roll angle</field>
+            <field type="int16_t" name="pitch">Pitch angle</field>
+            <field type="uint16_t" name="yaw">Yaw angle</field>
+        </message>
 		<message id="70" name="RC_CHANNELS_OVERRIDE">
 			<description>The RAW values of the RC channels sent to the MAV to override info received from the RC radio. A value of UINT16_MAX means no change to that channel. A value of 0 means control of that channel should be released back to the RC radio. The standard PPM modulation is as follows: 1000 microseconds: 0%, 2000 microseconds: 100%. Individual receivers/transmitters might violate this specification.</description>
 			<field type="uint8_t" name="target_system">System ID</field>

@@ -15,10 +15,31 @@ import scalatags.JsDom.all.td
 import scalatags.JsDom.all.tr
 import vfd.frontend.util.Environment
 import vfd.frontend.util.Framework.RxStr
+import vfd.frontend.ui.Components
+import rx.core.Var
+import rx.core.Obs
+import org.mavlink.messages._
 
 object Communication {
 
-  def apply(packets: Rx[Int], crcs: Rx[Int], overflows: Rx[Int], wrongIds: Rx[Int])(implicit app: Environment) = {
+  def apply(packets: Rx[Int], crcs: Rx[Int], overflows: Rx[Int], wrongIds: Rx[Int], message: Rx[Message])(implicit app: Environment) = {
+    
+    val m0 = Var(0.0)
+    val m1 = Var(0.0)
+    val m2 = Var(0.0)
+    val m3 = Var(0.0)
+    
+    Obs(message) {
+      message() match {
+        case Motor(_m0, _m1, _m2, _m3) =>
+          m0() = _m0
+          m1() = _m1
+          m2() = _m2
+          m3() = _m3
+        case _ => ()
+      }
+    }
+    
     div(
       "Link Status",
       table(`class` := "table table-condensed")(
@@ -42,7 +63,9 @@ object Communication {
             td("OFLW"),
             td(overflows),
             td("BID"),
-            td(wrongIds)))))
+            td(wrongIds)))),
+      div(
+        Components.basic(m0, "25%"),Components.basic(m1, "25%"),Components.basic(m2, "25%"),Components.basic(m3, "25%")))
   }
 
 }

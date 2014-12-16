@@ -1,7 +1,6 @@
 package vfd.frontend.ui
 
 import org.scalajs.dom.HTMLElement
-
 import rx.Obs
 import rx.Rx
 import rx.Rx
@@ -19,6 +18,17 @@ import vfd.frontend.util.Environment
 
 object Components {
 
+  private def instrument(name: String)(implicit app: Environment) = {
+    val path = app.asset("images/instruments/" + name + ".svg")
+    `object`(`type` := "image/svg+xml", "data".attr := path, width := "100%")(
+      "Error loading image " + name).render
+  }
+
+  private def frame(elem: HTMLElement, size: String) = {
+    div(style := s"width: $size; height: $size; display: inline-block;")(
+      elem)
+  }
+  
   def led(color: Rx[String], size: String)(implicit app: Environment) = {
     val elem = `object`(`type` := "image/svg+xml", "data".attr := app.asset("leds/led.svg"), width := size)(
       "Error loading image.").render
@@ -30,31 +40,22 @@ object Components {
     elem
   }
 
-  private def instrument(name: String)(implicit app: Environment) = {
-    val path = app.asset("images/instruments/" + name + ".svg")
-    `object`(`type` := "image/svg+xml", "data".attr := path, width := "100%")(
-      "Error loading image " + name).render
-  }
-
-  private def frame(elem: HTMLElement, size: String) = {
-    div(style := s"width: $size; height: $size; display: inline-block;")(
-      elem)
-  }
-
-  def attitude(pitchRoll: Rx[(Double, Double)], size: String)(implicit app: Environment) = {
-    val inst = instrument("attitude")
+  def horizon(pitchRoll: Rx[(Double, Double)], size: String)(implicit app: Environment) = {
+    val inst = instrument("horizon")
     Obs(pitchRoll, skipInitial = true) {
       val svg = inst.contentDocument
       val pitch = svg.getElementById("pitch")
       val roll = svg.getElementById("roll")
-      pitch.setAttribute("transform", "translate(0, " + pitchRoll()._1 / math.Pi * 180 + ")");
-      roll.setAttribute("transform", "rotate(" + pitchRoll()._2 / math.Pi * 180 + ")");
+      pitch.style.transition = "transform 250ms ease-out"
+      roll.style.transition = "transform 250ms ease-out"
+      pitch.style.transform = "translate(0px, " + pitchRoll()._1 + "px)"
+      roll.style.transform = "rotate(" + pitchRoll()._2 + "deg)"
     }
     frame(inst, size)
   }
 
-  def altitude(value: Rx[Double], size: String)(implicit app: Environment) = {
-    val inst = instrument("altitude")
+  def altimeter(value: Rx[Double], size: String)(implicit app: Environment) = {
+    val inst = instrument("altimeter")
     Obs(value, skipInitial = true) {
       val svg = inst.contentDocument
       // 36deg === 1m
@@ -63,14 +64,29 @@ object Components {
     frame(inst, size)
   }
 
-  def heading(value: Rx[Double], size: String)(implicit app: Environment) = {
-    val inst = instrument("heading")
+  def compass(value: Rx[Double], size: String)(implicit app: Environment) = {
+    val inst = instrument("compass")
     Obs(value, skipInitial = true) {
       val svg = inst.contentDocument
-      // 1deg === 1deg
-      svg.getElementById("heading").setAttribute("transform", "rotate(" + value() / math.Pi * 180 + ")");
+      val heading = svg.getElementById("heading")
+      heading.style.transition = "transform 250ms ease-out"
+      heading.style.transform = "rotate(" + value() + "deg)"
+    }
+    frame(inst, size)
+  }
+  
+   def basic(value: Rx[Double], size: String)(implicit app: Environment) = {
+    val inst = instrument("basic")
+    Obs(value, skipInitial = true) {
+      val svg = inst.contentDocument
+      val hand = svg.getElementById("hand")
+      hand.style.transform = "rotate(" + value() * 270 / 100 + "deg)";
+      hand.style.transition = "transform 250ms ease-out"
+      svg.getElementById("unit").textContent = "%"
+      svg.getElementById("value").textContent = value().toString
     }
     frame(inst, size)
   }
 
 }
+

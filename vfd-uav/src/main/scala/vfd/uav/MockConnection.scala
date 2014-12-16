@@ -1,15 +1,15 @@
 package vfd.uav
 
 import java.util.concurrent.TimeUnit.MILLISECONDS
-
 import scala.concurrent.duration.FiniteDuration
 import scala.util.Random
-
 import Connection.Received
 import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.Props
 import akka.util.ByteString
+import org.mavlink.messages._
+import org.mavlink.Packet
 
 class MockConnection extends Actor with ActorLogging with Connection {
   import Connection._
@@ -36,7 +36,21 @@ object MockConnection {
 
 object MockPackets {
 
-  def random() = Random.nextInt(2) match {
+  private implicit class RichMessage(val message: Message) extends AnyVal {
+    def bytes: Array[Byte] = {
+      val (id, payload) = Message.pack(message)
+      Packet(5, 42, 1, id, payload).toSeq.toArray
+    }
+  }
+
+  def random(): Array[Byte] = Random.nextInt(4) match {
+    case 0 => randomInvalid()
+    case 1 => Heartbeat(0).bytes
+    case 2 => Motor(Random.nextInt(101).toByte, Random.nextInt(101).toByte, Random.nextInt(101).toByte, Random.nextInt(101).toByte).bytes
+    case 3 => Attitude((Random.nextInt(160) - 80).toShort, (Random.nextInt(160) - 80).toShort.toShort, Random.nextInt(360).toShort).bytes
+  }
+
+  def randomInvalid() = Random.nextInt(2) match {
     case 0 => invalidCrc
     case 1 => invalidOverflow
   }

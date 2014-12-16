@@ -64,7 +64,8 @@ object Main {
                 socket.stats.packets,
                 socket.stats.crcErrors,
                 socket.stats.overflows,
-                socket.stats.wrongIds))))))
+                socket.stats.wrongIds,
+                message))))))
 
     env.root.appendChild(element.render)
   }

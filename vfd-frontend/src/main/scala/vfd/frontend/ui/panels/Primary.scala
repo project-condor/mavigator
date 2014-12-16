@@ -1,7 +1,6 @@
 package vfd.frontend.ui.panels
 
-import org.mavlink.messages.Message
-
+import org.mavlink.messages._
 import rx.core.Obs
 import rx.core.Rx
 import rx.core.Var
@@ -18,14 +17,17 @@ object Primary {
 
     Obs(message) {
       message() match {
+        case Attitude(roll, pitch, yaw) =>
+          pitchRoll() = (roll, pitch)
+          heading() = yaw
         case _ => ()
       }
     }
 
     div(
-      Components.heading(heading, "33%"),
-      Components.attitude(pitchRoll, "33%"),
-      Components.altitude(altitude, "33%"))
+      Components.compass(heading, "33%"),
+      Components.horizon(pitchRoll, "33%"),
+      Components.altimeter(altitude, "33%"))
   }
 
 }

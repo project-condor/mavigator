@@ -20,17 +20,17 @@
      id="defs4">
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath3999">
+       id="clipPath3055">
       <path
-         transform="translate(-55,-55)"
-         d="M 105,55 A 50,50 0 1 1 5,55 50,50 0 1 1 105,55 z"
-         sodipodi:ry="50"
-         sodipodi:rx="50"
-         sodipodi:cy="55"
-         sodipodi:cx="55"
-         id="path4002"
+         sodipodi:type="arc"
          style="fill:#00ff00;fill-opacity:1;stroke:none"
-         sodipodi:type="arc" />
+         id="path3057"
+         sodipodi:cx="55"
+         sodipodi:cy="55"
+         sodipodi:rx="50"
+         sodipodi:ry="50"
+         d="M 105,55 A 50,50 0 1 1 5,55 50,50 0 1 1 105,55 z"
+         transform="translate(-55,-55)" />
     </clipPath>
   </defs>
   <sodipodi:namedview
@@ -41,7 +41,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8284271"
-     inkscape:cx="-34.071266"
+     inkscape:cx="-19.222023"
      inkscape:cy="22.322089"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -87,21 +87,21 @@
      id="layer1">
     <g
        id="roll"
-       clip-path="url(#clipPath3999)">
+       clip-path="url(#clipPath3055)">
       <g
          id="pitch">
         <rect
            style="fill:#2eccfa;fill-opacity:1;stroke:none"
            id="rect3861"
            width="100"
-           height="100"
+           height="150"
            x="-50"
-           y="-100" />
+           y="-150" />
         <rect
            style="fill:#61380b;fill-opacity:1;stroke:none"
            id="rect3863"
            width="100"
-           height="100"
+           height="150"
            x="-50"
            y="0" />
         <rect
