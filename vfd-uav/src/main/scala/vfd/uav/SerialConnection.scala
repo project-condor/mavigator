@@ -4,7 +4,9 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 
 import scala.concurrent.duration.FiniteDuration
 
+import org.mavlink.Packet
 import org.mavlink.Parser
+import org.mavlink.messages.Heartbeat
 import org.mavlink.messages.Message
 
 import com.github.jodersky.flow.Parity
@@ -23,13 +25,15 @@ import akka.util.ByteString
 class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String, settings: SerialSettings) extends Actor with ActorLogging with Connection {
   import context._
 
-  val Heartbeat = ByteString(
-    Array(-2, 9, -121, 20, -56, 0, 0, 0, 0, 0, 2, 0, 0, 3, 3, -112, 76).map(_.toByte))
+  lazy val hb = {
+    val (id, payload) = Message.pack(Heartbeat(0))
+    Packet(5, 42, 1, id, payload).toSeq.toArray
+  }
 
   override def preStart() = {
     heartbeat foreach { interval =>
       context.system.scheduler.schedule(interval, interval) {
-        self ! Connection.Send(Heartbeat)
+        self ! Connection.Send(ByteString(hb))
       }
     }
   }
@@ -58,7 +62,7 @@ class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String
       context become opened(sender)
 
     case Connection.Send(_) => () // ignore
-      /*
+    /*
     	 * During opening, any outgoing messages are discarded.
        * By using some kind of message stashing, maybe messages could be treated
        * once the port has been opened. However, in such a case failure also needs
@@ -68,14 +72,11 @@ class SerialConnection(id: Byte, heartbeat: Option[FiniteDuration], port: String
        */
 
   }
-  
-  val last = new collection.mutable.Queue[Int]
-  
-  val parser = new Parser(pckt =>
+
+  val parser = new Parser(pckt => {
     println("Received message: " + Message.unpack(pckt.messageId, pckt.payload))
-  )
-  
- 
+  })
+
   def _opened(operator: ActorRef): Receive = {
 
     case Terminated(`operator`) =>
