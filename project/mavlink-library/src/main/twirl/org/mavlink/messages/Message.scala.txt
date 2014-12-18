@@ -3,9 +3,9 @@
 @extract(field: parsing.Field, offset: Int) = {
   @field.tpe.width match {
     case 1 => {payload(@offset)}
-    case 2 => {((payload(@offset)) | ((payload(@{offset+1}) & 0xff) << 8)).toShort}
-    case 4 => {(payload(@offset)) | ((payload(@{offset+1}) & 0xff) << 8) | ((payload(@{offset+2}) & 0xff) << 16) | ((payload(@{offset+3}) & 0xff) << 24)}
-    case 8 => {payload(@offset) |
+    case 2 => {((payload(@offset) & 0xff) | ((payload(@{offset+1}) & 0xff) << 8)).toShort}
+    case 4 => {(payload(@offset) & 0xff) | ((payload(@{offset+1}) & 0xff) << 8) | ((payload(@{offset+2}) & 0xff) << 16) | ((payload(@{offset+3}) & 0xff) << 24)}
+    case 8 => {(payload(@offset) & 0xffl) |
         ((payload(@{offset+2}) & 0xffl) << 8) |
         ((payload(@{offset+3}) & 0xffl) << 16) |
         ((payload(@{offset+4}) & 0xffl) << 24) |
