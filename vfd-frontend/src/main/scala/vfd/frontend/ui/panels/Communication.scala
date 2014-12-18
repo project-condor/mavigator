@@ -28,6 +28,7 @@ object Communication {
     val m1 = Var(0.0)
     val m2 = Var(0.0)
     val m3 = Var(0.0)
+    val battery = Var(0.0)
     
     Obs(message) {
       message() match {
@@ -36,6 +37,7 @@ object Communication {
           m1() = _m1
           m2() = _m2
           m3() = _m3
+        case Power(mV) => battery() = mV / 120
         case _ => ()
       }
     }
@@ -64,6 +66,7 @@ object Communication {
             td(overflows),
             td("BID"),
             td(wrongIds)))),
+      div(Components.bar(battery, "25%")),
       div(
         Components.basic(m0, "25%"),Components.basic(m1, "25%"),Components.basic(m2, "25%"),Components.basic(m3, "25%")))
   }

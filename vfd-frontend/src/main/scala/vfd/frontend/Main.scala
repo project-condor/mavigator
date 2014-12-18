@@ -29,7 +29,7 @@ object Main {
     val message = socket.packet.map { p =>
       Message.unpack(socket.packet().messageId, socket.packet().payload)
     }
-    
+
     Obs(message) {
       println(message().toString())
     }
@@ -39,8 +39,10 @@ object Main {
         div(`class` := "col-xs-12")(
           div(`class` := "panel panel-default")(
             div(`class` := "panel-body")(
-              button(`class` := "btn")("ACK"),
-              img(`src` := env.asset("images/leds/red-on.svg"), height := "30px"))))),
+              button(`class` := "btn")("LOCKED"),
+              button(`class` := "btn")("MANUAL"),
+              button(`class` := "btn")("GUIDED"),
+              button(`class` := "btn")("AUTO"))))),
       div(`class` := "row")(
         div(`class` := "col-xs-4")(
           div(`class` := "panel panel-default")(

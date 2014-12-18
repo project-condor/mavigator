@@ -75,13 +75,26 @@ object Components {
     frame(inst, size)
   }
   
-   def basic(value: Rx[Double], size: String)(implicit app: Environment) = {
+  def basic(value: Rx[Double], size: String)(implicit app: Environment) = {
     val inst = instrument("basic")
     Obs(value, skipInitial = true) {
       val svg = inst.contentDocument
       val hand = svg.getElementById("hand")
       hand.style.transform = "rotate(" + value() * 270 / 100 + "deg)";
       hand.style.transition = "transform 250ms ease-out"
+      svg.getElementById("unit").textContent = "%"
+      svg.getElementById("value").textContent = value().toString
+    }
+    frame(inst, size)
+  }
+  
+  def bar(value: Rx[Double], size: String)(implicit app: Environment) = {
+    val inst = instrument("bar")
+    Obs(value, skipInitial = true) {
+      val svg = inst.contentDocument
+      val level = svg.getElementById("level")
+      level.style.transform = "translate(0px, " + 97 * (1 - value() / 100) + "px)";
+      level.style.transition = "transform 250ms ease-out"
       svg.getElementById("unit").textContent = "%"
       svg.getElementById("value").textContent = value().toString
     }
