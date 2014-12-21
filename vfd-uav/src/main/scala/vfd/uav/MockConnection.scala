@@ -15,7 +15,7 @@ class MockConnection extends Actor with ActorLogging with Connection {
   import Connection._
   import context._
 
-  val messageInterval = FiniteDuration(250, MILLISECONDS)
+  val messageInterval = FiniteDuration(100, MILLISECONDS)
 
   override def preStart() = {
     context.system.scheduler.schedule(messageInterval, messageInterval) {
@@ -42,14 +42,14 @@ object MockPackets {
       Packet(5, 42, 1, id, payload).toSeq.toArray
     }
   }
-  
+
   def messages = Heartbeat(0) ::
     Motor(Random.nextInt(101).toByte, Random.nextInt(101).toByte, Random.nextInt(101).toByte, Random.nextInt(101).toByte) ::
     Attitude((Random.nextInt(160) - 80).toShort, (Random.nextInt(160) - 80).toShort.toShort, Random.nextInt(360).toShort) ::
     Power(Random.nextInt(12000).toShort) :: Nil
-  
+
   def valid: Array[Byte] = messages.flatMap(_.bytes).toArray
-  
+
   val invalidCrc = Array(254, 1, 123, 13, 13).map(_.toByte)
   val invalidOverflow = {
     val data = Array.fill[Byte](Packet.MaxPayloadLength + 10)(42)
@@ -58,15 +58,14 @@ object MockPackets {
     data(1) = -1
     data
   }
-  
+
   def randomInvalid = Random.nextInt(2) match {
     case 0 => invalidCrc
     case 1 => invalidOverflow
   }
 
-  def random: Array[Byte] = if (Random.nextInt(5) == 0) {
-    randomInvalid
-  } else {
-    valid
+  def random: Array[Byte] = Random.nextInt(messages.length + 1) match {
+    case 0 => randomInvalid
+    case i => messages(i - 1).bytes
   }
 }
