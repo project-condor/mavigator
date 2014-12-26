@@ -1,5 +1,6 @@
 @()
 
+@_header()
 package org.mavlink
 
 import scala.collection.mutable.ArrayBuffer
@@ -124,5 +125,7 @@ class Parser(receiver: Packet => Unit, error: Parser.ParseErrors.ParseError => U
         }
     }
   }
+
+  def push(bytes: Traversable[Byte]): Unit = for (b <- bytes) push(b)
 
 }

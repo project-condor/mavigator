@@ -17,6 +17,7 @@ object Main {
         org.mavlink.txt.Crc().body -> Path("Crc.scala"),
         org.mavlink.txt.Packet(protocol.messages).body -> Path("Packet.scala"),
         org.mavlink.txt.Parser().body -> Path("Parser.scala"),
+        org.mavlink.txt.Assembler().body -> Path("Assembler.scala"),
         org.mavlink.messages.txt.Message(protocol.messages).body -> Path.fromString("messages/messages.scala")
     )
     

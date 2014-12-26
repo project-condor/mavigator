@@ -40,7 +40,7 @@ sealed trait Message
 case class Unknown(id: Byte, payload: Seq[Byte]) extends Message
 
 object Message {
-  def unpack(id: Byte, payload: Seq[Byte]) = id match {
+  def unpack(id: Byte, payload: Seq[Byte]): Message = id match {
     @for(message <- messages) {
     case @message.id =>
 	  @defining(message.orderedFields){ ordered =>
