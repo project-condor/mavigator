@@ -9,33 +9,26 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="100"
+   width="32"
    height="100"
    id="svg4387"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   viewBox="-50 -50 100 100"
-   sodipodi:docname="voltage.svg">
+   viewBox="0 0 32 100"
+   sodipodi:docname="bar.svg">
   <defs
      id="defs4389">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 50 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="100 : 50 : 1"
-       inkscape:persp3d-origin="50 : 33.333333 : 1"
-       id="perspective5114" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath3111">
+       id="clipPath2997">
       <rect
-         y="-48.5"
-         x="-3.5"
+         clip-path="none"
+         y="1.5"
+         x="1.5"
          height="97"
          width="29"
-         id="rect3113"
-         style="fill:#00ffff;fill-opacity:1;stroke:none"
-         ry="3.5" />
+         id="rect2999"
+         style="fill:#00ffff;fill-opacity:1;stroke:none" />
     </clipPath>
   </defs>
   <sodipodi:namedview
@@ -46,8 +39,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6568542"
-     inkscape:cx="86.541936"
-     inkscape:cy="51.30932"
+     inkscape:cx="97.092685"
+     inkscape:cy="49.623219"
      inkscape:document-units="px"
      inkscape:current-layer="svg4387"
      showgrid="true"
@@ -82,41 +75,17 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <g
-     id="labels">
-    <text
-       sodipodi:linespacing="125%"
-       id="text5104"
-       y="0.71679688"
-       x="-29.029297"
-       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#1a1a1a;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-       xml:space="preserve"><tspan
-         y="0.71679688"
-         x="-29.029297"
-         id="value"
-         sodipodi:role="line">0</tspan></text>
-    <text
-       sodipodi:linespacing="125%"
-       id="text5106"
-       y="12.33289"
-       x="-29.03418"
-       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#4d4d4d;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-       xml:space="preserve"><tspan
-         y="12.33289"
-         x="-29.03418"
-         id="unit"
-         sodipodi:role="line">%</tspan></text>
-  </g>
   <rect
      style="fill:#00ff00;fill-opacity:1;stroke:none"
      id="level"
      width="29"
      height="97"
-     x="-3.5"
-     y="-48.5"
-     clip-path="url(#clipPath3111)" />
+     x="1.5"
+     y="1.5"
+     clip-path="url(#clipPath2997)" />
   <g
-     id="fixed">
+     id="fixed"
+     transform="translate(5,50)">
     <path
        id="rect3022"
        transform="translate(-50,-50)"

@@ -1,4 +1,4 @@
-@(socket: String, remoteSystemId: Int)
+@(socket: String, remoteSystemId: Byte, systemId: Byte, componentId: Byte)
 
 @main("Main", "Remote System " + remoteSystemId){
 
@@ -10,8 +10,15 @@
 		</p>
 	</div>
 
-	<div id="app" data-socketUrl="@socket" data-remoteSystemId="@remoteSystemId.toString">
-		Loading...
+	<div
+		id="app"
+		data-socketUrl="@socket"
+		data-remoteSystemId="@remoteSystemId.toString"
+		data-systemId="@systemId.toString"
+		data-componentId="@componentId.toString">
+		<div class="loader">
+			<i class="fa fa-spinner fa-spin"></i>
+		</div>
 	</div>
 
 	<script type="text/javascript">
@@ -22,7 +29,7 @@
 			} catch(err) {
 				document.getElementById("scalajsError").style.display = "block";
 				document.getElementById("scalajsErrorMessage").innerHTML = err;
-				console.log(err)
+				console.error(err)
 			}
 		}
 	</script>

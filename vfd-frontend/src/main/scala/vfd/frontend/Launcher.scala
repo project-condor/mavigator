@@ -4,9 +4,7 @@ import scala.scalajs.js.annotation.JSExport
 
 import org.scalajs.dom
 
-import vfd.frontend.util.Environment
-
-@JSExport
+@JSExport("Launcher")
 class Launcher(rootId: String, assetsBase: String) {
 
   lazy val env = new Environment {
