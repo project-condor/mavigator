@@ -16,7 +16,7 @@ object ApplicationBuild extends Build {
   val common = Seq(
     scalaVersion := "2.11.4",
     scalacOptions ++= Seq("-feature", "-deprecation"),
-    mavlinkDialect := (baseDirectory in ThisBuild).value / "conf" / "concise.xml"
+    mavlinkDialect := (baseDirectory in ThisBuild).value / "mavlink" / "concise.xml"
   )
 
   lazy val root = Project("root", file(".")).aggregate(

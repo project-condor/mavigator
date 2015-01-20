@@ -1,6 +1,19 @@
 # Virtual Flight Deck for UAVs
 
-This project is in its making...
+Web interface simulating a cockpit of an unmanned aerial vehicle, built with Akka and Play.
+
+This project is made of several subprojects:
+ - `vfd-backend` contains the play application that runs the actual interface
+ - `vfd-frontend` dynamic interface built with scalajs that is served by `vfd-backend`
+ - `vfd-uav` library for communicating with UAVs
+
+# Run
+First, switch to project `vfd-backend` and then `run`
+
+    project vfd-backend
+    run
+
+Calling `vfd-backend/run` directly will not work.
 
 # License
 Copyright (C) Jakob Odersky
