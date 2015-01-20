@@ -20,9 +20,26 @@ object ApplicationBuild extends Build {
   )
 
   lazy val root = Project("root", file(".")).aggregate(
+    main,
     uav,
-    backend,
-    frontend
+    dashboard
+  )
+
+  lazy val main = (
+    Project("vfd-main", file("vfd-main"))
+    enablePlugins(PlayScala)
+    enablePlugins(SbtMavlink)
+    settings(common: _*)
+    settings(
+      resolvers += Resolver.url("scala-js-releases", url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(Resolver.ivyStylePatterns),
+      libraryDependencies ++= Seq(
+        bootstrap,
+        fontawesome,
+        jquery
+      )
+    )
+    dependsOn(uav)
+    dependsOnJs(dashboard)
   )
 
   lazy val uav = (
@@ -38,25 +55,8 @@ object ApplicationBuild extends Build {
     )
   )
 
-  lazy val backend = (
-    Project("vfd-backend", file("vfd-backend"))
-    enablePlugins(PlayScala)
-    enablePlugins(SbtMavlink)
-    settings(common: _*)
-    settings(
-      resolvers += Resolver.url("scala-js-releases", url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(Resolver.ivyStylePatterns),
-      libraryDependencies ++= Seq(
-        bootstrap,
-        fontawesome,
-        jquery
-      )
-    )
-    dependsOn(uav)
-    dependsOnJs(frontend)
-  )
-
-  lazy val frontend = (
-    Project("vfd-frontend", file("vfd-frontend"))
+  lazy val dashboard = (
+    Project("vfd-dashboard", file("vfd-dashboard"))
     settings(ScalaJSPlugin.scalaJSSettings: _*)
     enablePlugins(SbtMavlink)
     settings(common: _*)

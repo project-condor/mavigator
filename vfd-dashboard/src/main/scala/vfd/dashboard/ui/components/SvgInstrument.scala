@@ -1,4 +1,4 @@
-package vfd.frontend.ui.components
+package vfd.dashboard.ui.components
 
 import scala.scalajs.js.Any.fromFunction1
 
@@ -11,7 +11,7 @@ import scalatags.JsDom.all.stringFrag
 import scalatags.JsDom.all.stringStyle
 import scalatags.JsDom.all.`type`
 import scalatags.JsDom.all.width
-import vfd.frontend.Environment
+import vfd.dashboard.Environment
 
 trait SvgInstrument[A] {
   

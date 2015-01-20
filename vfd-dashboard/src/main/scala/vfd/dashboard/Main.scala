@@ -1,6 +1,6 @@
-package vfd.frontend
+package vfd.dashboard
 
-import vfd.frontend.ui.Layout
+import vfd.dashboard.ui.Layout
 
 object Main {
 

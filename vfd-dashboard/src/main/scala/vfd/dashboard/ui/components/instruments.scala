@@ -1,4 +1,4 @@
-package vfd.frontend.ui.components
+package vfd.dashboard.ui.components
 
 import org.scalajs.dom
 
@@ -9,7 +9,7 @@ import scalatags.JsDom.all.stringFrag
 import scalatags.JsDom.all.stringStyle
 import scalatags.JsDom.all.`type`
 import scalatags.JsDom.all.width
-import vfd.frontend.Environment
+import vfd.dashboard.Environment
 
 class Led(implicit env: Environment) extends SvgInstrument[String] {
   lazy val element = `object`(`type` := "image/svg+xml", "data".attr := env.asset("images/leds/led.svg"), width := "100%")(

@@ -3,17 +3,17 @@
 Web interface simulating a cockpit of an unmanned aerial vehicle, built with Akka and Play.
 
 This project is made of several subprojects:
- - `vfd-backend` contains the play application that runs the actual interface
- - `vfd-frontend` dynamic interface built with scalajs that is served by `vfd-backend`
- - `vfd-uav` library for communicating with UAVs
+ - `vfd-main` contains the play application that runs the actual interface
+ - `vfd-dashboard` dynamic interface built with scalajs that is served by the main backend
+ - `vfd-uav` communication library
 
 # Run
-First, switch to project `vfd-backend` and then `run`
+First, switch to project `vfd-main` and then `run`
 
-    project vfd-backend
+    project vfd-main
     run
 
-Calling `vfd-backend/run` directly will not work.
+Calling `vfd-main/run` directly will not work.
 
 # License
 Copyright (C) Jakob Odersky

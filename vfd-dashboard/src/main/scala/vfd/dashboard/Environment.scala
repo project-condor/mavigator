@@ -1,4 +1,4 @@
-package vfd.frontend
+package vfd.dashboard
 
 import org.scalajs.dom.HTMLElement
 

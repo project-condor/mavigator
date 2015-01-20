@@ -1,4 +1,4 @@
-package vfd.frontend.ui
+package vfd.dashboard.ui
 
 import org.scalajs.dom.HTMLElement
 
@@ -15,10 +15,10 @@ import scalatags.JsDom.all.stringFrag
 import scalatags.JsDom.all.stringStyle
 import scalatags.JsDom.all.style
 import scalatags.JsDom.all.width
-import vfd.frontend.Environment
-import vfd.frontend.MavlinkSocket
-import vfd.frontend.ui.panels.Communication
-import vfd.frontend.ui.panels.Primary
+import vfd.dashboard.Environment
+import vfd.dashboard.MavlinkSocket
+import vfd.dashboard.ui.panels.Communication
+import vfd.dashboard.ui.panels.Primary
 
 class Layout(socket: MavlinkSocket) {
 

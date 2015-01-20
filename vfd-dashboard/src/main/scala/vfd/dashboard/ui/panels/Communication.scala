@@ -1,4 +1,4 @@
-package vfd.frontend.ui.panels
+package vfd.dashboard.ui.panels
 
 import org.mavlink.messages.Heartbeat
 import org.mavlink.messages.Motor
@@ -13,12 +13,12 @@ import scalatags.JsDom.all.table
 import scalatags.JsDom.all.tbody
 import scalatags.JsDom.all.td
 import scalatags.JsDom.all._
-import vfd.frontend.Environment
-import vfd.frontend.MavlinkSocket
-import vfd.frontend.ui.components.Generic
-import vfd.frontend.ui.components.Balance
-import vfd.frontend.ui.components.Bar
-import vfd.frontend.ui.components.Led
+import vfd.dashboard.Environment
+import vfd.dashboard.MavlinkSocket
+import vfd.dashboard.ui.components.Generic
+import vfd.dashboard.ui.components.Balance
+import vfd.dashboard.ui.components.Bar
+import vfd.dashboard.ui.components.Led
 
 object Communication {
 

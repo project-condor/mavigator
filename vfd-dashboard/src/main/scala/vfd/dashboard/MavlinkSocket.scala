@@ -1,4 +1,4 @@
-package vfd.frontend
+package vfd.dashboard
 
 import scala.scalajs.js
 import scala.scalajs.js.Any.fromFunction1
