@@ -1,8 +1,9 @@
 package vfd.dashboard.ui
 
-import org.scalajs.dom.HTMLElement
+import org.scalajs.dom.html
 
 import scalatags.JsDom.all.ExtendedString
+import scalatags.JsDom.all.Int2CssNumber
 import scalatags.JsDom.all.bindNode
 import scalatags.JsDom.all.`class`
 import scalatags.JsDom.all.div
@@ -12,7 +13,7 @@ import scalatags.JsDom.all.p
 import scalatags.JsDom.all.src
 import scalatags.JsDom.all.stringAttr
 import scalatags.JsDom.all.stringFrag
-import scalatags.JsDom.all.stringStyle
+import scalatags.JsDom.all.stringPixelStyle
 import scalatags.JsDom.all.style
 import scalatags.JsDom.all.width
 import vfd.dashboard.Environment
@@ -23,8 +24,8 @@ import vfd.dashboard.ui.panels.Primary
 class Layout(socket: MavlinkSocket) {
 
   val map = iframe(
-    width := "100%",
-    height := "350px",
+    width := 100.pct,
+    height := 350.px,
     "frameborder".attr := "0",
     "scrolling".attr := "no",
     "marginheight".attr := "0",
@@ -34,7 +35,7 @@ class Layout(socket: MavlinkSocket) {
   val feed = div(style := "width: 100%; height: 460px; color: #ffffff; background-color: #c2c2c2; text-align: center;")(
     p(style := "padding-top: 220px")("video feed"))
 
-  def element(implicit env: Environment): HTMLElement = div(`class` := "container-fluid")(
+  def element(implicit env: Environment): html.Element = div(`class` := "container-fluid")(
     div(`class` := "row")(
       div(`class` := "col-xs-12")(
         div(`class` := "panel panel-default")(

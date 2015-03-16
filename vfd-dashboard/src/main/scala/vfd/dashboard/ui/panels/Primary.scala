@@ -1,7 +1,7 @@
 package vfd.dashboard.ui.panels
 
 import org.mavlink.messages.Attitude
-import org.scalajs.dom.HTMLElement
+import org.scalajs.dom.html
 
 import rx.core.Obs
 import scalatags.JsDom.all.bindNode
@@ -19,7 +19,7 @@ import vfd.dashboard.ui.components.Horizon
 
 object Primary {
 
-  def apply(socket: MavlinkSocket)(implicit env: Environment): HTMLElement = {
+  def apply(socket: MavlinkSocket)(implicit env: Environment): html.Element = {
 
     val compass = new Compass
     val horizon = new Horizon

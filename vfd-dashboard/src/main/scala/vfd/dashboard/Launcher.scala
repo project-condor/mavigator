@@ -3,12 +3,13 @@ package vfd.dashboard
 import scala.scalajs.js.annotation.JSExport
 
 import org.scalajs.dom
+import org.scalajs.dom.html
 
 @JSExport("Launcher")
 class Launcher(rootId: String, assetsBase: String) {
 
   lazy val env = new Environment {
-    val root = dom.document.getElementById(rootId)
+    val root = dom.document.getElementById(rootId).asInstanceOf[html.Element]
     def asset(file: String) = assetsBase + "/" + file
   }
 

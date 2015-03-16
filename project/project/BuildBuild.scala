@@ -9,8 +9,8 @@ object BuildBuild extends Build {
     Project("root", file("."))
     settings(
       resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/",
-      addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.7"),
-      addSbtPlugin("org.scala-lang.modules.scalajs" % "scalajs-sbt-plugin" % "0.5.6")
+      addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.8"),
+      addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.1")
     )
     dependsOn(mavlinkPlugin)
   )

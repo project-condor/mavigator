@@ -3,26 +3,33 @@ package vfd.dashboard.ui.panels
 import org.mavlink.messages.Heartbeat
 import org.mavlink.messages.Motor
 import org.mavlink.messages.Power
-import org.scalajs.dom.HTMLElement
+import org.scalajs.dom.html
+
 import rx.core.Obs
 import scalatags.JsDom.all.bindNode
 import scalatags.JsDom.all.`class`
 import scalatags.JsDom.all.div
+import scalatags.JsDom.all.i
 import scalatags.JsDom.all.stringAttr
+import scalatags.JsDom.all.stringFrag
+import scalatags.JsDom.all.stringPixelStyle
+import scalatags.JsDom.all.style
 import scalatags.JsDom.all.table
 import scalatags.JsDom.all.tbody
 import scalatags.JsDom.all.td
-import scalatags.JsDom.all._
+import scalatags.JsDom.all.thead
+import scalatags.JsDom.all.tr
+import scalatags.JsDom.all.width
 import vfd.dashboard.Environment
 import vfd.dashboard.MavlinkSocket
-import vfd.dashboard.ui.components.Generic
 import vfd.dashboard.ui.components.Balance
 import vfd.dashboard.ui.components.Bar
+import vfd.dashboard.ui.components.Generic
 import vfd.dashboard.ui.components.Led
 
 object Communication {
 
-  def apply(socket: MavlinkSocket)(implicit app: Environment): HTMLElement = {
+  def apply(socket: MavlinkSocket)(implicit app: Environment): html.Element = {
 
     val hb = i(`class` := "fa fa-heart heartbeat").render
     

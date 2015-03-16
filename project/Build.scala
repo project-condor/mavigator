@@ -3,9 +3,8 @@ import sbt.Keys._
 import util._
 import play._
 import play.PlayImport.PlayKeys._
-import scala.scalajs.sbtplugin.ScalaJSPlugin
-import scala.scalajs.sbtplugin.ScalaJSPlugin.ScalaJSKeys._
-import Dependencies._
+import org.scalajs.sbtplugin.ScalaJSPlugin
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 
 import com.github.jodersky.sbt.mavlink.MavlinkKeys._
 import com.github.jodersky.sbt.SbtMavlink
@@ -14,7 +13,7 @@ object ApplicationBuild extends Build {
 
   //settings common to all projects
   val common = Seq(
-    scalaVersion := "2.11.4",
+    scalaVersion := "2.11.6",
     scalacOptions ++= Seq("-feature", "-deprecation"),
     mavlinkDialect := (baseDirectory in ThisBuild).value / "mavlink" / "concise.xml"
   )
@@ -33,9 +32,9 @@ object ApplicationBuild extends Build {
     settings(
       resolvers += Resolver.url("scala-js-releases", url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(Resolver.ivyStylePatterns),
       libraryDependencies ++= Seq(
-        bootstrap,
-        fontawesome,
-        jquery
+        "org.webjars" % "bootstrap" % "3.3.1",
+        "org.webjars" % "font-awesome" % "4.2.0",
+        "org.webjars" % "jquery" % "2.1.3"
       )
     )
     dependsOn(uav)
@@ -48,23 +47,23 @@ object ApplicationBuild extends Build {
     settings(common: _*)
     settings(
       libraryDependencies ++= Seq(
-        akkaActor,
-        flow,
-        flowNative
+        "com.typesafe.akka" %% "akka-actor" % "2.3.9",
+        "com.github.jodersky" %% "flow" % "2.1.0",
+        "com.github.jodersky" % "flow-native" % "2.1.0"
       )
     )
   )
 
   lazy val dashboard = (
     Project("vfd-dashboard", file("vfd-dashboard"))
-    settings(ScalaJSPlugin.scalaJSSettings: _*)
+    enablePlugins(ScalaJSPlugin)
     enablePlugins(SbtMavlink)
     settings(common: _*)
     settings(
       libraryDependencies ++= Seq(
-        rx,
-        dom,
-        tag
+        "org.scala-js" %%% "scalajs-dom" % "0.8.0",
+        "com.lihaoyi" %%% "scalatags" % "0.4.6",
+        "com.lihaoyi" %%% "scalarx" % "0.2.8"
       )
     )
   )

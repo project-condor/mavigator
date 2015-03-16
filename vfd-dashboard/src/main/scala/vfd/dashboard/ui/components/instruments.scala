@@ -1,18 +1,20 @@
 package vfd.dashboard.ui.components
 
 import org.scalajs.dom
+import org.scalajs.dom.html
 
 import scalatags.JsDom.all.ExtendedString
+import scalatags.JsDom.all.Int2CssNumber
 import scalatags.JsDom.all.`object`
 import scalatags.JsDom.all.stringAttr
 import scalatags.JsDom.all.stringFrag
-import scalatags.JsDom.all.stringStyle
+import scalatags.JsDom.all.stringPixelStyle
 import scalatags.JsDom.all.`type`
 import scalatags.JsDom.all.width
 import vfd.dashboard.Environment
 
 class Led(implicit env: Environment) extends SvgInstrument[String] {
-  lazy val element = `object`(`type` := "image/svg+xml", "data".attr := env.asset("images/leds/led.svg"), width := "100%")(
+  lazy val element = `object`(`type` := "image/svg+xml", "data".attr := env.asset("images/leds/led.svg"), width := 100.pct)(
       "Error loading led.").render
   
   def update(color: String) = {
@@ -26,8 +28,8 @@ class Led(implicit env: Environment) extends SvgInstrument[String] {
 class Horizon(implicit env: Environment) extends SvgInstrument[(Double, Double)] {
   lazy val element = SvgInstrument.svg("horizon")
   
-  def pitch = content.getElementById("pitch")
-  def roll = content.getElementById("roll")
+  def pitch = content.getElementById("pitch").asInstanceOf[html.Element]
+  def roll = content.getElementById("roll").asInstanceOf[html.Element]
   protected def moveable = Seq(pitch, roll)
   
   def update(pitchRoll: (Double, Double)) = {
@@ -39,7 +41,7 @@ class Horizon(implicit env: Environment) extends SvgInstrument[(Double, Double)]
 class Altimeter(implicit env: Environment) extends SvgInstrument[Double] {
   lazy val element = SvgInstrument.svg("altimeter")
   
-  def hand = content.getElementById("hand")
+  def hand = content.getElementById("hand").asInstanceOf[html.Element]
   protected def moveable = Seq(hand)
   
   // 36deg === 1m
@@ -51,7 +53,7 @@ class Altimeter(implicit env: Environment) extends SvgInstrument[Double] {
 class Compass(implicit env: Environment) extends SvgInstrument[Double] {
   lazy val element = SvgInstrument.svg("compass")
   
-  def plate = content.getElementById("heading")
+  def plate = content.getElementById("heading").asInstanceOf[html.Element]
   protected def moveable = Seq(plate)
   
   def update(heading: Double) = {
@@ -67,7 +69,7 @@ class Generic(
   
   lazy val element = SvgInstrument.svg("generic")
   
-  def handElement = content.getElementById("hand")
+  def handElement = content.getElementById("hand").asInstanceOf[html.Element]
   def unitElement = content.getElementById("unit")
   def valueElement = content.getElementById("value")
   def minElement = content.getElementById("min")
@@ -94,7 +96,7 @@ class Bar(implicit env: Environment) extends SvgInstrument[Double] {
   
   lazy val element = SvgInstrument.svg("bar")
   
-  def level = content.getElementById("level")
+  def level = content.getElementById("level").asInstanceOf[html.Element]
   protected def moveable = Seq(level)
   
   def update(value: Double) = {
@@ -106,7 +108,7 @@ class Bar(implicit env: Environment) extends SvgInstrument[Double] {
 class Balance(implicit env: Environment) extends SvgInstrument[(Double, Double, Double, Double)] {
   lazy val element = SvgInstrument.svg("balance")
   
-  def position = content.getElementById("position")
+  def position = content.getElementById("position").asInstanceOf[html.Element]
   protected def moveable = Seq(position)
   
   def update(value: (Double, Double, Double, Double)) = {

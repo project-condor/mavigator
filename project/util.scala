@@ -2,8 +2,8 @@ import sbt._
 import sbt.Keys._
 import play._
 import play.PlayImport.PlayKeys._
-import scala.scalajs.sbtplugin.ScalaJSPlugin
-import scala.scalajs.sbtplugin.ScalaJSPlugin.ScalaJSKeys._
+import org.scalajs.sbtplugin.ScalaJSPlugin
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import com.typesafe.sbt.packager.universal.UniversalKeys
 
 package object util extends UniversalKeys {
@@ -19,7 +19,7 @@ package object util extends UniversalKeys {
       stage <<= stage dependsOn (fullOptJS in (scalajs, Compile)),
       playMonitoredFiles += (scalaSource in (scalajs, Compile)).value.getCanonicalPath
     ).settings(
-      Seq(packageLauncher, fastOptJS, fullOptJS) map { packageJSKey =>
+      Seq(packageScalaJSLauncher, fastOptJS, fullOptJS) map { packageJSKey =>
         crossTarget in (scalajs, Compile, packageJSKey) := jsOutputDir.value
       }: _*
     )
