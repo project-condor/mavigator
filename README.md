@@ -19,16 +19,23 @@ This project is made of several subprojects:
 
  2. Navigate to localhost:9000 in a modern browser (tested on Firefox and Chrome) to see the interface. The feed defaults to mock data.
 
-# Developer Info
+# Developer Overview
 The general idea of this project is to create a web interface for displaying live data from a drone.
 
-A few explanations to get started:
+The flow of such data can be summarized in a few points:
 - Data is received and processed in the form of [MAVLink](http://qgroundcontrol.org/mavlink/start) messages.
 - Messages arrive at a communication backend (implemented in vfd-uav). Currently, this is either a mock backend that generates random messages, or a serial connection using [flow](https://github.com/jodersky/flow) for low-level communication.
 - These messages are then transferred through vfd-main to the interface via websockets.
 - Messages are parsed by the front-end (the interface) and used to display virtual instrumentation.
 - Currently, a custom set of MAVLink messages are used. Their definition is in mavlink/concise.xml
 - The dialect definition is translated from xml into useable scala code by a plugin during the build (plugin is contained in /project).
+
+Details on the dashboard interface:
+ - the frontend is a pure scalajs application using [scalatags](https://github.com/lihaoyi/scalatags) templating
+ - basically, vfd-main provides a websocket for communication and serves a page (see views.uav.scala.html) that contains a div with a loading message
+ - once loaded, the scalajs frontend replaces the content of said div with its insrumentation (see code in package vfd.dashboard.ui.*)
+ - messages are received by a websocket and stored in an observable "var"; this process uses [scala.rx](https://github.com/lihaoyi/scala.rx)
+ - panels observe the recieved messages and update their respective instruments and components
 
 
 # License
