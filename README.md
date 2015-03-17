@@ -10,7 +10,7 @@ This project is made of several subprojects:
 # Run
  0. SBT is used as the build tool.
 
- 1. Switch to project `vfd-main` and then `run`. /Note: if this is the first time your run a play project throught sbt, be aware that you may need to wait a while as your computer downloads half the internet/
+ 1. Switch to project `vfd-main` and then `run`. *Note: if this is the first time your run a play project throught sbt, be aware that you may need to wait a while as your computer downloads half the internet*
 
         project vfd-main
         run
