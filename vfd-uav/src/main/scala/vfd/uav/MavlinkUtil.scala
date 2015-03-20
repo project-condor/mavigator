@@ -24,9 +24,9 @@ trait MavlinkUtil { myself: Actor with ActorLogging =>
   
   /** Assembles a message into a bytestring representing a packet sent from this connection. */
   protected def assemble(message: Message): ByteString = {
-    val (messageId: Byte, payload: Seq[Byte]) = Message.pack(message)
+    val (messageId, payload) = Message.pack(message)
     val packet: Packet = assembler.assemble(messageId, payload)
-    ByteString(packet.toSeq.toArray)
+    ByteString(packet.toArray)
   }
 
   /** Parser for messages being sent to the uav. */

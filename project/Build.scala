@@ -6,8 +6,8 @@ import play.PlayImport.PlayKeys._
 import org.scalajs.sbtplugin.ScalaJSPlugin
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 
-import com.github.jodersky.sbt.mavlink.MavlinkKeys._
-import com.github.jodersky.sbt.SbtMavlink
+import com.github.jodersky.mavlink.sbt._
+import com.github.jodersky.mavlink.sbt.MavlinkKeys._
 
 object ApplicationBuild extends Build {
 

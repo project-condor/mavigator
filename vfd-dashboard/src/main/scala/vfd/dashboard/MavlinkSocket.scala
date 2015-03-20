@@ -5,6 +5,7 @@ import scala.scalajs.js.Any.fromFunction1
 
 import org.mavlink.Packet
 import org.mavlink.Parser
+import org.mavlink.Parser.Errors._
 import org.mavlink.messages.Message
 import org.scalajs.dom
 
@@ -14,7 +15,7 @@ import rx.ops.RxOps
 
 class MavlinkSocket(url: String, remoteSystemId: Int) {
 
-  lazy val packet: Var[Packet] = Var(Packet.Empty)
+  lazy val packet: Var[Packet] = Var(Packet.empty)
   lazy val message: Rx[Message] = packet.map{p => 
     Message.unpack(p.messageId, p.payload)
   }
@@ -39,8 +40,8 @@ class MavlinkSocket(url: String, remoteSystemId: Int) {
     },
     err => {
       err match {
-        case Parser.ParseErrors.CrcError => stats.crcErrors() += 1
-        case Parser.ParseErrors.OverflowError => stats.overflows() += 1
+        case CrcError => stats.crcErrors() += 1
+        case OverflowError => stats.overflows() += 1
       }
     })
 
