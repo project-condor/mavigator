@@ -2,6 +2,6 @@
 
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.8")
 
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.1")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.2")
 
-addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.1-SNAPSHOT")
+addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.1")
