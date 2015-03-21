@@ -1,4 +1,4 @@
-# Virtual Flight Deck for UAVs
+b# Virtual Flight Deck for UAVs
 
 Web interface simulating a cockpit of an unmanned aerial vehicle, built with Akka, Play and ScalaJS.
 
@@ -8,19 +8,16 @@ This project is made of several subprojects:
  - `vfd-uav` communication backend for message exchange with drones
 
 # Run
-SBT is used as the build tool. However, the standard 'sbt run' procedure does not work as there seems
-to be some problems with plugins used.
-Hence, the general workflow is as follows:
+SBT is used as the build tool. To get started:
 
  1. start sbt in the base directory
- 2. enter 'project vfd-main'
- 3. enter 'run'    
-    *Note: if this is the first time your run a play project throught sbt, be aware that you may need to wait a while as your computer downloads half the internet*
- 4. open localhost:9000 in a modern browser to see the application in action
- 5. make some changes
- 6. go to step 4 (the application is automatically recompiled)
+ 2. enter 'run'    
+    *Note: if this is the first time your run a play project through sbt, be aware that you may need to wait a while as your computer downloads half the internet*
+ 3. open localhost:9000 in a modern browser to see the application in action
+ 4. make some changes
+ 5. go to step 3 (the application is automatically recompiled)
 
-Currently, standalone deployment and packaging of the application is not is broken.
+The application can be deployed as a standalone package by running the 'dist' task.
 
 # Developer Overview
 The general idea of this project is to create a web interface for displaying live data from a drone.

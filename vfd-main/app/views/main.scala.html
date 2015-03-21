@@ -1,5 +1,7 @@
 @(title: String, info: String)(content: Html)
 
+@import play.api.Play
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -46,7 +48,12 @@
 
 	<script type="text/javascript" src="@routes.Assets.at("lib/jquery/jquery.js")"></script>
 	<script type="text/javascript" src="@routes.Assets.at("lib/bootstrap/js/bootstrap.min.js")"></script>
-	<script type="text/javascript" src="@routes.Assets.at("lib/vfd-dashboard-fastopt.js")"></script>
+
+	@if(Play.isProd(Play.current)) {
+		<script type="text/javascript" src="@routes.Assets.at("vfd-dashboard-opt.js")"></script>
+	} else {
+		<script type="text/javascript" src="@routes.Assets.at("vfd-dashboard-fastopt.js")"></script>
+	}
 	
 </body>
 </html>

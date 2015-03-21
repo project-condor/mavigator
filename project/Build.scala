@@ -1,13 +1,20 @@
 import sbt._
 import sbt.Keys._
-import util._
+import sbt.Project.projectToRef
+
 import play._
 import play.PlayImport.PlayKeys._
+
 import org.scalajs.sbtplugin.ScalaJSPlugin
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 
 import com.github.jodersky.mavlink.sbt._
 import com.github.jodersky.mavlink.sbt.MavlinkKeys._
+
+import playscalajs.ScalaJSPlay
+import playscalajs.PlayScalaJS.autoImport._
+import com.typesafe.sbt.web.Import._
+
 
 object ApplicationBuild extends Build {
 
@@ -18,12 +25,20 @@ object ApplicationBuild extends Build {
     mavlinkDialect := (baseDirectory in ThisBuild).value / "mavlink" / "concise.xml"
   )
 
-  lazy val root = Project("root", file(".")).aggregate(
-    main,
-    uav,
-    dashboard
+  //root super-project
+  lazy val root = (
+    Project("root", file(".")).aggregate(
+      main,
+      uav,
+      dashboard
+    )
+    settings(
+      //goto main project on load
+      onLoad in Global := (Command.process("project vfd-main", _: State)) compose (onLoad in Global).value
+    )
   )
 
+  //main play project
   lazy val main = (
     Project("vfd-main", file("vfd-main"))
     enablePlugins(PlayScala)
@@ -31,6 +46,8 @@ object ApplicationBuild extends Build {
     settings(common: _*)
     settings(
       resolvers += Resolver.url("scala-js-releases", url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(Resolver.ivyStylePatterns),
+      scalaJSProjects := Seq(dashboard),
+      pipelineStages := Seq(scalaJSProd),
       libraryDependencies ++= Seq(
         "org.webjars" % "bootstrap" % "3.3.1",
         "org.webjars" % "font-awesome" % "4.2.0",
@@ -38,9 +55,10 @@ object ApplicationBuild extends Build {
       )
     )
     dependsOn(uav)
-    dependsOnJs(dashboard)
+    aggregate(projectToRef(dashboard))
   )
 
+  //communication backend
   lazy val uav = (
     Project("vfd-uav", file("vfd-uav"))
     enablePlugins(SbtMavlink)
@@ -54,9 +72,11 @@ object ApplicationBuild extends Build {
     )
   )
 
+  //web frontend
   lazy val dashboard = (
     Project("vfd-dashboard", file("vfd-dashboard"))
     enablePlugins(ScalaJSPlugin)
+    enablePlugins(ScalaJSPlay)
     enablePlugins(SbtMavlink)
     settings(common: _*)
     settings(
