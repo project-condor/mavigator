@@ -1,4 +1,4 @@
-b# Virtual Flight Deck for UAVs
+# Virtual Flight Deck for UAVs
 
 Web interface simulating a cockpit of an unmanned aerial vehicle, built with Akka, Play and ScalaJS.
 
@@ -28,7 +28,7 @@ The flow of such data can be summarized in a few points:
 - These messages are then transferred through vfd-main to the interface via websockets.
 - Messages are parsed by the front-end (the interface) and used to display virtual instrumentation.
 - Currently, a custom set of MAVLink messages are used. Their definition is in mavlink/concise.xml
-- The dialect definition is translated from xml into useable scala code by a plugin during the build (plugin is contained in /project).
+- The dialect definition is translated from xml into useable scala code by a [plugin](https://github.com/jodersky/sbt-mavlink) during the build.
 
 Details on the dashboard interface:
  - the frontend is a pure scalajs application using [scalatags](https://github.com/lihaoyi/scalatags) templating
