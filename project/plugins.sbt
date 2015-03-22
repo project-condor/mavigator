@@ -6,4 +6,4 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.2")
 
 addSbtPlugin("com.vmunier" % "sbt-play-scalajs" % "0.2.3")
 
-addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.1")
+addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.2")
