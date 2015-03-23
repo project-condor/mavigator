@@ -1,0 +1,29 @@
+# sbt
+.cache
+.history/
+.lib/
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+
+# scala-ide specific
+/.settings
+/.scala_dependencies
+/.project
+/.classpath
+/.cache
+/.history
+
+# ensime
+.ensime
+
+# general files
+/*.jar
+*.swp
+*.class
+*.log
+*~
+

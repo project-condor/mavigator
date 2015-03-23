@@ -14,11 +14,11 @@ object Application extends Controller {
   private def plugin = current.plugin[UavPlugin].getOrElse(throw new RuntimeException("UAV plugin is not available"))
 
   def index = Action { implicit request =>
-    Redirect(routes.Application.uav(0))
+    Ok(views.html.index(routes.Application.mavlink.webSocketURL()))
   }
   
-  def uav(remoteSystemId: Int) = Action { implicit request =>
-    Ok(views.html.uav(routes.Application.mavlink.webSocketURL(), remoteSystemId.toByte, plugin.systemId, 0.toByte))
+  def dashboard(remoteSystemId: Int) = Action { implicit request =>
+    Ok(views.html.dashboard(routes.Application.mavlink.webSocketURL(), remoteSystemId.toByte, plugin.systemId, 0.toByte))
   }
 
   def mavlink = WebSocket.acceptWithActor[Array[Byte], Array[Byte]] { implicit request =>

@@ -46,7 +46,7 @@ object ApplicationBuild extends Build {
     settings(common: _*)
     settings(
       resolvers += Resolver.url("scala-js-releases", url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(Resolver.ivyStylePatterns),
-      scalaJSProjects := Seq(dashboard),
+      scalaJSProjects := Seq(dashboard, index),
       pipelineStages := Seq(scalaJSProd),
       libraryDependencies ++= Seq(
         "org.webjars" % "bootstrap" % "3.3.1",
@@ -55,7 +55,10 @@ object ApplicationBuild extends Build {
       )
     )
     dependsOn(uav)
-    aggregate(projectToRef(dashboard))
+    aggregate(
+      projectToRef(dashboard),
+      projectToRef(index)
+    )
   )
 
   //communication backend
@@ -72,20 +75,31 @@ object ApplicationBuild extends Build {
     )
   )
 
-  //web frontend
+  //web frontends
+  val scalajs = Seq(
+    libraryDependencies ++= Seq(
+        "org.scala-js" %%% "scalajs-dom" % "0.8.0",
+        "com.lihaoyi" %%% "scalatags" % "0.4.6",
+        "com.lihaoyi" %%% "scalarx" % "0.2.8"
+    )
+  )
+
   lazy val dashboard = (
     Project("vfd-dashboard", file("vfd-dashboard"))
     enablePlugins(ScalaJSPlugin)
     enablePlugins(ScalaJSPlay)
     enablePlugins(SbtMavlink)
     settings(common: _*)
-    settings(
-      libraryDependencies ++= Seq(
-        "org.scala-js" %%% "scalajs-dom" % "0.8.0",
-        "com.lihaoyi" %%% "scalatags" % "0.4.6",
-        "com.lihaoyi" %%% "scalarx" % "0.2.8"
-      )
-    )
+    settings(scalajs: _*)
+  )
+
+  lazy val index = (
+    Project("vfd-index", file("vfd-index"))
+    enablePlugins(ScalaJSPlugin)
+    enablePlugins(ScalaJSPlay)
+    enablePlugins(SbtMavlink)
+    settings(common: _*)
+    settings(scalajs: _*)
   )
 
 }
