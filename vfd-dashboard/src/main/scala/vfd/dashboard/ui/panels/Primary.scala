@@ -1,6 +1,5 @@
 package vfd.dashboard.ui.panels
 
-import org.mavlink.messages.Attitude
 import org.scalajs.dom.html
 
 import rx.core.Obs
@@ -27,9 +26,7 @@ object Primary {
 
     Obs(socket.message, skipInitial = true) {
       socket.message() match {
-        case Attitude(roll, pitch, yaw) =>
-          horizon.update(pitch, roll)
-          compass.update(yaw)
+        //TODO match message and update UI
         case _ => ()
       }
     }

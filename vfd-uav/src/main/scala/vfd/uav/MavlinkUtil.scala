@@ -1,14 +1,13 @@
 package vfd.uav
 
 import org.mavlink.Assembler
-import akka.util.ByteString
 import org.mavlink.Packet
-import akka.actor.Actor
-import org.mavlink.messages.Ping
-import org.mavlink.messages.Ack
-import org.mavlink.messages.Message
 import org.mavlink.Parser
+import org.mavlink.messages.Message
+
+import akka.actor.Actor
 import akka.actor.ActorLogging
+import akka.util.ByteString
 
 /** Provides utilities for actors representing a mavlink connection. */
 trait MavlinkUtil { myself: Actor with ActorLogging =>
@@ -31,10 +30,12 @@ trait MavlinkUtil { myself: Actor with ActorLogging =>
 
   /** Parser for messages being sent to the uav. */
   protected val outgoing: Parser = new Parser(packet => Message.unpack(packet.messageId, packet.payload) match {
+    //TODO handle ping
+    /*
     case Ping(`systemId`, `componentId`) =>
       val message = Ack(packet.systemId, packet.componentId)
       val data = assemble(message)
-      self ! Connection.Received(data)
+      self ! Connection.Received(data)*/
     case _ => ()
   })
 

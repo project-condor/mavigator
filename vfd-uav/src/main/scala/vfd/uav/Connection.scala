@@ -1,16 +1,12 @@
 package vfd.uav
 
 import scala.collection.mutable.ArrayBuffer
+
 import akka.actor.Actor
 import akka.actor.ActorRef
 import akka.actor.Terminated
 import akka.actor.actorRef2Scala
 import akka.util.ByteString
-import org.mavlink.Assembler
-import org.mavlink.messages.Message
-import org.mavlink.Parser
-import org.mavlink.Packet
-import akka.actor.ActorLogging
 
 /** Protocol definition. */
 object Connection {

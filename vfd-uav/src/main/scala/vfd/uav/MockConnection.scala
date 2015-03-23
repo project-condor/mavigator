@@ -1,30 +1,43 @@
 package vfd.uav
 
 import java.util.concurrent.TimeUnit.MILLISECONDS
+
 import scala.concurrent.duration.FiniteDuration
 import scala.util.Random
+
+import org.mavlink.Packet
+import org.mavlink.enums.MavAutopilot
+import org.mavlink.enums.MavModeFlag
+import org.mavlink.enums.MavState
+import org.mavlink.enums.MavType
+import org.mavlink.messages.Heartbeat
+
 import Connection.Received
 import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.Props
 import akka.util.ByteString
-import org.mavlink.messages._
-import org.mavlink.Packet
 
 class MockConnection(localSystemId: Byte, localComponentId: Byte, remoteSystemId: Byte) extends Actor with ActorLogging with Connection with MavlinkUtil {
   import Connection._
   import context._
-  
+
   override val systemId = remoteSystemId
   override val componentId = remoteSystemId
 
-  val MessageInterval = FiniteDuration(100, MILLISECONDS)
-  
-  def randomData: ByteString = Random.nextInt(MockPackets.Messages + 1) match {
-    case 0 => ByteString(MockPackets.invalid)
-    case i => assemble(MockPackets.message(i - 1))
-  }
-  
+  val MessageInterval = FiniteDuration(1000, MILLISECONDS)
+
+  def randomData: ByteString =
+    assemble(
+      Heartbeat(
+        MavType.MavTypeGeneric.toByte,
+        MavAutopilot.MavAutopilotGeneric.toByte,
+        (MavModeFlag.MavModeFlagSafetyArmed | MavModeFlag.MavModeFlagManualInputEnabled).toByte,
+        0, //no custom mode
+        MavState.MavStateActive.toByte,
+        0 //TODO properly implement read-only fields
+        ))
+
   override def preStart() = context.system.scheduler.schedule(MessageInterval, MessageInterval) {
     sendAll(Received(randomData))
   }
@@ -42,19 +55,6 @@ object MockPackets {
   private implicit class RichRandom(val r: Random) extends AnyVal {
     def nextByte(): Byte = r.nextInt().toByte
     def nextByte(max: Int): Byte = r.nextInt(max).toByte
-  }
-  
-  def heartbeat = Heartbeat(0)
-  def motor = Motor(r.nextByte(101), r.nextByte(101), r.nextByte(101), r.nextByte(101))
-  def attitude = Attitude((r.nextInt(160) - 80).toShort, (r.nextInt(160) - 80).toShort, r.nextInt(360).toShort)
-  def power = Power(Random.nextInt(12000).toShort)
-  
-  val Messages = 4
-  def message(i: Int) = i match {
-    case 0 => heartbeat
-    case 1 => motor
-    case 2 => attitude
-    case 3 => power
   }
 
   val invalidCrc = Array(254, 1, 123, 13, 13).map(_.toByte)

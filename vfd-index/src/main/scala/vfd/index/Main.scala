@@ -18,14 +18,12 @@ import scalatags.JsDom.all._
 object Main {
   import Util._
 
-  case class ActiveVehicle(id: Int)
-
   val active = Var(Set.empty[ActiveVehicle])
 
   val parser = new Parser(
     packet => Message.unpack(packet.messageId, packet.payload) match {
       case hb: Heartbeat =>
-        active() += ActiveVehicle(packet.systemId)
+        active() += ActiveVehicle.fromHeartbeat(packet.messageId, hb)
       case _ => ()
     })
 
@@ -48,13 +46,19 @@ object Main {
       thead(
         tr(
           th("System ID"),
+          th("Type"),
+          th("Autopilot"),
+          th("State"),
           th(""))),
       Rx {
         tbody(
           for (vehicle <- active().toSeq) yield {
             tr(
-              td(vehicle.id),
-              td(a(href := "/dashboard/" + vehicle.id, `class` := "btn btn-default")("Pilot")))
+              td(vehicle.systemId),
+              td(vehicle.vehicleType),
+              td(vehicle.autopilot),
+              td(vehicle.state),
+              td(a(href := "/dashboard/" + vehicle.systemId, `class` := "btn btn-default")("Pilot")))
           })
       }).render)
   }

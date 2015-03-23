@@ -1,8 +1,5 @@
 package vfd.dashboard.ui.panels
 
-import org.mavlink.messages.Heartbeat
-import org.mavlink.messages.Motor
-import org.mavlink.messages.Power
 import org.scalajs.dom.html
 
 import rx.core.Obs
@@ -46,22 +43,7 @@ object Communication {
 
     Obs(socket.message, skipInitial = true) {
       socket.message() match {
-        case Motor(m0, m1, m2, m3) =>
-          motor0.update(m0)
-          motor1.update(m1)
-          motor2.update(m2)
-          motor3.update(m3)
-          powerDistribution.update(m0, m1, m2, m3)
-
-        case Power(mV) =>
-          batteryLevel.update(100 * (mV - 9600) / 12600)
-        case Heartbeat(_) => {
-          hb.style.visibility = "hidden"
-          hb.style.visibility = "visible"
-          //hb.classList.remove("heartbeat")
-          //hb.offsetHeight
-          //hb.classList.add("heartbeat")
-        }
+        //TODO match message and update UI 
         case _ =>
       }
     }
