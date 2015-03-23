@@ -4,7 +4,8 @@ Web interface simulating a cockpit of an unmanned aerial vehicle, built with Akk
 
 This project is made of several subprojects:
  - `vfd-main` contains the play application that serves the actual interface
- - `vfd-dashboard` dynamic interface built with scalajs that displays real-time data from the drone
+ - `vfd-dashboard` dynamic cockpit interface built with scalajs that displays real-time data from the drone
+ - `vfd-index` dynamic landing page advertising available drones
  - `vfd-uav` communication backend for message exchange with drones
 
 # Run
