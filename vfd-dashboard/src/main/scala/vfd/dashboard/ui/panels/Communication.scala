@@ -4,7 +4,6 @@ import org.mavlink.messages.Heartbeat
 import org.mavlink.messages.Motor
 import org.mavlink.messages.Power
 import org.scalajs.dom.html
-
 import rx.core.Obs
 import scalatags.JsDom.all.bindNode
 import scalatags.JsDom.all.`class`
@@ -26,10 +25,11 @@ import vfd.dashboard.ui.components.Balance
 import vfd.dashboard.ui.components.Bar
 import vfd.dashboard.ui.components.Generic
 import vfd.dashboard.ui.components.Led
+import scalatags.jsdom.Frag
 
 object Communication {
 
-  def apply(socket: MavlinkSocket)(implicit app: Environment): html.Element = {
+  def apply(socket: MavlinkSocket)(implicit app: Environment): Frag = {
 
     val hb = i(`class` := "fa fa-heart heartbeat").render
     
@@ -107,7 +107,7 @@ object Communication {
             tr(
               td(motor2.element),
               td(),
-              td(motor3.element))))).render
+              td(motor3.element)))))
   }
 
 }
