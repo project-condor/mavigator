@@ -30,7 +30,8 @@ object ApplicationBuild extends Build {
     Project("root", file(".")).aggregate(
       main,
       uav,
-      dashboard
+      dashboard,
+      index
     )
     settings(
       //goto main project on load
