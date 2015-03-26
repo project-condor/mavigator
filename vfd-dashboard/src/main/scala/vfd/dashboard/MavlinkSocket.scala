@@ -29,25 +29,21 @@ class MavlinkSocket(url: String, remoteSystemId: Int) {
   }
 
   private val parser = new Parser(
-    pckt => {
-      pckt match {
-        case Packet(seq, `remoteSystemId`, compId, msgId, payload) =>
-          packet() = pckt
-          stats.packets() += 1
-        case _ =>
-          stats.wrongIds() += 1
-      }
+    {
+      case pckt@Packet(seq, `remoteSystemId`, compId, msgId, payload) =>
+        packet() = pckt
+        stats.packets() += 1
+      case _ =>
+        stats.wrongIds() += 1
     },
-    err => {
-      err match {
-        case CrcError => stats.crcErrors() += 1
-        case OverflowError => stats.overflows() += 1
-      }
+    {
+      case CrcError => stats.crcErrors() += 1
+      case OverflowError => stats.overflows() += 1
     })
 
   private val connection = new dom.WebSocket(url)
 
-  connection.binaryType = "arraybuffer";
+  connection.binaryType = "arraybuffer"
   connection.onopen = (e: dom.Event) => {
     stats.open() = true
   }

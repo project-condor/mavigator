@@ -35,7 +35,7 @@ trait Connection { myself: Actor =>
 
   /** Adds a client to the client list and acquires a deathwatch. */
   protected def register(client: ActorRef) = {
-    _clients += client;
+    _clients += client
     myself.context.watch(client)
   }
 

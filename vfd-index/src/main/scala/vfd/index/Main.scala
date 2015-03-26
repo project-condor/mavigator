@@ -21,18 +21,23 @@ object Main {
   val active = Var(Set.empty[ActiveVehicle])
 
   val parser = new Parser(
-    packet => Message.unpack(packet.messageId, packet.payload) match {
-      case hb: Heartbeat =>
-        active() += ActiveVehicle.fromHeartbeat(packet.messageId, hb)
-      case _ => ()
-    })
+    packet => {
+      val m: Message = Message.unpack(packet.messageId, packet.payload)
+      println(m)
+      m match {
+        case hb: Heartbeat =>
+          active() += ActiveVehicle.fromHeartbeat(packet.systemId, hb)
+        case _ => ()
+      }
+    }
+  )
 
   @JSExport
   def main(root: html.Element, baseAssets: String, args: js.Dictionary[String]): Unit = {
 
     val connection = new dom.WebSocket(args("socketUrl"))
 
-    connection.binaryType = "arraybuffer";
+    connection.binaryType = "arraybuffer"
     connection.onmessage = (e: dom.MessageEvent) => {
       val buffer = e.data.asInstanceOf[js.typedarray.ArrayBuffer]
       val view = new js.typedarray.DataView(buffer)
