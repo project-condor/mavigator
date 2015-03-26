@@ -1,5 +1,6 @@
 package vfd.dashboard.ui.panels
 
+import org.mavlink.messages.{VfrHud, Attitude, GlobalPositionInt}
 import org.scalajs.dom.html
 
 import rx.core.Obs
@@ -26,7 +27,12 @@ object Primary {
 
     Obs(socket.message, skipInitial = true) {
       socket.message() match {
-        //TODO match message and update UI
+        case a: Attitude =>
+//          compass.update(a.yaw / Math.PI * 360)
+//          horizon.update(a.pitch, a.roll)
+        case vh: VfrHud =>
+//          altimeter.update(vh.alt)
+//          compass.update(vh.heading / Math.PI * 360)
         case _ => ()
       }
     }
