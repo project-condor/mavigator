@@ -127,6 +127,8 @@ body {
 .mode.danger {
 	color: #d9534f;
 	text-shadow: 0 0 5px #d9534f;
+	animation: danger-blink 1s linear infinite;
+	-webkit-animation: danger-blink 1s linear infinite;
 }
 
 .mode.warning {
@@ -147,6 +149,8 @@ body {
 .mode.off {
 	color: #eeeeee;
 	text-shadow: none;
+	animation: none;
+	-webkit-animation: none;
 }
 
 /* TODO: Rules below are maybe obsolete and need to be reviewed */
@@ -163,6 +167,7 @@ body {
 	color: rgba(165, 25, 25, 1);
 	animation: heartbeat 2s linear infinite;
 }
+
 @keyframes heartbeat {
 	0% {
 		transform: scale(1);
@@ -178,5 +183,34 @@ body {
 	}
 	28% {
 		transform: scale(1);
+	}
+}
+
+@keyframes danger-blink {
+	0% {
+		color: #eeeeee;
+		text-shadow: none;
+	}
+	50% {
+		color: #d9534f;
+		text-shadow: 0 0 5px #d9534f;
+	}
+	100% {
+		color: #eeeeee;
+		text-shadow: none;
+	}
+}
+@-webkit-keyframes danger-blink {
+	0% {
+		color: #eeeeee;
+		text-shadow: none;
+	}
+	50% {
+		color: #d9534f;
+		text-shadow: 0 0 5px #d9534f;
+	}
+	100% {
+		color: #eeeeee;
+		text-shadow: none;
 	}
 }
