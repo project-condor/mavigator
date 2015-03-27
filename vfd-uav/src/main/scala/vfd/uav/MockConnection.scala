@@ -39,8 +39,8 @@ class MockConnection(localSystemId: Byte, localComponentId: Byte, remoteSystemId
     system.scheduler.schedule(0.01.seconds, 0.01.seconds){plan.tick(0.01)}
     
     //send messages
-    scheduleMessage(0.1.seconds)(plan.position)
-    scheduleMessage(0.1.seconds)(plan.attitude)
+    scheduleMessage(0.05.seconds)(plan.position)
+    scheduleMessage(0.05.seconds)(plan.attitude)
     scheduleMessage(2.seconds)(plan.heartbeat)
     
     //simulate noisy line

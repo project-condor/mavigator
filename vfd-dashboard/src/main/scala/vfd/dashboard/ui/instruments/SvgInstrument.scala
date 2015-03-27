@@ -23,7 +23,7 @@ trait SvgInstrument[A] extends Instrument[A] {
   /** Called when element has been loaded. */
   protected def load(event: dom.Event): Unit = {
     for (part <- moveable) {
-      part.style.transition = "transform 250ms ease-out"
+      part.style.transition = "transform 50ms ease-out"
     }
     ready()
   }
@@ -47,8 +47,8 @@ object SvgInstrument {
   }
 
   /** Applies rotation styling to an element. */
-  def rotate(elem: html.Element, deg: Int): Unit = {
-    elem.style.transform = "rotateZ(" + deg + "deg)";
+  def rotate(elem: html.Element, rad: Double): Unit = {
+    elem.style.transform = "rotateZ(" + rad + "rad)";
   }
 
 }

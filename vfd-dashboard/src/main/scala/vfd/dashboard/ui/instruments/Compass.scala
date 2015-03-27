@@ -13,6 +13,6 @@ class Compass(implicit env: Environment) extends SvgInstrument[Double] {
   lazy val moveable = Seq(plate)
   
   protected def update(heading: Double) = {
-    rotate(plate, heading.toInt)
+    rotate(plate, heading)
   }
 }

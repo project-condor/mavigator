@@ -12,8 +12,8 @@ class Altimeter(implicit env: Environment) extends SvgInstrument[Double] {
   lazy val hand = part("hand")
   lazy val moveable = Seq(hand)
 
-  // 36deg === 1m
+  // 1m === 36deg = 2Pi / 10 ~= 0.62832
   protected def update(altitude: Double) = {
-    rotate(hand, (altitude * 36).toInt)
+    rotate(hand, (altitude * 0.62832).toInt)
   }
 }

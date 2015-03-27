@@ -14,7 +14,7 @@ class Horizon(implicit env: Environment) extends SvgInstrument[(Double, Double)]
   lazy val moveable = Seq(pitch, roll)
   
   protected def update(pitchRoll: (Double, Double)) = {
-    translate(pitch, 0, pitchRoll._1.toInt)
-    rotate(roll, pitchRoll._2.toInt)
+    translate(pitch, 0, (pitchRoll._1 * 180 / math.Pi).toInt) // 1deg === 1px
+    rotate(roll, pitchRoll._2)
   }
 }

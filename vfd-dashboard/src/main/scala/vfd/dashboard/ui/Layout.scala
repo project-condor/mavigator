@@ -1,9 +1,5 @@
 package vfd.dashboard.ui
 
-import org.mavlink.messages.Attitude
-import org.mavlink.messages.Motor
-import org.mavlink.messages.Power
-
 import rx.Obs
 import scalatags.JsDom.all._
 import vfd.dashboard.Environment
@@ -14,6 +10,8 @@ import vfd.dashboard.ui.instruments.Bar
 import vfd.dashboard.ui.instruments.Compass
 import vfd.dashboard.ui.instruments.Generic
 import vfd.dashboard.ui.instruments.Horizon
+import org.mavlink.messages.Heartbeat
+import org.mavlink.messages.Attitude
 
 class Layout(socket: MavlinkSocket)(implicit env: Environment) {
 
@@ -133,21 +131,15 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
   //message router
   Obs(socket.message, skipInitial = true) {
     socket.message() match {
+      
+      case att: Attitude =>
+        horizon.value() = (att.pitch, att.roll)
+        compass.value() = att.yaw
 
-      case Motor(m0, m1, m2, m3) =>
-        motor0.value() = m0
-        motor1.value() = m1
-        motor2.value() = m2
-        motor3.value() = m3
-        powerDistribution.value() = (m0, m1, m2, m3)
+      //TODO route other messages
 
-      case Power(mV) =>
-        batteryLevel.value() = (100 * (mV - 9600) / 12600)
-
-      case Attitude(roll, pitch, yaw) =>
-        horizon.value() = (pitch, roll)
-        compass.value() = (yaw)
-        
+      case _ => ()
+      
     }
   }
 
