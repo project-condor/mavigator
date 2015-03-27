@@ -12,6 +12,7 @@ import vfd.dashboard.ui.instruments.Generic
 import vfd.dashboard.ui.instruments.Horizon
 import org.mavlink.messages.Heartbeat
 import org.mavlink.messages.Attitude
+import vfd.dashboard.ui.instruments.Clock
 
 class Layout(socket: MavlinkSocket)(implicit env: Environment) {
 
@@ -59,7 +60,7 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
 
   val top = header(
     div("Flight Control Panel"),
-    div("00:00:00"),
+    div((new Clock).element),
     div("System #"))
 
   val left = panel(
