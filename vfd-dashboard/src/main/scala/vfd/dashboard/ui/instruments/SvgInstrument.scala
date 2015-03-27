@@ -1,55 +1,52 @@
-package vfd.dashboard.ui.components
+package vfd.dashboard.ui.instruments
 
-import scala.scalajs.js.Any.fromFunction1
 
 import org.scalajs.dom
 import org.scalajs.dom.html
 
-import scalatags.JsDom.all.ExtendedString
-import scalatags.JsDom.all.Int2CssNumber
-import scalatags.JsDom.all.`object`
-import scalatags.JsDom.all.stringAttr
-import scalatags.JsDom.all.stringFrag
-import scalatags.JsDom.all.stringPixelStyle
-import scalatags.JsDom.all.`type`
-import scalatags.JsDom.all.width
+import scalatags.JsDom.all._
+
 import vfd.dashboard.Environment
 
-trait SvgInstrument[A] {
+/** An instrument backed by an SVG image. */
+trait SvgInstrument[A] extends Instrument[A] {
   
   /** SVG object element that contains the rendered instrument */
-  def element: html.Object
+  val element: html.Object
   
-  /** Actual svg document */
-  protected def content = element.contentDocument
+  /** Retrieves an element of the underlying SVG document by ID. */
+  protected def part(id: String) = element.contentDocument.getElementById(id).asInstanceOf[html.Element]
   
-  /** Moveable parts of the instrument */
+  /** Movable parts of the instrument */
   protected def moveable: Seq[html.Element]
   
-  /** Updates the instrument to show a new value */
-  def update(value: A): Unit
-  
+  /** Called when element has been loaded. */
   protected def load(event: dom.Event): Unit = {
     for (part <- moveable) {
       part.style.transition = "transform 250ms ease-out"
     }
+    ready()
   }
   
   element.addEventListener("load", (e: dom.Event) => load(e))
 }
 
+/** Contains helpers for SVG instruments. */
 object SvgInstrument {
 
-  def svg(name: String)(implicit app: Environment): html.Object = {
+  /** Retrieves an SVG object element by its instrument's name. */
+  def svgObject(name: String)(implicit app: Environment): html.Object = {
     val path = app.asset("images/instruments/" + name + ".svg")
     `object`(`type` := "image/svg+xml", "data".attr := path, width := 100.pct)(
       "Error loading instrument " + name).render
   }
 
+  /** Applies translation styling to an element. */
   def translate(elem: html.Element, x: Int, y: Int): Unit = {
     elem.style.transform = "translate(" + x + "px, " + y + "px)";
   }
 
+  /** Applies rotation styling to an element. */
   def rotate(elem: html.Element, deg: Int): Unit = {
     elem.style.transform = "rotateZ(" + deg + "deg)";
   }

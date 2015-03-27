@@ -1,67 +1,25 @@
 package vfd.dashboard.ui
 
-import org.scalajs.dom.html
-import scalatags.JsDom.all.ExtendedString
-import scalatags.JsDom.all.Int2CssNumber
-import scalatags.JsDom.all.`class`
-import scalatags.JsDom.all.div
-import scalatags.JsDom.all.header
-import scalatags.JsDom.all.height
-import scalatags.JsDom.all.iframe
-import scalatags.JsDom.all.p
-import scalatags.JsDom.all.src
-import scalatags.JsDom.all.stringAttr
-import scalatags.JsDom.all.stringFrag
-import scalatags.JsDom.all.stringPixelStyle
-import scalatags.JsDom.all.style
-import scalatags.JsDom.all.width
-import scalatags.JsDom.all.button
-import scalatags.JsDom.all.id
+import org.mavlink.messages.Attitude
+import org.mavlink.messages.Motor
+import org.mavlink.messages.Power
+
+import rx.Obs
 import scalatags.JsDom.all._
-import scalatags.jsdom._
-import scalatags.jsdom.Frag
 import vfd.dashboard.Environment
 import vfd.dashboard.MavlinkSocket
-import vfd.dashboard.ui.panels.Communication
-import vfd.dashboard.ui.panels.Primary
-import org.scalajs.dom.MouseEvent
-import org.scalajs.dom
+import vfd.dashboard.ui.instruments.Altimeter
+import vfd.dashboard.ui.instruments.Balance
+import vfd.dashboard.ui.instruments.Bar
+import vfd.dashboard.ui.instruments.Compass
+import vfd.dashboard.ui.instruments.Generic
+import vfd.dashboard.ui.instruments.Horizon
 
 class Layout(socket: MavlinkSocket)(implicit env: Environment) {
 
   private def panel(contents: Frag*) = div(`class` := "d-panel")(contents: _*)
 
-  def layout =
-    div(`class` := "d-container d-column")(
-      div(`class` := "d-above")(
-        top),
-      div(`class` := "d-above d-container d-row")(
-        panel(modes),
-        panel(infos)),
-      div(`class` := "d-container d-row")(
-        div(`class` := "d-container d-details")(
-          panel("foo")),
-        div(`class` := "d-container d-left")(
-          left),
-        div(`class` := "d-container d-column d-middle")(
-          div(`class` := "d-container d-center")(
-            center),
-          div(`class` := "d-container d-below")(
-            below)),
-        div(`class` := "d-container d-right")(
-          right)))
-
-  def top = header(
-    div("Flight Control Panel"),
-    div("00:00:00"),
-    div("System #"))
-
-  def left = panel(map)
-  def center = panel(feed)
-  def below = panel(Primary(socket))
-  def right = panel(Communication(socket))
-
-  def mode(name: String, kind: String, on: Boolean = false) = div(`class` := s"mode $kind ${if (!on) "off"}")(name)
+  private def mode(name: String, kind: String, on: Boolean = false) = div(`class` := s"mode $kind ${if (!on) "off"}")(name)
 
   val modes = div(
     mode("MANUAL", "warning", true),
@@ -91,5 +49,106 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
   val feed = div(style := "width: 100%; height: 460px; color: #ffffff; background-color: #c2c2c2; text-align: center;")(
     p(style := "padding-top: 220px")("video feed"))
 
-  def element: html.Element = layout.render
+  val altimeter = new Altimeter
+  val horizon = new Horizon
+  val compass = new Compass
+  val motor0 = new Generic(0, 50, 100, "%")
+  val motor1 = new Generic(0, 50, 100, "%")
+  val motor2 = new Generic(0, 50, 100, "%")
+  val motor3 = new Generic(0, 50, 100, "%")
+  val powerDistribution = new Balance()
+  val batteryLevel = new Bar()
+
+  val top = header(
+    div("Flight Control Panel"),
+    div("00:00:00"),
+    div("System #"))
+
+  val left = panel(
+    map,
+    table(`class` := "table-instrument")(
+      thead("Motors"),
+      tbody(
+        tr(
+          td(motor0.element),
+          td(),
+          td(motor1.element),
+          td()
+        ),
+        tr(
+          td(),
+          td(powerDistribution.element),
+          td(),
+          td()
+        ),
+        tr(
+          td(motor2.element),
+          td(),
+          td(motor3.element),
+          td()
+        )
+      )
+    )
+  )
+
+  val center = panel(feed)
+
+  val below = panel(
+    table(`class` := "table-instrument")(
+      tbody(
+        tr(
+          td(compass.element),
+          td(horizon.element),
+          td(altimeter.element)
+        )
+      )
+    )
+  )
+
+  val right = panel()
+
+  val element = div(`class` := "d-container d-column")(
+    div(`class` := "d-above")(
+      top),
+    div(`class` := "d-above d-container d-row")(
+      panel(modes),
+      panel(infos)),
+    div(`class` := "d-container d-row")(
+      div(`class` := "d-container d-details")(
+        panel("foo")),
+      div(`class` := "d-container d-left")(
+        left),
+      div(`class` := "d-container d-column d-middle")(
+        div(`class` := "d-container d-center")(
+          center),
+        div(`class` := "d-container d-below")(
+          below)
+      ),
+      div(`class` := "d-container d-right")(
+        right
+      )
+    )
+  ).render
+
+  //message router
+  Obs(socket.message, skipInitial = true) {
+    socket.message() match {
+
+      case Motor(m0, m1, m2, m3) =>
+        motor0.value() = m0
+        motor1.value() = m1
+        motor2.value() = m2
+        motor3.value() = m3
+        powerDistribution.value() = (m0, m1, m2, m3)
+
+      case Power(mV) =>
+        batteryLevel.value() = (100 * (mV - 9600) / 12600)
+
+      case Attitude(roll, pitch, yaw) =>
+        horizon.value() = (pitch, roll)
+        compass.value() = (yaw)
+        
+    }
+  }
+
 }
