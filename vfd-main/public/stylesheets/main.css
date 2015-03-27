@@ -1,18 +1,9 @@
-@font-face {
-    font-family: ds-digi;
-    src: url('../fonts/ds-digi.ttf')
-}
-
-html {
-    height: 100%;
+html, body {
+	height: 100%;
 }
 
 body {
-    height: 100%;
-}
-
-body {
-    background-color: #e6e6e6;
+	background-color: #e6e6e6;
 }
 
 .loader {
@@ -21,6 +12,144 @@ body {
 	text-align: center;
 }
 
+#vfd-dashboard {
+	width: 100%;
+	height: 100%;
+}
+
+#vfd-dashboard header {
+	color: #eeeeee;
+	background-color: #222222;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+	display: flex;
+}
+
+#vfd-dashboard header > * {
+	margin: 5px;
+	flex: 1;
+}
+
+#vfd-dashboard header > :nth-child(1) {
+	text-align: left;
+}
+
+#vfd-dashboard header > :nth-child(2) {
+	text-align: center;
+}
+
+#vfd-dashboard header > :nth-child(3) {
+	text-align: right;
+}
+
+/* dashboard layout */
+.d-container {
+	display: flex;
+	align-content: flex-start;
+	align-items: stretch;
+}
+
+.d-container > * {
+	flex: 1;
+}
+
+.d-column {
+	flex-direction: column;
+	height: 100%;
+}
+
+.d-row {
+	flex-direction: row;
+	width: 100%;
+}
+
+.d-above {
+	flex: none;
+}
+
+.d-left {
+	flex: 1 1 30%;
+}
+
+.d-middle {
+	flex: 1 1 45%;
+}
+
+.d-right {
+	flex: 1 1 25%;
+}
+
+.d-center {
+	flex: none;
+}
+
+.d-below {
+	flex: 1;
+}
+
+.d-details {
+	display: none;
+}
+
+.d-detailed .d-left, .d-detailed .d-right {
+	display: none;
+}
+
+.d-detailed .d-middle {
+	flex: 1 1 25%;
+}
+
+.d-detailed .d-details {
+	display: flex;
+	flex: 1 1 75%;
+	overerflow-y: scroll;
+}
+
+.d-panel {
+	margin: 5px;
+	padding: 15px;
+	background-color: white;
+	border-radius: 3px;
+}
+
+
+/* Mode styles */
+.mode {
+	display: inline-block;
+	box-sizing: border-box;
+	text-decoration: normal;
+	margin-right: 5px;
+}
+
+.mode.danger {
+	color: #d9534f;
+	text-shadow: 0 0 5px #d9534f;
+}
+
+.mode.warning {
+	color: #f0ad4e;
+	text-shadow: 0 0 5px #f0ad4e;
+}
+
+.mode.info {
+	color: #5bc0de;
+	text-shadow: 0 0 5px #5bc0de;
+}
+
+.mode.success {
+	color: #5cb85c;
+	text-shadow: 0 0 5px #5cb85c;
+}
+
+.mode.off {
+	color: #eeeeee;
+	text-shadow: none;
+}
+
+/* TODO: Rules below are maybe obsolete and need to be reviewed */
 .table-instrument {
 	table-layout: fixed;
 	width: 100%;
@@ -31,25 +160,23 @@ body {
 }
 
 .heartbeat {
-    color: rgba(165, 25, 25, 1);
-    animation: heartbeat 2s linear infinite;
+	color: rgba(165, 25, 25, 1);
+	animation: heartbeat 2s linear infinite;
 }
-
 @keyframes heartbeat {
-    0% {
-        transform: scale(1);
-    }
-    7% {
-        transform: scale(1.3);
-    }
-    14% {
-        transform: scale(1);
-    }
-    21% {
-        transform: scale(1.3);
-    }
-    28% {
-        transform: scale(1);
-    }
+	0% {
+		transform: scale(1);
+	}
+	7% {
+		transform: scale(1.3);
+	}
+	14% {
+		transform: scale(1);
+	}
+	21% {
+		transform: scale(1.3);
+	}
+	28% {
+		transform: scale(1);
+	}
 }
-
