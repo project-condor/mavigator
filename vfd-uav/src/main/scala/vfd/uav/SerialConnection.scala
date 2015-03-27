@@ -1,16 +1,19 @@
 package vfd.uav
 
 import java.util.concurrent.TimeUnit.MILLISECONDS
+
 import scala.concurrent.duration.FiniteDuration
-import org.mavlink.Packet
-import org.mavlink.Parser
-import org.mavlink.Assembler
+
+import org.mavlink.enums.MavAutopilot
+import org.mavlink.enums.MavModeFlag
+import org.mavlink.enums.MavState
+import org.mavlink.enums.MavType
 import org.mavlink.messages.Heartbeat
-import org.mavlink.messages.Ack
-import org.mavlink.messages.Message
+
 import com.github.jodersky.flow.Parity
 import com.github.jodersky.flow.Serial
 import com.github.jodersky.flow.SerialSettings
+
 import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.ActorRef
@@ -18,8 +21,6 @@ import akka.actor.Props
 import akka.actor.Terminated
 import akka.actor.actorRef2Scala
 import akka.io.IO
-import akka.util.ByteString
-import org.mavlink.messages.Ping
 
 class SerialConnection(
   val systemId: Byte,
@@ -32,7 +33,18 @@ class SerialConnection(
 
   override def preStart() = heartbeatInterval foreach { interval =>
     context.system.scheduler.schedule(interval, interval) {
-      self ! Connection.Send(assemble(Heartbeat(0)))
+      self ! Connection.Send(
+        assemble(
+          Heartbeat(
+            MavType.MavTypeGeneric.toByte,
+            MavAutopilot.MavAutopilotGeneric.toByte,
+            0, //no base mode
+            0, //no custom mode
+            MavState.MavStateActive.toByte,
+            0 //TODO properly implement read-only fields
+          )
+        )
+      )
     }
   }
 

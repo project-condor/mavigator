@@ -3,30 +3,49 @@ package vfd.uav
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import scala.concurrent.duration.FiniteDuration
 import scala.util.Random
+import org.mavlink.Packet
+import org.mavlink.enums.MavAutopilot
+import org.mavlink.enums.MavModeFlag
+import org.mavlink.enums.MavState
+import org.mavlink.enums.MavType
+import org.mavlink.messages.Heartbeat
 import Connection.Received
 import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.Props
 import akka.util.ByteString
-import org.mavlink.messages._
-import org.mavlink.Packet
+import scala.concurrent.duration._
+import org.mavlink.messages.Message
+import vfd.uav.mock.RandomFlightPlan
 
 class MockConnection(localSystemId: Byte, localComponentId: Byte, remoteSystemId: Byte) extends Actor with ActorLogging with Connection with MavlinkUtil {
   import Connection._
-  import context._
-  
+  import context._ 
+
   override val systemId = remoteSystemId
   override val componentId = remoteSystemId
-
-  val MessageInterval = FiniteDuration(100, MILLISECONDS)
   
-  def randomData: ByteString = Random.nextInt(MockPackets.Messages + 1) match {
-    case 0 => ByteString(MockPackets.invalid)
-    case i => assemble(MockPackets.message(i - 1))
+  val plan = new RandomFlightPlan
+  
+  def scheduleMessage(delay: FiniteDuration)(fct: => Message) = system.scheduler.schedule(delay, delay){
+    sendAll(Received(assemble(fct)))
   }
-  
-  override def preStart() = context.system.scheduler.schedule(MessageInterval, MessageInterval) {
-    sendAll(Received(randomData))
+  def scheduleBytes(delay: FiniteDuration)(fct: => Array[Byte]) = system.scheduler.schedule(delay, delay){
+    sendAll(Received(ByteString(fct)))
+  }
+
+  override def preStart() = {
+    //increment state
+    system.scheduler.schedule(0.01.seconds, 0.01.seconds){plan.tick(0.01)}
+    
+    //send messages
+    scheduleMessage(0.1.seconds)(plan.position)
+    scheduleMessage(0.1.seconds)(plan.attitude)
+    scheduleMessage(2.seconds)(plan.heartbeat)
+    
+    //simulate noisy line
+    scheduleBytes(0.3.seconds)(MockPackets.invalidCrc)
+    scheduleBytes(1.5.seconds)(MockPackets.invalidOverflow)
   }
 
   def receive = registration
@@ -38,36 +57,12 @@ object MockConnection {
 }
 
 object MockPackets {
-  private val r = new Random
-  private implicit class RichRandom(val r: Random) extends AnyVal {
-    def nextByte(): Byte = r.nextInt().toByte
-    def nextByte(max: Int): Byte = r.nextInt(max).toByte
-  }
-  
-  def heartbeat = Heartbeat(0)
-  def motor = Motor(r.nextByte(101), r.nextByte(101), r.nextByte(101), r.nextByte(101))
-  def attitude = Attitude((r.nextInt(160) - 80).toShort, (r.nextInt(160) - 80).toShort, r.nextInt(360).toShort)
-  def power = Power(Random.nextInt(12000).toShort)
-  
-  val Messages = 4
-  def message(i: Int) = i match {
-    case 0 => heartbeat
-    case 1 => motor
-    case 2 => attitude
-    case 3 => power
-  }
-
   val invalidCrc = Array(254, 1, 123, 13, 13).map(_.toByte)
   val invalidOverflow = {
-    val data = Array.fill[Byte](Packet.MaxPayloadLength + 10)(42)
+    val data = Array.fill[Byte](Packet.MaxPayloadLength + 100)(42)
     data(0) = -2
     data(1) = 2
     data(1) = -1
     data
-  }
-
-  def invalid = r.nextInt(2) match {
-    case 0 => invalidCrc
-    case 1 => invalidOverflow
   }
 }

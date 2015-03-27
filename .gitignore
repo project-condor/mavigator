@@ -26,4 +26,5 @@ project/plugins/project/
 *.class
 *.log
 *~
+/.idea
 

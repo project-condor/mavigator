@@ -22,7 +22,7 @@ object ApplicationBuild extends Build {
   val common = Seq(
     scalaVersion := "2.11.6",
     scalacOptions ++= Seq("-feature", "-deprecation"),
-    mavlinkDialect := (baseDirectory in ThisBuild).value / "mavlink" / "concise.xml"
+    mavlinkDialect := (baseDirectory in ThisBuild).value / "mavlink" / "common.xml"
   )
 
   //root super-project
@@ -33,6 +33,7 @@ object ApplicationBuild extends Build {
       dashboard,
       index
     )
+    settings(common: _*)
     settings(
       //goto main project on load
       onLoad in Global := (Command.process("project vfd-main", _: State)) compose (onLoad in Global).value
