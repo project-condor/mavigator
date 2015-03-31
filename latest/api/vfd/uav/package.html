@@ -1,0 +1,257 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>uav - vfd.uav</title>
+          <meta name="description" content="uav - vfd.uav" />
+          <meta name="keywords" content="uav vfd.uav" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'vfd.uav.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../lib/package_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="vfd">vfd</a></p>
+        <h1>uav</h1><span class="permalink">
+      <a href="../../index.html#vfd.uav.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">uav</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="vfd.uav.Connection" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ConnectionextendsAnyRef"></a>
+      <a id="Connection:Connection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Connection.html"><span class="name">Connection</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#vfd.uav.package@ConnectionextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Common behavior of connection actors.</p>
+    </li><li name="vfd.uav.MavlinkUtil" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="MavlinkUtilextendsAnyRef"></a>
+      <a id="MavlinkUtil:MavlinkUtil"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="MavlinkUtil.html"><span class="name">MavlinkUtil</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#vfd.uav.package@MavlinkUtilextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides utilities for actors representing a mavlink connection.</p>
+    </li><li name="vfd.uav.MockConnection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MockConnectionextendsActorwithActorLoggingwithConnectionwithMavlinkUtil"></a>
+      <a id="MockConnection:MockConnection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MockConnection.html"><span class="name">MockConnection</span></a><span class="result"> extends <span class="extype" name="akka.actor.Actor">Actor</span> with <span class="extype" name="akka.actor.ActorLogging">ActorLogging</span> with <a href="Connection.html" class="extype" name="vfd.uav.Connection">Connection</a> with <a href="MavlinkUtil.html" class="extype" name="vfd.uav.MavlinkUtil">MavlinkUtil</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#vfd.uav.package@MockConnectionextendsActorwithActorLoggingwithConnectionwithMavlinkUtil" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="vfd.uav.SerialConnection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SerialConnectionextendsActorwithActorLoggingwithConnectionwithMavlinkUtil"></a>
+      <a id="SerialConnection:SerialConnection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SerialConnection.html"><span class="name">SerialConnection</span></a><span class="result"> extends <span class="extype" name="akka.actor.Actor">Actor</span> with <span class="extype" name="akka.actor.ActorLogging">ActorLogging</span> with <a href="Connection.html" class="extype" name="vfd.uav.Connection">Connection</a> with <a href="MavlinkUtil.html" class="extype" name="vfd.uav.MavlinkUtil">MavlinkUtil</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#vfd.uav.package@SerialConnectionextendsActorwithActorLoggingwithConnectionwithMavlinkUtil" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="vfd.uav.Connection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Connection"></a>
+      <a id="Connection:Connection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Connection$.html"><span class="name">Connection</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#vfd.uav.package@Connection" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Protocol definition.</p>
+    </li><li name="vfd.uav.MockConnection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MockConnection"></a>
+      <a id="MockConnection:MockConnection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MockConnection$.html"><span class="name">MockConnection</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#vfd.uav.package@MockConnection" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="vfd.uav.MockPackets" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MockPackets"></a>
+      <a id="MockPackets:MockPackets"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MockPackets$.html"><span class="name">MockPackets</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#vfd.uav.package@MockPackets" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="vfd.uav.SerialConnection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SerialConnection"></a>
+      <a id="SerialConnection:SerialConnection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SerialConnection$.html"><span class="name">SerialConnection</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#vfd.uav.package@SerialConnection" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="vfd.uav.mock" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="mock"></a>
+      <a id="mock:mock"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="mock/package.html"><span class="name">mock</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#vfd.uav.package@mock" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
