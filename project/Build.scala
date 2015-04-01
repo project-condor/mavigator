@@ -15,39 +15,61 @@ import playscalajs.ScalaJSPlay
 import playscalajs.PlayScalaJS.autoImport._
 import com.typesafe.sbt.web.Import._
 
+import sbtunidoc.Plugin._
+
+import com.typesafe.sbt.SbtSite._
+import com.typesafe.sbt.SbtGhPages._
+import com.typesafe.sbt.SbtGit._
 
 object ApplicationBuild extends Build {
 
-  //settings common to all projects
-  val common = Seq(
+  // settings common to all projects
+  val commonSettings = Seq(
     scalaVersion := "2.11.6",
-    scalacOptions ++= Seq("-feature", "-deprecation"),
-    mavlinkDialect := (baseDirectory in ThisBuild).value / "mavlink" / "common.xml"
+    scalacOptions ++= Seq("-feature", "-deprecation")
   )
 
-  //root super-project
+  // root super-project
   lazy val root = (
-    Project("root", file(".")).aggregate(
+    Project("root", file("."))
+    settings(commonSettings: _*)
+    settings(unidocSettings: _*)
+    settings(site.settings: _*)
+    settings(ghpages.settings: _*)
+    settings(
+      //goto main project on load
+      onLoad in Global := (Command.process("project vfd-main", _: State)) compose (onLoad in Global).value,
+      site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "latest/api"),
+      git.remoteRepo := "git@github.com:jodersky/vfd.git"
+    )
+    aggregate(
+      bindings,
       main,
       uav,
       dashboard,
       index
     )
-    settings(common: _*)
+  )
+
+  // empty project that uses SbtMavlink to generate protocol bindings
+  lazy val bindings = (
+    Project("vfd-bindings", file("vfd-bindings"))
+    enablePlugins(SbtMavlink)
+    enablePlugins(ScalaJSPlugin)
+    settings(commonSettings: _*)
     settings(
-      //goto main project on load
-      onLoad in Global := (Command.process("project vfd-main", _: State)) compose (onLoad in Global).value
+      mavlinkDialect := baseDirectory.value / "mavlink" / "common.xml"
     )
   )
 
-  //main play project
+  // main play project
   lazy val main = (
     Project("vfd-main", file("vfd-main"))
     enablePlugins(PlayScala)
-    enablePlugins(SbtMavlink)
-    settings(common: _*)
+    dependsOn(bindings)
+    dependsOn(uav)
+    settings(commonSettings: _*)
     settings(
-      resolvers += Resolver.url("scala-js-releases", url("http://dl.bintray.com/content/scala-js/scala-js-releases"))(Resolver.ivyStylePatterns),
       scalaJSProjects := Seq(dashboard, index),
       pipelineStages := Seq(scalaJSProd),
       libraryDependencies ++= Seq(
@@ -56,18 +78,17 @@ object ApplicationBuild extends Build {
         "org.webjars" % "jquery" % "2.1.3"
       )
     )
-    dependsOn(uav)
     aggregate(
       projectToRef(dashboard),
       projectToRef(index)
     )
   )
 
-  //communication backend
+  // communication backend
   lazy val uav = (
     Project("vfd-uav", file("vfd-uav"))
-    enablePlugins(SbtMavlink)
-    settings(common: _*)
+    dependsOn(bindings)
+    settings(commonSettings: _*)
     settings(
       libraryDependencies ++= Seq(
         "com.typesafe.akka" %% "akka-actor" % "2.3.9",
@@ -77,31 +98,33 @@ object ApplicationBuild extends Build {
     )
   )
 
-  //web frontends
-  val scalajs = Seq(
+  // web frontends
+  val scalajsSettings = Seq(
     libraryDependencies ++= Seq(
-        "org.scala-js" %%% "scalajs-dom" % "0.8.0",
-        "com.lihaoyi" %%% "scalatags" % "0.5.0",
-        "com.lihaoyi" %%% "scalarx" % "0.2.8"
+      "org.scala-js" %%% "scalajs-dom" % "0.8.0",
+      "com.lihaoyi" %%% "scalatags" % "0.5.0",
+      "com.lihaoyi" %%% "scalarx" % "0.2.8"
     )
   )
 
+  // main cockpit front-end
   lazy val dashboard = (
     Project("vfd-dashboard", file("vfd-dashboard"))
     enablePlugins(ScalaJSPlugin)
     enablePlugins(ScalaJSPlay)
-    enablePlugins(SbtMavlink)
-    settings(common: _*)
-    settings(scalajs: _*)
+    dependsOn(bindings)
+    settings(commonSettings: _*)
+    settings(scalajsSettings: _*)
   )
 
+  // landing page providing selection of drone
   lazy val index = (
     Project("vfd-index", file("vfd-index"))
     enablePlugins(ScalaJSPlugin)
     enablePlugins(ScalaJSPlay)
-    enablePlugins(SbtMavlink)
-    settings(common: _*)
-    settings(scalajs: _*)
+    dependsOn(bindings)
+    settings(commonSettings: _*)
+    settings(scalajsSettings: _*)
   )
 
 }
