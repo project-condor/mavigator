@@ -47,25 +47,46 @@ object Main {
       }
     }
 
-    root.appendChild(table(`class` := "table table-hover")(
-      thead(
-        tr(
-          th("System ID"),
-          th("Type"),
-          th("Autopilot"),
-          th("State"),
-          th(""))),
-      Rx {
-        tbody(
-          for (vehicle <- active().toSeq) yield {
-            tr(
-              td(vehicle.systemId),
-              td(vehicle.vehicleType),
-              td(vehicle.autopilot),
-              td(vehicle.state),
-              td(a(href := "/dashboard/" + vehicle.systemId, `class` := "btn btn-default")("Pilot")))
-          })
-      }).render)
+    connection.onclose = (e: dom.Event) => {
+      while (root.firstChild != null) {
+        root.removeChild(root.firstChild);
+      }
+      root.appendChild(
+        div(`class`:="alert alert-danger")(
+          "Connection to server unexpectedly closed. Check server logs for errors."
+        ).render
+      )
+
+    }
+
+    root.appendChild(div(
+      table(`class` := "table table-hover")(
+        thead(
+          tr(
+            th("System ID"),
+            th("Type"),
+            th("Autopilot"),
+            th("State"),
+            th("")
+          )
+        ),
+        Rx {
+          tbody(
+            for (vehicle <- active().toSeq) yield {
+              tr(
+                td(vehicle.systemId),
+                td(vehicle.vehicleType),
+                td(vehicle.autopilot),
+                td(vehicle.state),
+                td(a(href := "/dashboard/" + vehicle.systemId, `class` := "btn btn-default")("Pilot"))
+              )
+            }
+          )
+        }
+      ),
+      i(`class`:="fa fa-spinner fa-spin")(),
+      " Listening for heartbeats..."
+    ).render)
   }
 
 }
