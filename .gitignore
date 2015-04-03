@@ -1,6 +1,5 @@
 # sbt
-.cache
-.history/
+.history
 .lib/
 dist/*
 target/
@@ -10,12 +9,11 @@ project/boot/
 project/plugins/project/
 
 # scala-ide specific
-/.settings
-/.scala_dependencies
-/.project
-/.classpath
-/.cache
-/.history
+.settings
+.scala_dependencies
+.project
+.classpath
+.cache
 
 # ensime
 .ensime
@@ -26,5 +24,4 @@ project/plugins/project/
 *.class
 *.log
 *~
-/.idea
-
+.idea
