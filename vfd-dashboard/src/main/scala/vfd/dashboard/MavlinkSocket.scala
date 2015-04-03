@@ -13,7 +13,7 @@ import rx.core.Rx
 import rx.core.Var
 import rx.ops.RxOps
 
-class MavlinkSocket(url: String, remoteSystemId: Int) {
+class MavlinkSocket(url: String, val remoteSystemId: Int) {
 
   lazy val packet: Var[Packet] = Var(Packet.empty)
   lazy val message: Rx[Message] = packet.map{p => 

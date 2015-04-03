@@ -34,7 +34,7 @@ class Generic(
   }
 
   protected def update(value: Double) = {
-    rotate(handElement, (value * 270 / (max - min)).toInt)
+    rotate(handElement, value  / (max - min) * math.Pi * 3 / 2)
     valueElement.textContent = value.toString
   }
 }
