@@ -41,6 +41,8 @@ class MockConnection(localSystemId: Byte, localComponentId: Byte, remoteSystemId
     //send messages
     scheduleMessage(0.05.seconds)(plan.position)
     scheduleMessage(0.05.seconds)(plan.attitude)
+    scheduleMessage(0.05.seconds)(plan.motors)
+    scheduleMessage(0.1.seconds)(plan.distance)
     scheduleMessage(2.seconds)(plan.heartbeat)
     
     //simulate noisy line
