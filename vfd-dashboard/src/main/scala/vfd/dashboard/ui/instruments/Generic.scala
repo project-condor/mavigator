@@ -2,18 +2,19 @@ package vfd.dashboard.ui.instruments
 
 import org.scalajs.dom
 import org.scalajs.dom.html
+import rx._
 import vfd.dashboard.Environment
 
 class Generic(
     min: Double,
     med: Double,
     max: Double,
-    unit: String)(implicit env: Environment)
+    unit: String,
+    val value: Rx[Double])
+    (implicit env: Environment)
   extends SvgInstrument[Double] {
 
   import SvgInstrument._
-  
-  val initial = 0.0
 
   lazy val element = svgObject("generic")
   lazy val handElement = part("hand")
@@ -29,12 +30,11 @@ class Generic(
     minElement.textContent = min.toString
     medElement.textContent = med.toString
     maxElement.textContent = max.toString
-    update(min)
     super.load(e)
   }
 
   protected def update(value: Double) = {
-    rotate(handElement, value  / (max - min) * math.Pi * 3 / 2)
+    rotate(handElement, value / (max - min) * math.Pi * 3 / 2)
     valueElement.textContent = value.toString
   }
 }

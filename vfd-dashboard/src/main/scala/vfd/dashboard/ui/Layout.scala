@@ -1,11 +1,12 @@
 package vfd.dashboard.ui
 
-import rx.Obs
+import rx._
 import scalatags.JsDom.all._
 import vfd.dashboard.Environment
 import vfd.dashboard.MavlinkSocket
 import vfd.dashboard.ui.instruments._
 import org.mavlink.messages._
+import vfd.dashboard.rxutil._
 
 class Layout(socket: MavlinkSocket)(implicit env: Environment) {
 
@@ -41,15 +42,35 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
   val feed = div(style := "width: 100%; height: 460px; color: #ffffff; background-color: #c2c2c2; text-align: center;")(
     p(style := "padding-top: 220px")("video feed"))
 
-  val altimeter = new Altimeter
-  val horizon = new Horizon
-  val compass = new Compass
-  val motor0 = new Generic(0, 50, 100, "%")
-  val motor1 = new Generic(0, 50, 100, "%")
-  val motor2 = new Generic(0, 50, 100, "%")
-  val motor3 = new Generic(0, 50, 100, "%")
-  val powerDistribution = new Distribution
-  val batteryLevel = new Bar
+  val altimeter = new Altimeter(
+    Var(0.0)
+  )
+  val horizon = new Horizon(socket.message.collect((0.0, 0.0)) {
+    case att: Attitude => (att.pitch, att.roll)
+  })
+  val compass = new Compass(socket.message.collect(0.0) {
+    case att: Attitude => att.yaw
+  })
+  val motor0 = new Generic(0, 50, 100, "%", socket.message.collect(0.0) {
+    case s: ServoOutputRaw => 100 * (s.servo1Raw - 1000) / 1000
+  })
+  val motor1 = new Generic(0, 50, 100, "%", socket.message.collect(0.0) {
+    case s: ServoOutputRaw => 100 * (s.servo2Raw - 1000) / 1000
+  })
+  val motor2 = new Generic(0, 50, 100, "%", socket.message.collect(0.0) {
+    case s: ServoOutputRaw => 100 * (s.servo3Raw - 1000) / 1000
+  })
+  val motor3 = new Generic(0, 50, 100, "%", socket.message.collect(0.0) {
+    case s: ServoOutputRaw => 100 * (s.servo4Raw - 1000) / 1000
+  })
+  val powerDistribution = new Distribution(
+    socket.message.collect((0.0, 0.0, 0.0, 0.0)) {
+      case s: ServoOutputRaw => (s.servo1Raw, s.servo2Raw, s.servo3Raw, s.servo4Raw)
+    }
+  )
+  val batteryLevel = new Bar(
+    Var(0.0)
+  )
 
   val top = header(
     div("Flight Control Panel"),
@@ -122,33 +143,5 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
       )
     )
   ).render
-
-  //message router
-  Obs(socket.message, skipInitial = true) {
-    socket.message() match {
-      
-      case att: Attitude =>
-        horizon.value() = (att.pitch, att.roll)
-        compass.value() = att.yaw
-
-      case s: ServoOutputRaw =>
-        val m0 = 100 * (s.servo1Raw - 1000) / 1000
-        val m1 = 100 * (s.servo2Raw - 1000) / 1000
-        val m2 = 100 * (s.servo3Raw - 1000) / 1000
-        val m3 = 100 * (s.servo4Raw - 1000) / 1000
-
-        motor0.value() = m0
-        motor1.value() = m1
-        motor2.value() = m2
-        motor3.value() = m3
-        powerDistribution.value() = (m0, m1, m2, m3)
-
-      //TODO route other messages
-
-      case _ => ()
-      
-    }
-  }
-
 
 }

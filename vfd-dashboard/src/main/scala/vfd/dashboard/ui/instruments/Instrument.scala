@@ -6,11 +6,8 @@ import org.scalajs.dom.html
 /** Common trait to all flight instruments. */
 trait Instrument[A] {
 
-  /** Initial value. */
-  val initial: A
-
   /** Current value that is displayed in the instrument. */
-  val value: Var[A] = Var(initial)
+  val value: Rx[A]
 
   /** HTML element that contains the rendered instrument */
   val element: html.Element

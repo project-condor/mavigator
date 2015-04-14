@@ -1,12 +1,11 @@
 package vfd.dashboard.ui.instruments
 
 import org.scalajs.dom.html
+import rx._
 import vfd.dashboard.Environment
 
-class Horizon(implicit env: Environment) extends SvgInstrument[(Double, Double)] {
+class Horizon(val value: Rx[(Double, Double)])(implicit env: Environment) extends SvgInstrument[(Double, Double)] {
   import SvgInstrument._
-  
-  val initial = (0.0, 0.0)
   
   lazy val element = svgObject("horizon")
   lazy val pitch = part("pitch")

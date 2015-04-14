@@ -1,12 +1,11 @@
 package vfd.dashboard.ui.instruments
 
 import org.scalajs.dom.html
+import rx._
 import vfd.dashboard.Environment
 
-class Compass(implicit env: Environment) extends SvgInstrument[Double] {
+class Compass(val value: Rx[Double])(implicit env: Environment) extends SvgInstrument[Double] {
   import SvgInstrument._
-  
-  val initial = 0.0
   
   lazy val element = svgObject("compass")
   lazy val plate = part("heading")
