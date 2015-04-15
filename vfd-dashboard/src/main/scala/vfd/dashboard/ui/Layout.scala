@@ -31,15 +31,13 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
     div(style := "float: right")(mode("CRITICAL", "danger", true)))
 
   val map = iframe(
-    width := 100.pct,
-    height := 350.px,
     "frameborder".attr := "0",
     "scrolling".attr := "no",
     "marginheight".attr := "0",
     "marginwidth".attr := "0",
     src := "http://www.openstreetmap.org/export/embed.html?bbox=6.5611016750335684%2C46.51718501017836%2C6.570038795471191%2C46.520577350893525&amp;layer=mapnik")
 
-  val feed = div(style := "width: 100%; height: 460px; color: #ffffff; background-color: #c2c2c2; text-align: center;")(
+  val feed = div(style := "width: 100%; color: #ffffff; background-color: #c2c2c2; text-align: center;")(
     p(style := "padding-top: 220px")("video feed"))
 
   val altimeter = new Altimeter(
@@ -78,69 +76,163 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
     div("UAV " + socket.remoteSystemId)
   )
 
-  val left = panel(
-    map,
-    table(`class` := "table-instrument")(
-      thead("Motors"),
-      tbody(
-        tr(
-          td(motor1.element),
-          td(),
-          td(motor0.element),
-          td()
+  val left = div(
+    panel(
+      table(`class` := "table-instrument")(
+        thead("Communication"),
+        tbody(
+          tr(
+            td("Uplink RSSI"),
+            td("89"),
+            td("Socket"),
+            td("5ms")
+          ),
+          tr(
+            td("Something else"),
+            td("unknown"),
+            td("Heartbeat"),
+            td(i(`class` := "fa fa-heart heartbeat"))
+          )
+        )
+      ),
+      table(`class` := "table-instrument")(
+        thead("Packets"),
+        tbody(
+          tr(
+            td("OK"),
+            Rx{td(socket.stats.packets())},
+            td("CRC"),
+            Rx{td(socket.stats.crcErrors())},
+            td("OFLW"),
+            Rx{td(socket.stats.overflows())},
+            td("BID"),
+            Rx{td(socket.stats.wrongIds())}
+          ),
+          tr(
+            td("Ratio"),
+            Rx{
+              import socket.stats._
+              val sum = packets() + crcErrors() + overflows() + wrongIds() 
+              td(1.0 * packets() / sum formatted "%.2f")
+              },
+            td(),
+            td(),
+            td(),
+            td(),
+            td(),
+            td()
+          )
+        )
+      )
+    ),
+    panel(
+      table(`class` := "table-instrument")(
+        tbody(
+          tr(
+            td(compass.element),
+            td(horizon.element),
+            td(altimeter.element),
+            td(altimeter.element)
+          )
+        )
+      )
+    ),
+    panel(
+      div(style := "width: 50%; display: inline-block;")(
+        table(`class` := "table-instrument")(
+          tbody(
+            tr(
+              td(motor1.element),
+              td(),
+              td(motor0.element)
+            ),
+            tr(
+              td(),
+              td(powerDistribution.element),
+              td()
+            ),
+            tr(
+              td(motor2.element),
+              td(),
+              td(motor3.element)
+            )
+          )
+        )
+      ),
+      div(style := "width: 50%; display: inline-block;")(
+        table(`class` := "table-instrument")(
+          thead("Power"),
+          tbody(
+            tr(
+              td("VHIGH"),
+              td("12.6V"),
+              td("VLOW"),
+              td("9V")
+            ),
+            tr(
+              td("Voltage"),
+              td("11.2V"),
+              td("Remaining"),
+              td("80%")
+            ),
+            tr(
+              td("Flight"),
+              td("05:00"),
+              td("Endurance"),
+              td("12:00")
+            )
+          )
         ),
-        tr(
-          td(),
-          td(powerDistribution.element),
-          td(),
-          td()
-        ),
-        tr(
-          td(motor2.element),
-          td(),
-          td(motor3.element),
-          td()
+        table(`class` := "table-instrument")(
+          thead("Navigation"),
+          tbody(
+            tr(
+              td("Satellites"),
+              td("5"),
+              td("Precision"),
+              td("10cm")
+            ),
+            tr(
+              td("LON"),
+              td(""),
+              td("LAT"),
+              td("")
+            ),
+            tr(
+              td("GSpeed"),
+              td("3 m/s"),
+              td(),
+              td()
+            ),
+            tr(
+              td("Travelled"),
+              td("5000m"),
+              td("Home"),
+              td("1200m")
+            )
+          )
         )
       )
     )
   )
-
-  val center = panel(feed)
-
-  val below = panel(
-    table(`class` := "table-instrument")(
-      tbody(
-        tr(
-          td(compass.element),
-          td(horizon.element),
-          td(altimeter.element)
-        )
-      )
-    )
-  )
-
-  val right = panel()
 
   val element = div(`class` := "d-container d-column")(
     div(`class` := "d-above")(
-      top),
+      top
+    ),
     div(`class` := "d-above d-container d-row")(
       panel(modes),
-      panel(infos)),
+      panel(infos)
+    ),
     div(`class` := "d-container d-row")(
-      div(`class` := "d-container d-details")(
-        panel("foo")),
       div(`class` := "d-container d-left")(
-        left),
-      div(`class` := "d-container d-column d-middle")(
-        div(`class` := "d-container d-center")(
-          center),
-        div(`class` := "d-container d-below")(
-          below)
+        left
       ),
-      div(`class` := "d-container d-right")(
-        right
-      )
+      div(`class` := "d-container d-column d-middle")(
+        panel(feed),
+        panel(map)
+      ),
+      div(`class` := "d-container d-right")()
     )
   ).render
 
