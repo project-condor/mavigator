@@ -1,10 +1,6 @@
 # Virtual Flight Deck for UAVs
 
-<a title="See demo" href="http://vfd.herokuapp.com">
-<object data="http://vfd.herokuapp.com/assets/badges/demo-live.png" type="image/png" style="display: inline-block;">
-	<img src="vfd-main/public/badges/demo-down.png" alt="See demo" style="display: inline-block;"/>
-</object>
-</a>
+[![See Demo](https://img.shields.io/badge/demo-available-brightgreen.svg)](http://vfd-demo.jodersky.ch)
 [![Join the chat at https://gitter.im/jodersky/vfd](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jodersky/vfd?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Web interface simulating a cockpit of an unmanned aerial vehicle, built with Akka, Play and ScalaJS.
