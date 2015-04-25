@@ -2,29 +2,36 @@ package vfd.dashboard
 
 import scala.scalajs.js
 import scala.scalajs.js.Any.fromFunction1
-
 import org.mavlink.Packet
 import org.mavlink.Parser
 import org.mavlink.Parser.Errors._
 import org.mavlink.messages.Message
 import org.scalajs.dom
-
-import rx.core.Rx
-import rx.core.Var
-import rx.ops.RxOps
+import scala.concurrent.duration._
+import rx._
+import rx.ops._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class MavlinkSocket(url: String, val remoteSystemId: Int) {
+  implicit val scheduler = new DomScheduler
 
   lazy val packet: Var[Packet] = Var(Packet.empty)
   lazy val message: Rx[Message] = packet.map{p => 
     Message.unpack(p.messageId, p.payload)
   }
-
+  
   object stats {
-    val crcErrors = Var(0)
-    val overflows = Var(0)
-    val wrongIds = Var(0)
-    val packets = Var(0)
+    private val DebounceTime = 1.seconds
+    
+    private[MavlinkSocket] val _crcErrors = Var(0)
+    private[MavlinkSocket] val _overflows = Var(0)
+    private[MavlinkSocket] val _wrongIds = Var(0)
+    private[MavlinkSocket] val _packets = Var(0)
+    
+    val crcErrors = _crcErrors.debounce(DebounceTime)
+    val overflows = _overflows.debounce(DebounceTime)
+    val wrongIds = _wrongIds.debounce(DebounceTime)
+    val packets = _packets.debounce(DebounceTime)
     val open = Var(false)
   }
 
@@ -32,13 +39,13 @@ class MavlinkSocket(url: String, val remoteSystemId: Int) {
     {
       case pckt@Packet(seq, `remoteSystemId`, compId, msgId, payload) =>
         packet() = pckt
-        stats.packets() += 1
+        stats._packets() += 1
       case _ =>
-        stats.wrongIds() += 1
+        stats._wrongIds() += 1
     },
     {
-      case CrcError => stats.crcErrors() += 1
-      case OverflowError => stats.overflows() += 1
+      case CrcError => stats._crcErrors() += 1
+      case OverflowError => stats._overflows() += 1
     })
 
   private val connection = new dom.WebSocket(url)

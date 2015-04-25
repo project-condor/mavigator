@@ -63,7 +63,13 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
   })
   val powerDistribution = new Distribution(
     socket.message.collect((0.0, 0.0, 0.0, 0.0)) {
-      case s: ServoOutputRaw => (s.servo1Raw, s.servo2Raw, s.servo3Raw, s.servo4Raw)
+      case s: ServoOutputRaw =>
+        (
+          1.0 * (s.servo1Raw - 1000) / 1000,
+          1.0 * (s.servo2Raw - 1000) / 1000,
+          1.0 * (s.servo3Raw - 1000) / 1000,
+          1.0 * (s.servo4Raw - 1000) / 1000
+        )
     }
   )
   val batteryLevel = new Bar(
@@ -100,21 +106,21 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
         tbody(
           tr(
             td("OK"),
-            Rx{td(socket.stats.packets())},
+            Rx { td(socket.stats.packets()) },
             td("CRC"),
-            Rx{td(socket.stats.crcErrors())},
+            Rx { td(socket.stats.crcErrors()) },
             td("OFLW"),
-            Rx{td(socket.stats.overflows())},
+            Rx { td(socket.stats.overflows()) },
             td("BID"),
-            Rx{td(socket.stats.wrongIds())}
+            Rx { td(socket.stats.wrongIds()) }
           ),
           tr(
             td("Ratio"),
-            Rx{
+            Rx {
               import socket.stats._
-              val sum = packets() + crcErrors() + overflows() + wrongIds() 
+              val sum = packets() + crcErrors() + overflows() + wrongIds()
               td(1.0 * packets() / sum formatted "%.2f")
-              },
+            },
             td(),
             td(),
             td(),
