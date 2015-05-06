@@ -91,9 +91,9 @@ object ApplicationBuild extends Build {
     settings(commonSettings: _*)
     settings(
       libraryDependencies ++= Seq(
-        "com.typesafe.akka" %% "akka-actor" % "2.3.9",
-        "com.github.jodersky" %% "flow" % "2.1.0",
-        "com.github.jodersky" % "flow-native" % "2.1.0"
+        "com.typesafe.akka" %% "akka-actor" % "2.3.10",
+        "com.github.jodersky" %% "flow" % "2.1.1",
+        "com.github.jodersky" % "flow-native" % "2.1.1"
       )
     )
   )
