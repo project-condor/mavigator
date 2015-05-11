@@ -12,7 +12,7 @@ resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
  */
 
 // play web framework
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.8")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.9")
 
 // add support for scalajs
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.2")

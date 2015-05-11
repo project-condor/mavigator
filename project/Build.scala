@@ -73,9 +73,8 @@ object ApplicationBuild extends Build {
       scalaJSProjects := Seq(dashboard, index),
       pipelineStages := Seq(scalaJSProd),
       libraryDependencies ++= Seq(
-        "org.webjars" % "bootstrap" % "3.3.1",
-        "org.webjars" % "font-awesome" % "4.2.0",
-        "org.webjars" % "jquery" % "2.1.3"
+        "org.webjars" % "bootstrap" % "3.3.4",
+        "org.webjars" % "font-awesome" % "4.3.0"
       )
     )
     aggregate(
@@ -102,7 +101,7 @@ object ApplicationBuild extends Build {
   val scalajsSettings = Seq(
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "0.8.0",
-      "com.lihaoyi" %%% "scalatags" % "0.5.0",
+      "com.lihaoyi" %%% "scalatags" % "0.5.2",
       "com.lihaoyi" %%% "scalarx" % "0.2.8"
     )
   )
