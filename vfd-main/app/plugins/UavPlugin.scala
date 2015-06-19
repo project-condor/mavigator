@@ -23,7 +23,8 @@ class UavPlugin(app: Application) extends Plugin {
     val props = tpe match {
       case "mock" =>
         val remote = config.flatMap(_.getInt("mock.remote_system_id")).getOrElse(0).toByte
-        MockConnection(systemId, compId, remote)
+        val prescaler = config.flatMap(_.getInt("mock.prescaler")).getOrElse(1)
+        MockConnection(systemId, compId, remote, prescaler)
 
       case "serial" =>
         val serial = config.flatMap(_.getConfig("serial"))

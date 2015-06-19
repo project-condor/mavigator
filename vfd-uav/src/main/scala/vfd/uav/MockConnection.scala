@@ -18,9 +18,15 @@ import scala.concurrent.duration._
 import org.mavlink.messages.Message
 import vfd.uav.mock.RandomFlightPlan
 
-class MockConnection(localSystemId: Byte, localComponentId: Byte, remoteSystemId: Byte) extends Actor with ActorLogging with Connection with MavlinkUtil {
+class MockConnection(
+  localSystemId: Byte,
+  localComponentId: Byte,
+  remoteSystemId: Byte,
+  prescaler: Int)
+    extends Actor with ActorLogging with Connection with MavlinkUtil {
+
   import Connection._
-  import context._ 
+  import context._
 
   override val systemId = remoteSystemId
   override val componentId = remoteSystemId
@@ -36,18 +42,18 @@ class MockConnection(localSystemId: Byte, localComponentId: Byte, remoteSystemId
 
   override def preStart() = {
     //increment state
-    system.scheduler.schedule(0.01.seconds, 0.01.seconds){plan.tick(0.01)}
+    system.scheduler.schedule(0.01.seconds * prescaler, 0.01.seconds * prescaler){plan.tick(0.01)}
     
     //send messages
-    scheduleMessage(0.1.seconds)(plan.position)
-    scheduleMessage(0.05.seconds)(plan.attitude)
-    scheduleMessage(0.05.seconds)(plan.motors)
-    scheduleMessage(0.1.seconds)(plan.distance)
+    scheduleMessage(0.1.seconds * prescaler)(plan.position)
+    scheduleMessage(0.05.seconds * prescaler)(plan.attitude)
+    scheduleMessage(0.05.seconds * prescaler)(plan.motors)
+    scheduleMessage(0.1.seconds * prescaler)(plan.distance)
     scheduleMessage(1.seconds)(plan.heartbeat)
     
     //simulate noisy line
-    scheduleBytes(0.3.seconds)(MockPackets.invalidCrc)
-    scheduleBytes(1.5.seconds)(MockPackets.invalidOverflow)
+    scheduleBytes(0.3.seconds * prescaler)(MockPackets.invalidCrc)
+    scheduleBytes(1.5.seconds * prescaler)(MockPackets.invalidOverflow)
   }
 
   def receive = registration
@@ -55,7 +61,8 @@ class MockConnection(localSystemId: Byte, localComponentId: Byte, remoteSystemId
 }
 
 object MockConnection {
-  def apply(systemId: Byte, componentId: Byte, remoteSystemId: Byte) = Props(classOf[MockConnection], systemId, componentId, remoteSystemId)
+  def apply(systemId: Byte, componentId: Byte, remoteSystemId: Byte, prescaler: Int = 1) =
+    Props(classOf[MockConnection], systemId, componentId, remoteSystemId, prescaler)
 }
 
 object MockPackets {
