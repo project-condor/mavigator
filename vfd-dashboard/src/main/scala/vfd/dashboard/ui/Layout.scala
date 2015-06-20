@@ -37,8 +37,7 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
     "marginwidth".attr := "0",
     src := "http://www.openstreetmap.org/export/embed.html?bbox=6.5611016750335684%2C46.51718501017836%2C6.570038795471191%2C46.520577350893525&amp;layer=mapnik")
 
-  val feed = div(style := "width: 100%; color: #ffffff; background-color: #c2c2c2; text-align: center;")(
-    p(style := "padding-top: 220px")("video feed"))
+  val feed = div(style := "width: 100%; height: 100%; color: #ffffff; background-color: #c2c2c2; text-align: center;")
 
   val altimeter = new Altimeter(
     Var(0.0)
@@ -222,7 +221,31 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
     )
   )
 
-  val element = div(`class` := "d-container d-column")(
+
+
+  val hud = {
+    def overlay(name: String, z: Int, thinnerThanWide: Boolean = false) = {
+      val direction = if (thinnerThanWide) "row" else "column"
+      div(
+        style:=
+          "position: absolute; left: 0; right: 0; top: 0; bottom: 0;" +
+          s"display: flex; align-content: center; align-items: stretch; flex-direction: $direction;"+
+          s"z-index: $z;"
+      )(
+       `object`(`type`:="image/svg+xml", "data".attr:=env.asset("images/hud/" + name + ".svg"), style := "flex: 1 1 100%;")
+      )
+
+    }
+
+    Seq(
+      overlay("horizon", 0),
+      overlay("roll", 1)
+    )
+  }
+
+
+
+  val element = div(`class` := "d-container d-column", style:="width: 100%; height: 100%;")(
     div(`class` := "d-above")(
       top
     ),
@@ -234,11 +257,9 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
       div(`class` := "d-container d-left")(
         left
       ),
-      div(`class` := "d-container d-column d-middle")(
-        panel(feed),
-        panel(map)
-      ),
-      div(`class` := "d-container d-right")()
+      div(`class` := "d-main", style:="position: relative;")(
+        hud: _*
+      )
     )
   ).render
 
