@@ -15,7 +15,7 @@
    version="1.1"
    inkscape:version="0.48.5 r10040"
    sodipodi:docname="horizon.svg"
-   viewBox="-600 600 1200 1200"
+   viewBox="-600 -600 1200 1200"
    preserveAspectRatio="none">
   <defs
      id="defs4" />
@@ -27,10 +27,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35374999"
-     inkscape:cx="339.9067"
+     inkscape:cx="356.86783"
      inkscape:cy="585.56122"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="horizon"
      showgrid="true"
      showborder="true"
      inkscape:window-width="1920"
@@ -58,18 +58,16 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1">
+     id="horizon">
     <rect
        style="fill:#c88f00;fill-opacity:1;stroke:none"
        id="rect3000"
        width="1800"
        height="1200"
        x="-900"
-       y="1200" />
+       y="0" />
     <rect
-       y="0"
+       y="-1200"
        x="-900"
        height="1200"
        width="1800"

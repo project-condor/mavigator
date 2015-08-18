@@ -258,7 +258,7 @@ class Layout(socket: MavlinkSocket)(implicit env: Environment) {
         left
       ),
       div(`class` := "d-main", style:="position: relative;")(
-        hud: _*
+        (new Hud(horizon.value)).element
       )
     )
   ).render
