@@ -12,13 +12,16 @@ resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
  */
 
 // play web framework
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.6")
+//addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.6")
 
 // add support for scalajs
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.5")
 
+// twirl html templating
+addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.1.1")
+
 // enable "smooth" dependencies between play and scalajs projects
-addSbtPlugin("com.vmunier" % "sbt-play-scalajs" % "0.2.3")
+//addSbtPlugin("com.vmunier" % "sbt-play-scalajs" % "0.2.3")
 
 // generate MAVLink protocol bindings
 addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.5.2")
@@ -36,3 +39,5 @@ addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.5.2")
 
 // generate documentation for all projects
 //addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.3.3")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0")

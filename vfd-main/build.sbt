@@ -6,7 +6,8 @@ VfdBuild.defaultSettings
 
 scalaJSProjects := Seq(dashboard, index)
 pipelineStages := Seq(scalaJSProd)
+
 libraryDependencies ++= Seq(
-  "org.webjars" % "bootstrap" % "3.3.4",
-  "org.webjars" % "font-awesome" % "4.3.0"
+  "org.webjars" % "bootstrap" % "3.3.6",
+  "org.webjars" % "font-awesome" % "4.5.0"
 )
