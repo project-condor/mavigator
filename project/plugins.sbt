@@ -15,7 +15,7 @@ resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
 //addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.6")
 
 // add support for scalajs
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.5")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.6")
 
 // twirl html templating
 addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.1.1")
