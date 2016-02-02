@@ -9,9 +9,11 @@ object Dependencies {
   val AkkaVersion = "2.4.2-RC1"
 
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % AkkaVersion
-  val akkaHttp = "com.typesafe.akka" %% "akka-http" % AkkaVersion
+  val akkaHttp = "com.typesafe.akka" %% "akka-http-experimental" % AkkaVersion
   val akkaHttpCore = "com.typesafe.akka" %% "akka-http-core" % AkkaVersion
-  val akkaStreams = "com.typesafe.akka" %% "akka-stream" % AkkaVersion
+  val akkaStream = "com.typesafe.akka" %% "akka-stream" % AkkaVersion
+
+  val reactiveStreams = "org.reactivestreams" % "reactive-streams" % "1.0.0"
 
   val flow = "com.github.jodersky" %% "flow" % "2.4.0"
   val flowNative = "com.github.jodersky" % "flow-native" % "2.4.0" % Runtime

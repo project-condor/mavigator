@@ -16,7 +16,7 @@ object MavigatorBuild extends Build {
   lazy val root = Project(
     id = "root",
     base = file("."),
-    aggregate = Seq(bindings, uav)
+    aggregate = Seq(bindings, uav, server)
   )
 
   // empty project that uses SbtMavlink to generate protocol bindings

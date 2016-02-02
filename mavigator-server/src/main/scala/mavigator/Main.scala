@@ -17,11 +17,10 @@ object Main {
 
     system.log.info("System started.")
 
-    val router = (new Router(system)).route
-    val settings = Mavigator(system)
+    val router = Router.route
 
-    system.log.info(s"Starting server on ${settings.interface}:${settings.port}...")
-    val binding = Http(system).bindAndHandle(router, settings.interface, settings.port)
+    system.log.info(s"Starting server")
+    val binding = Http(system).bindAndHandle(router, "0.0.0.0", 8080)
 
     for (b <- binding) {
       val addr = b.localAddress.getHostString()

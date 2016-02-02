@@ -5,14 +5,16 @@ import akka.stream._
 import akka.stream.scaladsl._
 import akka.http.scaladsl._
 import akka.http.scaladsl.model._
+import akka.http.scaladsl.model.ws._
 import akka.http.scaladsl.server._
+import uav.Uav
+import akka.util._
 
-
-class Router(system: ActorSystem) {
+object Router {
 
   import Directives._
 
-  val route: Route = (
+  def route(implicit system: ActorSystem): Route = (
     path("info") {
       get {
         val f: play.twirl.api.Html = mavigator.views.html.index()
@@ -31,7 +33,19 @@ class Router(system: ActorSystem) {
           //upgrade.handleMessagesWith(inSink: Sink[Message, _$3], outSource: Source[Message, _$4])
           ???
          }*/
-        handleWebsocketMessages((new MavlinkWebsocket(system)).wsflow)
+
+        val fromWebSocket = Flow[Message].collect{
+          case BinaryMessage.Strict(data) => data
+        }
+
+        val toWebSocket = Flow[ByteString].map{bytes =>
+          //BinaryMessage(bytes)
+          TextMessage(bytes.decodeString("UTF-8"))
+        }
+
+        val bytes = Uav().connect()
+
+        handleWebSocketMessages(fromWebSocket via bytes via toWebSocket)
       }
     } ~
     pathPrefix("assets") {
@@ -49,44 +63,3 @@ class Router(system: ActorSystem) {
   )
 
 }
-
-import akka.http.scaladsl.model.ws._
-import akka.stream.scaladsl._
-
-object SocketService {
-
-  /*
-  val out: Source[OutgoingMessage, ActorRef] = Source.actorRef[OutgoingMessage](0, OverflowStrategy.fail)
-  val in = Sink.actorRef(ref: ActorRef, onCompleteMessage: Any)
-   */
-
-
-  /*
-  Flow[Message, Message, _] { implicit builder =>
-
-    val in: Flow[Message, IncomingMessage, _] = Flow[Message].map {
-      case TextMessage.Strict(txt) => IncomingMessage(s"frpm websocket $txt")
-      case _ => ???
-    }
-
-    val out: Flow[OutgoingMessage, Message, _] = Flow[OutgoingMessage].map {
-      case OutgoingMessage(txt) => TextMessage(s"to websocket $text")
-    }
-
-    val chatActorSink = Sink.actorRef[ChatEvent](chatRoomActor, UserLeft(user))
-
-  }
- */
-}
-
-/*
-object EchoService {
-
-  val flow: Flow[Message, Message, _] = Flow[Message].map {
-    case TextMessage.Strict(txt) => TextMessage("ECHO: " + txt)
-    case _ => TextMessage("Message type unsupported")
-  }
-
-}
- */
-

@@ -7,5 +7,5 @@ MavigatorBuild.defaultSettings
 libraryDependencies ++= Seq(
   Dependencies.akkaHttp,
   Dependencies.akkaHttpCore,
-  Dependencies.akkaStreams
+  Dependencies.akkaStream
 )

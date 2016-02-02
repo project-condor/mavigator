@@ -4,6 +4,8 @@ MavigatorBuild.defaultSettings
 
 libraryDependencies ++= Seq(
   Dependencies.akkaActor,
+  Dependencies.akkaStream,
   Dependencies.flow,
-  Dependencies.flowNative
+  Dependencies.flowNative,
+  Dependencies.reactiveStreams
 )
