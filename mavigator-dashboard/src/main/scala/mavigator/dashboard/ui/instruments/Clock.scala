@@ -1,4 +1,4 @@
-package vfd.dashboard.ui.instruments
+package mavigator.dashboard.ui.instruments
 
 import org.scalajs.dom
 import rx._

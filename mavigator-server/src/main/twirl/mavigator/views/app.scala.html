@@ -1,0 +1,47 @@
+@(appId: String)(args: (String, String)*)
+
+<div id="scalajs-error" class="alert alert-danger" style="display: none;">
+    <p><strong><i class="fa fa-bug"></i> Error! </strong> An uncaught exception occurred in the browser application,
+	any information displayed on this website may be corrupt. This is NOT an error that should occur under normal
+	operation, it is an indication of a bug in the software.</p>
+    <p>The error was: "<span id="scalajs-error-message"></span>"
+    </p>
+</div>
+
+<div id="@appId">
+    <div class="loader">
+	<i class="fa fa-spinner fa-spin"></i>
+    </div>
+</div>
+
+<script type="text/javascript">
+ document.addEventListener("DOMContentLoaded", function(event) {
+     try {
+	 var root0 = document.getElementById("@appId");
+	 var args0 = {
+	     @args.map{ case (key, value) =>
+		 @key: "@value",
+	     }
+	 }
+
+	 while (root0.firstChild) {
+    	     root0.removeChild(root0.firstChild);
+	 }
+
+	 Main().start({
+	     root: root0,
+	     assetsBase: "/assets",
+	     args: args0
+	 });
+
+     } catch(err) {
+	 document.getElementById("scalajs-error").style.display = "block";
+	 document.getElementById("scalajs-error-message").innerHTML = err;
+	 console.error(err);
+	 throw err;
+     }
+ });
+</script>
+
+<script type="text/javascript" src="/assets/js/@{appId}-opt.js"></script>
+

@@ -1,8 +1,8 @@
-package vfd.dashboard.ui.instruments
+package mavigator.dashboard.ui.instruments
 
 import org.scalajs.dom.html
 import rx._
-import vfd.dashboard.Environment
+import mavigator.util.Environment
 
 class Compass(val value: Rx[Double])(implicit env: Environment) extends SvgInstrument[Double] {
   import SvgInstrument._

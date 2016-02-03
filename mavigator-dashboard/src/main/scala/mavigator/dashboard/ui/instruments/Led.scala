@@ -1,8 +1,8 @@
-package vfd.dashboard.ui.instruments
+package mavigator.dashboard.ui.instruments
 
 import rx._
 import scalatags.JsDom.all._
-import vfd.dashboard.Environment
+import mavigator.util.Environment
 
 class Led(val value: Rx[String])(implicit env: Environment) extends SvgInstrument[String] {
 

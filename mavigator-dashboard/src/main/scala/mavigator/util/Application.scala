@@ -8,19 +8,19 @@ import org.scalajs.dom.html
 
 trait Application {
 
-  def main(env: Environment, args: Map[String, String]): Unit
+  def main(args: Map[String, String])(implicit env: Environment): Unit
 
   @JSExport
-  final def _start(settings: js.Dynamic): Unit = {
+  final def start(settings: js.Dynamic): Unit = {
 
     val env = new StaticEnvironment(
       root = settings.root.asInstanceOf[html.Element],
-      assetsBase = settings.root.asInstanceOf[String]
+      assetsBase = settings.assetsBase.asInstanceOf[String]
     )
 
-    val args = settings.args.asInstanceOf[Map[String, String]]
+    val args = settings.args.asInstanceOf[js.Dictionary[Any]].mapValues(_.toString).toMap
 
-    main(env, args)
+    main(args)(env)
   }
 
 }

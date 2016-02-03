@@ -1,4 +1,6 @@
-package mavigator.uav
+package mavigator
+package uav
+package mock
 
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import scala.concurrent.duration.FiniteDuration

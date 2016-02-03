@@ -1,4 +1,4 @@
-package vfd.dashboard
+package mavigator.dashboard
 
 import scala.language.implicitConversions
 import scala.util.Failure

@@ -5,7 +5,7 @@ import org.scalajs.dom.html
 
 /** Represents an application's environment */
 trait Environment {
-  
+
   /** The application's root element. */
   def root: html.Element
 

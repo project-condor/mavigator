@@ -1,0 +1,11 @@
+@(socket: String, remoteSystemId: Byte, systemId: Byte, componentId: Byte)
+
+@main("Main"){
+	@app("mavigator-dashboard")(
+		"socketUrl" -> socket,
+		"remoteSystemId" -> remoteSystemId.toString,
+		"systemId" -> systemId.toString,
+		"componentId" -> componentId.toString
+	)
+}
+

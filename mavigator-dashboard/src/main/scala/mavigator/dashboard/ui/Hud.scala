@@ -1,7 +1,7 @@
-package vfd.dashboard.ui
+package mavigator.dashboard.ui
 
-import vfd.dashboard.Environment
-import vfd.dashboard.ui.instruments._
+import mavigator.util.Environment
+import mavigator.dashboard.ui.instruments._
 
 import scalatags.JsDom.all._
 import rx._

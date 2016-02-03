@@ -1,4 +1,4 @@
-import mavigator.{Dependencies, MavigatorBuild}
+import mavigator.{Dependencies, MavigatorBuild, Js}
 
 enablePlugins(SbtTwirl)
 
@@ -9,3 +9,5 @@ libraryDependencies ++= Seq(
   Dependencies.akkaHttpCore,
   Dependencies.akkaStream
 )
+
+Js.dependsOnJs(MavigatorBuild.dashboard)

@@ -1,4 +1,4 @@
-package vfd.dashboard
+package mavigator.dashboard
 
 import scala.scalajs.js
 import scala.scalajs.js.Any.fromFunction1
@@ -35,7 +35,7 @@ class MavlinkSocket(url: String, val remoteSystemId: Int) {
     val open = Var(false)
   }
 
-  private val parser = new Parser(
+ private val parser = new Parser(
     {
       case pckt@Packet(seq, `remoteSystemId`, compId, msgId, payload) =>
         packet() = pckt
@@ -48,9 +48,11 @@ class MavlinkSocket(url: String, val remoteSystemId: Int) {
       case OverflowError => stats._overflows() += 1
     })
 
-  private val connection = new dom.WebSocket(url)
+//  private val connection = new dom.WebSocket(url)
 
-  connection.binaryType = "arraybuffer"
+  //connection.binaryType = "arraybuffer"
+
+  /*
   connection.onopen = (e: dom.Event) => {
     stats.open() = true
   }
@@ -65,5 +67,5 @@ class MavlinkSocket(url: String, val remoteSystemId: Int) {
   connection.onclose = (e: dom.CloseEvent) => {
     stats.open() = false
   }
-
+   */
 }

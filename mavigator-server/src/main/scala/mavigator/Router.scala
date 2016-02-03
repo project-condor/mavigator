@@ -10,15 +10,34 @@ import akka.http.scaladsl.server._
 import uav.Uav
 import akka.util._
 
+import akka.http.scaladsl.marshalling.{Marshaller, ToEntityMarshaller}
+import akka.http.scaladsl.model.MediaTypes._
+import akka.http.scaladsl.model.MediaType
+import play.twirl.api.{ Xml, Txt, Html }
+
+
 object Router {
+
+  /** Serialize Twirl `Html` to `text/html`. */
+  implicit val twirlHtmlMarshaller = twirlMarshaller[Html](`text/html`)
+
+   /** Serialize Twirl formats to `String`. */
+  def twirlMarshaller[A <: AnyRef: Manifest](contentType: MediaType): ToEntityMarshaller[A] =
+    Marshaller.StringMarshaller.wrap(contentType)(_.toString)
+
 
   import Directives._
 
   def route(implicit system: ActorSystem): Route = (
     path("info") {
       get {
-        val f: play.twirl.api.Html = mavigator.views.html.index()
-        complete(f.body)
+        val f: Html = mavigator.views.html.dashboard(
+          "socket",
+          0,
+          0,
+          0
+        )
+        complete(f)
       }
     } ~
     path("dashboard" / IntNumber) { id =>

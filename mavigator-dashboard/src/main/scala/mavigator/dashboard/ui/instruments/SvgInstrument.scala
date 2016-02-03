@@ -1,4 +1,4 @@
-package vfd.dashboard.ui.instruments
+package mavigator.dashboard.ui.instruments
 
 
 import org.scalajs.dom
@@ -6,7 +6,7 @@ import org.scalajs.dom.html
 
 import scalatags.JsDom.all._
 
-import vfd.dashboard.Environment
+import mavigator.util.Environment
 
 /** An instrument backed by an SVG image. */
 trait SvgInstrument[A] extends Instrument[A] {

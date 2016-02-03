@@ -1,9 +1,9 @@
-package vfd.dashboard.ui.instruments
+package mavigator.dashboard.ui.instruments
 
 import org.scalajs.dom
 import org.scalajs.dom.html
 import rx._
-import vfd.dashboard.Environment
+import mavigator.util.Environment
 
 class Generic(
     min: Double,

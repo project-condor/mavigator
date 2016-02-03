@@ -1,12 +1,12 @@
-package vfd.dashboard.ui
+package mavigator.dashboard.ui
 
 import rx._
 import scalatags.JsDom.all._
-import vfd.dashboard.Environment
-import vfd.dashboard.MavlinkSocket
-import vfd.dashboard.ui.instruments._
+import mavigator.util.Environment
+import mavigator.dashboard.MavlinkSocket
+import mavigator.dashboard.ui.instruments._
 import org.mavlink.messages._
-import vfd.dashboard.rxutil._
+import mavigator.dashboard.rxutil._
 
 class Layout(socket: MavlinkSocket)(implicit env: Environment) {
 
