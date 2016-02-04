@@ -14,8 +14,10 @@ object Dependencies {
 
   val reactiveStreams = "org.reactivestreams" % "reactive-streams" % "1.0.0"
 
-  val flow = "com.github.jodersky" %% "flow" % "2.4.0"
-  val flowNative = "com.github.jodersky" % "flow-native" % "2.4.0" % Runtime
+  final val FlowVersion = "2.5.0-M1"
+  val flow = "com.github.jodersky" %% "flow-core" % FlowVersion
+  val flowNative = "com.github.jodersky" % "flow-native" % FlowVersion % Runtime
+  val flowStream = "com.github.jodersky" % "flow-stream" % FlowVersion
 
   val jsDom = Def.setting{"org.scala-js" %%% "scalajs-dom" % "0.8.2"}
   val scalatags = Def.setting{"com.lihaoyi" %%% "scalatags" % "0.5.4"}
