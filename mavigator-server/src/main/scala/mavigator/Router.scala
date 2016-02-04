@@ -25,7 +25,6 @@ object Router {
   def twirlMarshaller[A <: AnyRef: Manifest](contentType: MediaType): ToEntityMarshaller[A] =
     Marshaller.StringMarshaller.wrap(contentType)(_.toString)
 
-
   import Directives._
 
   def route(implicit system: ActorSystem): Route = (
