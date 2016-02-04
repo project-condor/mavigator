@@ -11,17 +11,11 @@ resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
  * Main plugins
  */
 
-// play web framework
-//addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.6")
-
 // add support for scalajs
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.6")
 
 // twirl html templating
 addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.1.1")
-
-// enable "smooth" dependencies between play and scalajs projects
-//addSbtPlugin("com.vmunier" % "sbt-play-scalajs" % "0.2.3")
 
 // generate MAVLink protocol bindings
 addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.5.2")
