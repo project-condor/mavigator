@@ -10,6 +10,7 @@ import akka.stream._
 import akka.NotUsed
 import akka.util._
 import org.mavlink._
+import Attributes._
 
 class MockConnection(
   remoteSystemId: Byte,
@@ -20,12 +21,7 @@ class MockConnection(
 
   private def stream(delaySeconds: Double)(message: RandomFlightPlan => Message): Flow[RandomFlightPlan, Message, NotUsed] = {
     val dt = delaySeconds / prescaler
-    Flow[RandomFlightPlan].throttle(
-      elements = 1,
-      per = dt.seconds,
-      maximumBurst = 1,
-      ThrottleMode.Shaping
-    ).map(message)
+    Flow[RandomFlightPlan].delay(dt.seconds).withAttributes(inputBuffer(1,1)).map(message)
   }
 
   def foo(messages: Flow[RandomFlightPlan, Message, _]*): Source[Message, NotUsed] = {
