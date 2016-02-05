@@ -1,6 +1,7 @@
 package mavigator
 package uav
 
+import mock._
 import akka._
 import akka.actor._
 import akka.util._
@@ -14,7 +15,7 @@ class Uav(system: ExtendedActorSystem) extends Extension {
     val t = scala.concurrent.duration.FiniteDuration(100, "ms")
     Flow.fromSinkAndSource(
       Sink.ignore,
-      Source.tick(t,t, ByteString("hello world"))
+      (new MockConnection(0,0,1)).data
     )
   }
 

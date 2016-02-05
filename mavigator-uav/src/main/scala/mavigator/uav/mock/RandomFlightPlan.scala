@@ -8,7 +8,7 @@ import org.mavlink.enums._
 import org.mavlink.messages._
 
 class RandomFlightPlan {
-  
+
   private var time: Double = 0 //current time in seconds
   private def millis = (time * 1000).toInt
   private def micros = (time * 1E6).toInt

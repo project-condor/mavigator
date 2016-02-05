@@ -31,7 +31,7 @@ object Router {
     path("info") {
       get {
         val f: Html = mavigator.views.html.dashboard(
-          "socket",
+          "ws://localhost:8080/mavlink",
           0,
           0,
           0
@@ -57,8 +57,7 @@ object Router {
         }
 
         val toWebSocket = Flow[ByteString].map{bytes =>
-          //BinaryMessage(bytes)
-          TextMessage(bytes.decodeString("UTF-8"))
+          BinaryMessage(bytes)
         }
 
         val bytes = Uav().connect()

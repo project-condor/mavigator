@@ -48,11 +48,10 @@ class MavlinkSocket(url: String, val remoteSystemId: Int) {
       case OverflowError => stats._overflows() += 1
     })
 
-//  private val connection = new dom.WebSocket(url)
+  private val connection = new dom.WebSocket(url)
 
-  //connection.binaryType = "arraybuffer"
+  connection.binaryType = "arraybuffer"
 
-  /*
   connection.onopen = (e: dom.Event) => {
     stats.open() = true
   }
@@ -67,5 +66,5 @@ class MavlinkSocket(url: String, val remoteSystemId: Int) {
   connection.onclose = (e: dom.CloseEvent) => {
     stats.open() = false
   }
-   */
+
 }
