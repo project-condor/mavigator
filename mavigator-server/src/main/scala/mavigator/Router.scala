@@ -17,14 +17,6 @@ import play.twirl.api.{ Xml, Txt, Html }
 
 
 object Router {
-
-  /** Serialize Twirl `Html` to `text/html`. */
-  implicit val twirlHtmlMarshaller = twirlMarshaller[Html](`text/html`)
-
-   /** Serialize Twirl formats to `String`. */
-  def twirlMarshaller[A <: AnyRef: Manifest](contentType: MediaType): ToEntityMarshaller[A] =
-    Marshaller.StringMarshaller.wrap(contentType)(_.toString)
-
   import Directives._
 
   def route(implicit system: ActorSystem): Route = (
@@ -41,17 +33,15 @@ object Router {
     } ~
     path("dashboard" / IntNumber) { id =>
       get {
+
+
+
         //get dashboard for remote sys id
         ???
       }
     } ~
     path("mavlink") {
       get {
-        /*extractUpgradeToWebsocket{ upgrade =>
-          //upgrade.handleMessagesWith(inSink: Sink[Message, _$3], outSource: Source[Message, _$4])
-          ???
-         }*/
-
         val fromWebSocket = Flow[Message].collect{
           case BinaryMessage.Strict(data) => data
         }
@@ -60,9 +50,9 @@ object Router {
           BinaryMessage(bytes)
         }
 
-        val bytes = Uav().connect()
+        val backend = Uav().connect()
 
-        handleWebSocketMessages(fromWebSocket via bytes via toWebSocket)
+        handleWebSocketMessages(fromWebSocket via backend via toWebSocket)
       }
     } ~
     pathPrefix("assets") {
@@ -78,5 +68,12 @@ object Router {
       }
     }
   )
+
+  /** Serialize Twirl `Html` to `text/html`. */
+  implicit val twirlHtmlMarshaller = twirlMarshaller[Html](`text/html`)
+
+   /** Serialize Twirl formats to `String`. */
+  def twirlMarshaller[A <: AnyRef: Manifest](contentType: MediaType): ToEntityMarshaller[A] =
+    Marshaller.StringMarshaller.wrap(contentType)(_.toString)
 
 }
