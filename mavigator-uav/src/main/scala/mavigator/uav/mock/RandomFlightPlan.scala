@@ -64,7 +64,7 @@ class RandomFlightPlan {
     0
   )
 
-  def heartbeat = Heartbeat(  
+  def heartbeat = Heartbeat(
     MavType.MavTypeGeneric.toByte,
     MavAutopilot.MavAutopilotGeneric.toByte,
     (MavModeFlag.MavModeFlagSafetyArmed | MavModeFlag.MavModeFlagManualInputEnabled).toByte,

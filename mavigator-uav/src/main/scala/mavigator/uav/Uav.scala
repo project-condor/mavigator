@@ -12,7 +12,6 @@ class Uav(system: ExtendedActorSystem) extends Extension {
   private lazy val config = system.settings.config.getConfig("mavigator.uav")
 
   def connect(): Flow[ByteString, ByteString, NotUsed] = {
-    val t = scala.concurrent.duration.FiniteDuration(100, "ms")
     Flow.fromSinkAndSource(
       Sink.ignore,
       (new MockConnection(0,0,1)).data
