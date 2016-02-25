@@ -1,21 +1,27 @@
-package vfd.index
+package mavigator.index
+
+import scala.scalajs.js
+import scala.scalajs.js.annotation.JSExport
+
+import org.scalajs.dom.html
+
+import mavigator.dashboard.ui.Layout
+import mavigator.util.Environment
+import mavigator.util.Application
+
+import scalatags.JsDom.all._
 
 import org.mavlink.Parser
 import org.mavlink.messages.Message
 import org.mavlink.messages.Heartbeat
 
 import org.scalajs.dom
-import org.scalajs.dom.html
 
 import rx._
 
-import scala.scalajs.js
-import scala.scalajs.js.annotation.JSExport
 
-import scalatags.JsDom.all._
-
-@JSExport("Main")
-object Main {
+@JSExport("mavigator_index_Main")
+object Main extends Application {
   import Util._
 
   val active = Var(Set.empty[ActiveVehicle])
@@ -32,9 +38,8 @@ object Main {
     }
   )
 
-  @JSExport
-  def main(root: html.Element, baseAssets: String, args: js.Dictionary[String]): Unit = {
-
+  override def main(args: Map[String, String])(implicit env: Environment): Unit = {
+    val root = env.root
     val connection = new dom.WebSocket(args("socketUrl"))
 
     connection.binaryType = "arraybuffer"
@@ -87,6 +92,6 @@ object Main {
       i(`class`:="fa fa-spinner fa-spin")(),
       " Listening for heartbeats..."
     ).render)
-  }
 
+  }
 }

@@ -16,7 +16,7 @@ object MavigatorBuild extends Build {
   lazy val root = Project(
     id = "root",
     base = file("."),
-    aggregate = Seq(bindings, uav, server, dashboard)
+    aggregate = Seq(bindings, uav, server, cockpit)
   )
 
   // empty project that uses SbtMavlink to generate protocol bindings
@@ -40,18 +40,10 @@ object MavigatorBuild extends Build {
   )
 
   // main cockpit front-end
-  lazy val dashboard = Project(
-    id = "mavigator-dashboard",
-    base = file("mavigator-dashboard"),
+  lazy val cockpit = Project(
+    id = "mavigator-cockpit",
+    base = file("mavigator-cockpit"),
     dependencies = Seq(bindings)
   )
 
-  /*
-  // landing page providing selection of drone
-  lazy val index = Project(
-    id = "mavigator-index",
-    base = file("mavigator-index"),
-    dependencies = Seq(bindings)
-  )
- */
 }

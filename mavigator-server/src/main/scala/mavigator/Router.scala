@@ -19,25 +19,22 @@ import play.twirl.api.{ Xml, Txt, Html }
 object Router {
   import Directives._
 
+  val socketUrl = "ws://localhost:8080/mavlink"
+
   def route(implicit system: ActorSystem): Route = (
-    path("info") {
-      get {
-        val f: Html = mavigator.views.html.dashboard(
-          "ws://localhost:8080/mavlink",
-          0,
-          0,
-          0
-        )
-        complete(f)
-      }
-    } ~
     path("dashboard" / IntNumber) { id =>
       get {
-
-
-
-        //get dashboard for remote sys id
-        ???
+        val html = mavigator.views.html.app(
+          "Mavigator",
+          "mavigator_dashboard_Main",
+          Map(
+            "socketUrl" -> socketUrl,
+	    "remoteSystemId" -> "0",
+            "systemId" -> "0",
+	    "componentId" -> "0"
+          )
+        )
+        complete(html)
       }
     } ~
     path("mavlink") {
@@ -64,16 +61,20 @@ object Router {
     } ~
     pathEndOrSingleSlash {
       get {
-        complete("hello world")
+        val html = mavigator.views.html.app(
+          "Index",
+          "mavigator_index_Main",
+          Map(
+            "socketUrl" -> socketUrl
+          )
+        )
+        complete(html)
       }
     }
   )
 
-  /** Serialize Twirl `Html` to `text/html`. */
-  implicit val twirlHtmlMarshaller = twirlMarshaller[Html](`text/html`)
-
-   /** Serialize Twirl formats to `String`. */
-  def twirlMarshaller[A <: AnyRef: Manifest](contentType: MediaType): ToEntityMarshaller[A] =
-    Marshaller.StringMarshaller.wrap(contentType)(_.toString)
-
+  implicit val twirlHtml : ToEntityMarshaller[Html] = Marshaller.StringMarshaller.wrap(`text/html`){(h: Html) =>
+    h.toString
+  }
+  
 }

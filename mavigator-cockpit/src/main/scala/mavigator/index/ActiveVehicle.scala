@@ -1,4 +1,4 @@
-package vfd.index
+package mavigator.index
 
 import org.mavlink.enums.MavAutopilot
 import org.mavlink.enums.MavState

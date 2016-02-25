@@ -11,16 +11,16 @@ import akka.util.ByteString
 
 /** Provides utilities for actors representing a mavlink connection. */
 trait MavlinkUtil { myself: Actor with ActorLogging =>
-  
+
   /** Mavlink system ID of this connection. */
   val systemId: Byte
 
   /** Mavlink component ID of this connection. */
   val componentId: Byte
-  
+
   /** Assembler for creating packets originating from this connection. */
   private lazy val assembler = new Assembler(systemId, componentId)
-  
+
   /** Assembles a message into a bytestring representing a packet sent from this connection. */
   protected def assemble(message: Message): ByteString = {
     val (messageId, payload) = Message.pack(message)

@@ -1,4 +1,4 @@
-package vfd.index
+package mavigator.index
 
 import scala.language.implicitConversions
 

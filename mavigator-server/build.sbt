@@ -10,4 +10,4 @@ libraryDependencies ++= Seq(
   Dependencies.akkaStream
 )
 
-Js.dependsOnJs(MavigatorBuild.dashboard)
+Js.dependsOnJs(MavigatorBuild.cockpit)

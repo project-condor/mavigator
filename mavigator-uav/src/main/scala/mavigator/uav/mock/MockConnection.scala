@@ -2,19 +2,16 @@ package mavigator
 package uav
 package mock
 
-import org.mavlink.enums._
-import org.mavlink.messages.{Heartbeat, Message}
-import akka.stream.scaladsl._
 import scala.concurrent.duration._
-import scala.util.Random
-import akka.stream._
+
 import akka.NotUsed
+import akka.stream._
+import akka.stream.Attributes._
+import akka.stream.scaladsl._
 import akka.util._
 import org.mavlink._
-import Attributes._
+import org.mavlink.messages.{Heartbeat, Message}
 
-
-//case class Heartbeat(`type`: Byte, autopilot: Byte, baseMode: Byte, customMode: Int, systemStatus: Byte, mavlinkVersion: Byte) extends Message
 
 class MockConnection(
   remoteSystemId: Byte,
@@ -23,12 +20,14 @@ class MockConnection(
 ) {
   import MockConnection._
 
+  private lazy val assembler = new Assembler(remoteSystemId, remoteComponentId)
+
   private def delayed(delaySeconds: Double)(message: RandomFlightPlan => Message): Flow[RandomFlightPlan, Message, NotUsed] = {
     val dt = delaySeconds / prescaler
     Flow[RandomFlightPlan].withAttributes(inputBuffer(1,1)).delay(dt.seconds).map(message)
   }
 
-  val messages: Source[Message, _] = streamFromPlan(new RandomFlightPlan)(
+  private val messages: Source[Message, NotUsed] = fromPlan(new RandomFlightPlan)(
     delayed(2)(_.heartbeat),
     delayed(0.2)(_.position),
     delayed(0.05)(_.attitude),
@@ -36,31 +35,20 @@ class MockConnection(
     delayed(0.1)(_.distance)
   )
 
-
-  private lazy val assembler = new Assembler(remoteSystemId, remoteComponentId)
-
-  /** Assembles a message into a bytestring representing a packet sent from this connection. */
-  def assemble(message: Message): ByteString = {
+  val data: Source[ByteString, NotUsed] = messages.map{ message =>
     val (messageId, payload) = Message.pack(message)
-    val packet: Packet = assembler.assemble(messageId, payload)
+    val packet = assembler.assemble(messageId, payload)
     ByteString(packet.toArray)
-  }
-
-  val data = messages.map{ msg =>
-    if (msg.isInstanceOf[Heartbeat]){println(msg)}
-    assemble(msg)
   }
 
 }
 
 object MockConnection {
 
-  final val ClockTick: FiniteDuration = 0.01.seconds
+  final val ClockTick: FiniteDuration = 0.02.seconds
 
-  private def streamFromPlan(plan: RandomFlightPlan)(messages: Flow[RandomFlightPlan, Message, _]*): Source[Message, NotUsed] = {
-
+  private def fromPlan(plan: RandomFlightPlan)(messages: Flow[RandomFlightPlan, Message, _]*): Source[Message, NotUsed] = {
     import GraphDSL.Implicits._
-
     Source.fromGraph(GraphDSL.create() { implicit b =>
 
       val clock = Source.tick(ClockTick, ClockTick, plan) map { plan =>
