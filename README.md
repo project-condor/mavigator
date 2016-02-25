@@ -1,64 +1,41 @@
-*A major overhaul of this project is on its way*
+# Mavigator - Virtual Cockpit for Drones
 
-# Virtual Flight Deck for UAVs
+Mavigator is a web server and interface simulating a cockpit of an unmanned aerial vehicle.
+It is compatible with any drone that uses the [MAVLink](http://qgroundcontrol.org/mavlink/start) protocol for communication.
 
-[![See Demo](https://img.shields.io/badge/demo-currently_down-red.svg)](http://vfd-demo.jodersky.ch)
-[![Join the chat at https://gitter.im/jodersky/vfd](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jodersky/vfd?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+## Getting Started
 
-Web interface simulating a cockpit of an unmanned aerial vehicle, built with Akka, Play and ScalaJS.
+1. Compile and run `sbt mavigator-server/run`
+2. Go to `localhost:8080` to view a mock drone
+3. *(TODO: configure connection to a real UAV)*
 
-# Getting started
-SBT is used as the build tool. To get started:
+## Architecture
+Mavigator's main function is to listen for MAVLink messages on some interface (serial port for example) and forward them to a web interface where the data is parsed and displayed. This general flow of data is implemented in various sub-projects, each contained in their own directories:
 
- 1. start sbt in the base directory
- 2. enter 'run'    
-    *Note: if this is the first time your run a play project through sbt, be aware that you may need to wait a while as your computer downloads half the internet*
- 3. open [localhost:9000](http://localhost:9000) in a modern browser (tested in Firefox and Chromium) to see the application in action
- 4. make some changes to the application
- 5. go to step 3 (the application is automatically recompiled)
+```
+├── mavigator-bindings    MAVLink utility library, used by all other projects.
+├── mavigator-cockpit     Cockpit web interface that displays real-time data from drones.
+├── mavigator-server      Web server that relays messages from drones to clients.
+├── mavigator-uav         Communication backend for message exchange with drones.
+└── project               Build configuration.
+```
 
-The application can be deployed as a standalone package by running the 'dist' task.
+Following the path of message from reception to display, here are detailed descriptions of the sub-projects.
 
-# Developer Overview
-## General Idea
-The general idea of this project is to create a web interface for displaying live data from a drone. It is made of several subprojects, each providing a certain functionality.
+### mavigator-uav
+Contains common message sources, such as a mock connection that generates arbitrary flight data or a serial connection. These backends are accessed through an [Akka](https://akka.io) system extension, exposing them as Akka Stream `Flow`s.
 
- Project | Description | Technology
- ------- | ----------- | ----------
- `vfd-main` | Contains a play application that serves the actual interface. | Scala
- `vfd-dashboard` | Dynamic cockpit web interface that displays real-time data from a drone. Served up by `vfd-main`. | ScalaJS
- `vfd-index` | Dynamic landing page advertising available drones. | ScalaJS
- `vfd-uav` | Communication backend for message exchange with drones. | Scala
- `vfd-bindings` | MAVLink utility library, used by all other projects. | Scala
+### mavigator-server
+The server is the main application entry point. It opens a message backend and also serves the web interface cockpit. It is implemented with Akka Http and uses [Twirl](https://github.com/playframework/twirl) for HTML templating.
 
-To get acquainted with the application's internal structure, it is recommended start looking at code in `vfd-main` and `vfd-dashboard`.
+### mavigator-cockpit
+A web UI built with [Scala.js](https://www.scala-js.org/) that simulates a cockpit. It connects to the server via websockets and displays MAVLink messages in the form of classic aviation instruments (artificial horizon etc).
 
-As stated in the general idea, this application mainly reads data from a drone and displays it. The flow of such data can be summarized in a few points:
-- Data is received and processed in the form of [MAVLink](http://qgroundcontrol.org/mavlink/start) messages.
-- Messages arrive at a communication backend (implemented in vfd-uav). Currently, this is either a mock backend that generates random messages, or a serial connection using [flow](https://github.com/jodersky/flow) for low-level communication.
-- These messages are then transferred through vfd-main to the interface via websockets.
-- Messages are parsed by the interface and used to display virtual instrumentation.
-- The official 'common' mavlink dialect is used. Its definition is in [vfd-bindings/mavlink/common.xml](vfd-bindings/mavlink/common.xml)
-- The dialect definition is translated from xml into useable scala code by a plugin during the build.
+### mavigator-bindings
+Purely a utility project on which all other projects depend. It uses the sbt-mavlink plugin generate Scala code from a MAVLink dialect definition.
 
-## Sub-project details
-
-### vfd-dashboard
-The dynamic cockpit UI frontend.
- - The frontend is a pure scalajs application using [scalatags](https://github.com/lihaoyi/scalatags) templating.
- - Basically, `vfd-main` serves an empty page containing the frontend and provides a websocket for communication.
- - Once loaded, the scalajs frontend replaces the empty page with its UI.
- - Messages are received by the websocket and stored in an observable [scala.rx](https://github.com/lihaoyi/scala.rx) "var".
- - Messages are reactively propagated to the final user interface components.
-
-### vfd-bindings
-Initially an empty project, it uses the [sbt-mavlink plugin](https://github.com/jodersky/sbt-mavlink) to generate Scala bindings for the MAVLink protocol Other projects depend on it for interacting with the protocol. See the scaladoc, package `org.mavlink`, for details on the MAVLink API.
-
-## Scaladoc
-Scaladoc of the current application is available [here](https://jodersky.github.io/vfd/latest/api/#org.mavlink.package).
-
-# Copying
-Copyright (C) 2015 The VFD Developers
+## Copying
+Copyright (C) 2015 The Mavigator Developers
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 2 as

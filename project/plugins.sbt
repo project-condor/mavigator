@@ -11,17 +11,14 @@ resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
  * Main plugins
  */
 
-// play web framework
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.9")
-
 // add support for scalajs
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.2")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.6")
 
-// enable "smooth" dependencies between play and scalajs projects
-addSbtPlugin("com.vmunier" % "sbt-play-scalajs" % "0.2.3")
+// twirl html templating
+addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.1.1")
 
 // generate MAVLink protocol bindings
-addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.5.1")
+addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.5.2")
 
 
 /*
@@ -29,10 +26,12 @@ addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.5.1")
  */
 
 // automate publishing documentation
-addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "0.8.1")
+//addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "0.8.2")
 
 // publish to github pages
-addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.5.3")
+//addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.5.4")
 
 // generate documentation for all projects
-addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.3.2")
+//addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.3.3")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0")

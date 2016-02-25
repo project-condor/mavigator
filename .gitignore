@@ -17,6 +17,7 @@ project/plugins/project/
 
 # ensime
 .ensime
+.ensime_cache/
 
 # general files
 /*.jar
