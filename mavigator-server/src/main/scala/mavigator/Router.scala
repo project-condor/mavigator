@@ -60,7 +60,7 @@ object Router {
       }
     } ~
     pathEndOrSingleSlash {
-      get {
+      get {/*
         val html = mavigator.views.html.app(
           "Index",
           "mavigator_index_Main",
@@ -69,6 +69,8 @@ object Router {
           )
         )
         complete(html)
+            */
+        complete(mavigator.views.html.next("test"))
       }
     }
   )

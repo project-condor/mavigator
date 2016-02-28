@@ -1,0 +1,59 @@
+body {
+    background: black;
+}
+
+main {
+    width: 100vw;
+    height: 56.25vw; /* 100/56.25 = 1.778 */
+    max-height: 100vh;
+    max-width: 177.78vh; /* 16/9 = 1.778 */
+    margin: auto;
+    position: absolute;
+    top:0; bottom:0; /* vertical center */
+    left:0; right:0; /* horizontal center */
+
+    background: pink;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#mcp {
+    background: purple;
+
+    width: 100%;
+    height: 15%;
+}
+
+#mrow {
+    width: 100%;
+    height: 88.75%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+#ecam {
+    background: lightblue;
+
+    width: 20%;
+    height: 100%;
+}
+
+#primary {
+    background: orange;
+
+    width: 80%;
+    height: 100%;
+}
+
+#fms {
+    background: gray;
+
+    width: 100%;
+    height: 5%;
+}
