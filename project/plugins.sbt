@@ -2,19 +2,18 @@
  * Additional resolvers
  */
 
-resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
+//resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
 
-resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
+//resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
 
 resolvers += Resolver.jcenterRepo
-
 
 /*
  * Main plugins
  */
 
 // add support for scalajs
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.6")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.8")
 
 // twirl html templating
 addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.1.1")

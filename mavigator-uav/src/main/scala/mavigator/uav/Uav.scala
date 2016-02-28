@@ -32,7 +32,7 @@ class Uav(system: ExtendedActorSystem) extends Extension {
   def connect(): Flow[ByteString, ByteString, NotUsed] = {
     Flow.fromSinkAndSource(
       Sink.ignore,
-      (new MockConnection(0,0,1)).data
+      (new MockConnection(0,0,1)).data //TODO: use source instead of hardcoded value
     )
   }
 

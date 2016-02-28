@@ -19,8 +19,8 @@ object Dependencies {
   val flowNative = "com.github.jodersky" % "flow-native" % FlowVersion % Runtime
   val flowStream = "com.github.jodersky" % "flow-stream" % FlowVersion
 
-  val jsDom = Def.setting{"org.scala-js" %%% "scalajs-dom" % "0.8.2"}
+  val jsDom = Def.setting{"org.scala-js" %%% "scalajs-dom" % "0.9.0"}
   val scalatags = Def.setting{"com.lihaoyi" %%% "scalatags" % "0.5.4"}
-  val scalarx = Def.setting{"com.lihaoyi" %%% "scalarx" % "0.2.8"}
+  val scalarx = Def.setting{"com.lihaoyi" %%% "scalarx" % "0.3.1"}
 
 }

@@ -13,9 +13,9 @@
     <p>The error was: "<span id="scalajs-error-message"></span>"</p>
 </div>
 
-<div id="@appId">
+<div id="@appId" class="app">
     <div class="loader">
-	<i class="fa fa-spinner fa-spin"></i>
+	<i class="fa fa-cog fa-spin"></i>
     </div>
 </div>
 
@@ -30,10 +30,12 @@
     	     root0.removeChild(root0.firstChild);
 	 }
 
-	 //run ScalaJS application
+         //run ScalaJS application
+         console.info("[@appId] Starting ScalaJS application...")
 	 @{appId}().start({
 	     root: root0,
-	     assetsBase: "/assets",
+	     styleRoot: document.getElementById("app-styles"),
+	     baseUrl: "/assets",
 	     args: {@args.map{ case (key, value) =>
 		 @key: "@value",
 	     }}
@@ -48,6 +50,6 @@
  });
 </script>
 
-<script type="text/javascript" src="/assets/js/mavigator-dashboard-opt.js"></script>
+<script type="text/javascript" src="/assets/js/mavigator-cockpit-fastopt.js"></script>
 
 }

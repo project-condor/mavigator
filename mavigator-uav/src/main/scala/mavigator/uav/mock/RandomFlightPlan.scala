@@ -54,9 +54,10 @@ class RandomFlightPlan {
     0
   )
 
+
   def attitude = Attitude(
     millis,
-    (2 * math.Pi * time / 6).toFloat,
+    (math.sin(2 * math.Pi * time ) * math.Pi / 6).toFloat,
     (math.sin(2 * math.Pi * time / 5) * math.Pi / 6).toFloat,
     (2 * math.Pi * time / 4).toFloat,
     0,

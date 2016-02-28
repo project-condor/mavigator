@@ -22,11 +22,11 @@ object Router {
   val socketUrl = "ws://localhost:8080/mavlink"
 
   def route(implicit system: ActorSystem): Route = (
-    path("dashboard" / IntNumber) { id =>
+    path("cockpit" / IntNumber) { id =>
       get {
         val html = mavigator.views.html.app(
           "Mavigator",
-          "mavigator_dashboard_Main",
+          "mavigator_cockpit_Main",
           Map(
             "socketUrl" -> socketUrl,
 	    "remoteSystemId" -> "0",

@@ -13,7 +13,8 @@ object ActiveVehicle {
     id,
     vehicleType(hb.`type`),
     autopilot(hb.autopilot),
-    state(hb.systemStatus))
+    state(hb.systemStatus)
+  )
 
   def vehicleType(tpe: Int) = tpe match {
     case MavType.MavTypeGeneric => "Generic"

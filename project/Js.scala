@@ -8,7 +8,7 @@ object Js {
 
   def dependsOnJs(proj: Project): Seq[Setting[_]] = Seq(
     resourceGenerators in Compile += Def.task{
-      val js: File = (fullOptJS in (proj, Compile)).value.data
+      val js: File = (fastOptJS in (proj, Compile)).value.data
       val map = js.getParentFile / (js.name + ".map")
 
       val out = (resourceManaged in Compile).value / "assets" / "js"
