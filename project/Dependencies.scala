@@ -14,7 +14,7 @@ object Dependencies {
 
   val reactiveStreams = "org.reactivestreams" % "reactive-streams" % "1.0.0"
 
-  final val FlowVersion = "2.5.0-M1"
+  final val FlowVersion = "2.5.0-M2"
   val flow = "com.github.jodersky" %% "flow-core" % FlowVersion
   val flowNative = "com.github.jodersky" % "flow-native" % FlowVersion % Runtime
   val flowStream = "com.github.jodersky" % "flow-stream" % FlowVersion

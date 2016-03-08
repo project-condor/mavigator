@@ -6,6 +6,8 @@ resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releas
 
 resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
 
+resolvers += Resolver.jcenterRepo
+
 
 /*
  * Main plugins
