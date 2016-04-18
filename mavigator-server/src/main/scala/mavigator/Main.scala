@@ -13,6 +13,8 @@ object Main {
   implicit lazy val system = ActorSystem("mavigator")
   implicit lazy val materializer = ActorMaterializer()
 
+  lazy val config = system.settings.config.getConfig("mavigator")
+
   def main(args: Array[String]): Unit = {
     import system.dispatcher
 
@@ -22,7 +24,11 @@ object Main {
     Uav().init()
 
     system.log.info(s"Starting server...")
-    val binding = Http(system).bindAndHandle(route, "::", 8080)
+    val binding = Http(system).bindAndHandle(
+      route,
+      config.getString("interface"),
+      config.getInt("port")
+    )
 
     for (b <- binding) {
       val addr = b.localAddress.getHostString()
