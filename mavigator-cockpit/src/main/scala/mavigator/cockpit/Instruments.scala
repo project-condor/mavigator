@@ -35,7 +35,7 @@ trait Instruments { page: Page =>
     /** Called when element has been loaded. */
     private def load(event: dom.Event): Unit = {
       for (part <- moveable) {
-        part.style.transition = "transform 20ms ease-out"
+        //part.style.transition = "transform 300ms ease"
       }
     }
 
@@ -59,7 +59,7 @@ trait Instruments { page: Page =>
 
     /** Applies rotation styling to an element. */
     def rotate(elem: html.Element, rad: Double): Unit = {
-      elem.style.transform = "rotateZ(" + rad + "rad)";
+      elem.style.transform = "rotate(" + rad + "rad)";
     }
 
   }
@@ -74,7 +74,7 @@ trait Instruments { page: Page =>
       import SvgInstrument._
       val (pitch, roll) = pitchRoll
       translate(pitchPart, 0, (pitch * 180 / math.Pi * 10).toInt) // 1deg === 10px
-      rotate(rollPart, roll)
+      rotate(rollPart, -roll)
     }
   }
 
@@ -82,15 +82,16 @@ trait Instruments { page: Page =>
     import SvgInstrument._
 
     override def element = div(`class`:="hud-overlay")(objectElement).render
-    lazy val horizon = part("horizon")
-    lazy override val moveable = Seq(horizon)
+    lazy val rollPart = part("roll")
+    lazy val pitchPart = part("pitch")
+    lazy override val moveable = Seq(rollPart, pitchPart)
 
     override def update(pitchRoll: (Float, Float)) = {
       val (pitch, roll) = pitchRoll
-
       val t = (pitch * 180 / math.Pi * 10).toInt // 1deg === 10px
 
-      horizon.style.transform = s"rotateZ(${roll}rad)translate(0px, ${t}px) "
+      SvgInstrument.rotate(rollPart, -roll)
+      SvgInstrument.translate(pitchPart, 0, t)
     }
   }
 
@@ -171,3 +172,4 @@ trait Instruments { page: Page =>
   def instrumentStyles: Seq[String] = Seq(overlayStyle, modeStyle)
 
 }
+

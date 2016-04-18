@@ -52,7 +52,10 @@ trait MavlinkWebSockets { self: Instruments =>
   }
 
   private def onMessage(msg: Message): Unit = msg match {
-    case a: Attitude => attitudeOverlay.update((a.pitch.toFloat, a.roll.toFloat))
+    case a: Attitude =>
+      attitudeOverlay.update((a.pitch, a.roll))
+      horizonOverlay.update((a.pitch, a.roll))
+
     case _ => ()
   }
 

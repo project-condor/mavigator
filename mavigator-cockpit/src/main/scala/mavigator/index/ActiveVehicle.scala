@@ -26,7 +26,7 @@ object ActiveVehicle {
   def autopilot(tpe: Int) = tpe match {
     case MavAutopilot.MavAutopilotGeneric => "Generic"
     case MavAutopilot.MavAutopilotInvalid => "Invalid"
-    case MavAutopilot.MavAutopilotPixhawk => "Pixhawk"
+    case MavAutopilot.MavAutopilotPx4 => "PX4"
     case _ => "Other"
   }
 

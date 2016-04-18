@@ -18,6 +18,7 @@ trait Layout { self: Page with Instruments =>
 
   /** Element to deisplay on heads-up display (main area). */
   def hud = div(id :="hud")(
+    horizonOverlay.element,
     attitudeOverlay.element
   )
 
