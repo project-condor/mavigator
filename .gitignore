@@ -15,6 +15,9 @@ project/plugins/project/
 .classpath
 .cache
 
+# akka application configuration (use reference.conf instead)
+application.conf
+
 # ensime
 .ensime
 .ensime_cache/
