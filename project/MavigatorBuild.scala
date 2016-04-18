@@ -8,7 +8,8 @@ object MavigatorBuild extends Build {
 
   // settings common to all projects
   val defaultSettings = Seq(
-    scalaVersion := "2.11.7",
+    resolvers += Resolver.jcenterRepo,
+    scalaVersion := "2.11.8",
     scalacOptions ++= Seq("-feature", "-deprecation")
   )
 

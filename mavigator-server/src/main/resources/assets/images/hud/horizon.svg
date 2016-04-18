@@ -9,13 +9,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1200"
-   height="1200"
+   width="1000"
+   height="1000"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="horizon.svg"
-   viewBox="-600 -600 1200 1200"
+   viewBox="-500 -500 1000 1000"
    preserveAspectRatio="none">
   <defs
      id="defs4" />
@@ -26,15 +26,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35374999"
-     inkscape:cx="356.86783"
-     inkscape:cy="585.56122"
+     inkscape:zoom="0.176875"
+     inkscape:cx="417.16915"
+     inkscape:cy="602.15446"
      inkscape:document-units="px"
-     inkscape:current-layer="horizon"
+     inkscape:current-layer="svg2"
      showgrid="true"
      showborder="true"
      inkscape:window-width="1920"
-     inkscape:window-height="1033"
+     inkscape:window-height="1034"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1">
@@ -58,20 +58,23 @@
     </rdf:RDF>
   </metadata>
   <g
-     id="horizon">
-    <rect
-       style="fill:#c88f00;fill-opacity:1;stroke:none"
-       id="rect3000"
-       width="1800"
-       height="1200"
-       x="-900"
-       y="0" />
-    <rect
-       y="-1200"
-       x="-900"
-       height="1200"
-       width="1800"
-       id="rect3770"
-       style="fill:#aaeeff;fill-opacity:1;stroke:none" />
+     id="roll">
+    <g
+       id="pitch">
+      <rect
+         y="0"
+         x="-1000"
+         height="2000"
+         width="2000"
+         id="ground"
+         style="fill:#c88f00;fill-opacity:1;stroke:none" />
+      <rect
+         style="fill:#aaeeff;fill-opacity:1;stroke:none"
+         id="sky"
+         width="2000"
+         height="2000"
+         x="-1000"
+         y="-2000" />
+    </g>
   </g>
 </svg>

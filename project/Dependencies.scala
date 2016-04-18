@@ -6,7 +6,7 @@ import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 
 object Dependencies {
 
-  final val AkkaVersion = "2.4.2-RC1"
+  final val AkkaVersion = "2.4.4"
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % AkkaVersion
   val akkaHttp = "com.typesafe.akka" %% "akka-http-experimental" % AkkaVersion
   val akkaHttpCore = "com.typesafe.akka" %% "akka-http-core" % AkkaVersion
@@ -14,10 +14,10 @@ object Dependencies {
 
   val reactiveStreams = "org.reactivestreams" % "reactive-streams" % "1.0.0"
 
-  final val FlowVersion = "2.5.0-M2"
+  final val FlowVersion = "2.6.0"
   val flow = "com.github.jodersky" %% "flow-core" % FlowVersion
   val flowNative = "com.github.jodersky" % "flow-native" % FlowVersion % Runtime
-  val flowStream = "com.github.jodersky" % "flow-stream" % FlowVersion
+  val flowStream = "com.github.jodersky" %% "flow-stream" % FlowVersion
 
   val jsDom = Def.setting{"org.scala-js" %%% "scalajs-dom" % "0.9.0"}
   val scalatags = Def.setting{"com.lihaoyi" %%% "scalatags" % "0.5.4"}

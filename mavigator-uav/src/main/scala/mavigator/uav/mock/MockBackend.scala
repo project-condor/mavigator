@@ -10,15 +10,16 @@ import akka.stream.Attributes._
 import akka.stream.scaladsl._
 import akka.util._
 import org.mavlink._
-import org.mavlink.messages.{Heartbeat, Message}
+import org.mavlink.messages.Message
 
 
-class MockConnection(
+/** A test connection that produces random MAVLink messages. */
+class MockBackend(
   remoteSystemId: Byte,
   remoteComponentId: Byte,
   prescaler: Double
 ) {
-  import MockConnection._
+  import MockBackend._
 
   private lazy val assembler = new Assembler(remoteSystemId, remoteComponentId)
 
@@ -35,7 +36,7 @@ class MockConnection(
     delayed(0.1)(_.distance)
   )
 
-  val data: Source[ByteString, NotUsed] = messages.map{ message =>
+  private val data: Source[ByteString, NotUsed] = messages.map{ message =>
     val (messageId, payload) = Message.pack(message)
     val packet = assembler.assemble(messageId, payload)
     ByteString(packet.toArray)
@@ -43,7 +44,7 @@ class MockConnection(
 
 }
 
-object MockConnection {
+object MockBackend extends Backend {
 
   final val ClockTick: FiniteDuration = 0.02.seconds
 
@@ -52,7 +53,7 @@ object MockConnection {
     Source.fromGraph(GraphDSL.create() { implicit b =>
 
       val clock = Source.tick(ClockTick, ClockTick, plan) map { plan =>
-        plan.tick(0.01)
+        plan.tick(ClockTick.toMillis / 1000.0)
         plan
       }
       val bcast = b.add(Broadcast[RandomFlightPlan](messages.length))
@@ -65,6 +66,30 @@ object MockConnection {
 
       SourceShape(merge.out)
     })
+  }
+
+
+  override def init(core: Core) = {
+    import core.materializer
+    import core.system
+
+    system.log.info("Initializing mock backend...")
+
+    val config = system.settings.config.getConfig("mavigator.uav.mock")
+
+    val mock = new MockBackend(
+      config.getInt("remote_system_id").toByte,
+      config.getInt("remote_component_id").toByte,
+      config.getDouble("prescaler")
+    )
+
+    val mockFlow = Flow.fromSinkAndSource(
+      Sink.ignore,
+      mock.data
+    )
+
+    (mockFlow join core.setBackend()).run()
+
   }
 
 }

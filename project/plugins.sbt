@@ -2,14 +2,10 @@
  * Additional resolvers
  */
 
-//resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
-
-//resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
-
 resolvers += Resolver.jcenterRepo
 
 /*
- * Main plugins
+ * Main plugins (required for building)
  */
 
 // add support for scalajs
@@ -19,11 +15,11 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.8")
 addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.1.1")
 
 // generate MAVLink protocol bindings
-addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.5.2")
+addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.7.0")
 
 
 /*
- * Utility or meta plugins
+ * Utility or meta plugins (non-essential, can be disabled)
  */
 
 // automate publishing documentation
@@ -35,4 +31,4 @@ addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.5.2")
 // generate documentation for all projects
 //addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.3.3")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.0")
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.0-RC3")

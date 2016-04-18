@@ -1,80 +1,92 @@
 package mavigator
 
 import akka.actor._
-import akka.stream._
-import akka.stream.scaladsl._
-import akka.http.scaladsl._
-import akka.http.scaladsl.model._
-import akka.http.scaladsl.model.ws._
-import akka.http.scaladsl.server._
-import uav.Uav
-import akka.util._
-
 import akka.http.scaladsl.marshalling.{Marshaller, ToEntityMarshaller}
 import akka.http.scaladsl.model.MediaTypes._
-import akka.http.scaladsl.model.MediaType
-import play.twirl.api.{ Xml, Txt, Html }
+import akka.http.scaladsl.model._
+import akka.http.scaladsl.model.Uri.Path
+import akka.http.scaladsl.model.ws._
+import akka.http.scaladsl.server._
+import akka.util._
+import akka.stream.scaladsl._
+import play.twirl.api.Html
+import uav.Uav
 
 
 object Router {
   import Directives._
 
-  val socketUrl = "ws://localhost:8080/mavlink"
+  final val SocketEndpoint = "mavlink"
+
+  def withSocketUri: Directive1[Uri] = extractUri.map { uri =>
+    uri.withScheme("ws").withPath(Path.Empty / SocketEndpoint)
+  }
 
   def route(implicit system: ActorSystem): Route = (
-    path("cockpit" / IntNumber) { id =>
+    path("whoami") {
       get {
-        val html = mavigator.views.html.app(
-          "Mavigator",
-          "mavigator_cockpit_Main",
-          Map(
-            "socketUrl" -> socketUrl,
-	    "remoteSystemId" -> "0",
-            "systemId" -> "0",
-	    "componentId" -> "0"
-          )
-        )
-        complete(html)
-      }
-    } ~
-    path("mavlink") {
-      get {
-        val fromWebSocket = Flow[Message].collect{
-          case BinaryMessage.Strict(data) => data
-        }
-
-        val toWebSocket = Flow[ByteString].map{bytes =>
-          BinaryMessage(bytes)
-        }
-
-        val backend = Uav().connect()
-
-        handleWebSocketMessages(fromWebSocket via backend via toWebSocket)
-      }
-    } ~
-    pathPrefix("assets") {
-      get {
-        encodeResponse {
-          getFromResourceDirectory("assets")
+        withSocketUri { sock =>
+          complete(sock.toString)
         }
       }
     } ~
-    pathEndOrSingleSlash {
-      get {
-        val html = mavigator.views.html.app(
-          "Index",
-          "mavigator_index_Main",
-          Map(
-            "socketUrl" -> socketUrl
-          )
-        )
-        complete(html)
+      path("cockpit" / IntNumber) { id =>
+        get {
+          withSocketUri { socket =>
+            val html = mavigator.views.html.app(
+              "Mavigator",
+              "mavigator_cockpit_Main",
+              Map(
+                "socketUrl" -> socket.toString,
+	        "remoteSystemId" -> id.toString
+              )
+            )
+            complete(html)
+          }
+        }
+      } ~
+      path(SocketEndpoint) {
+        get {
+          val fromWebSocket = Flow[Message].collect{
+            case BinaryMessage.Strict(data) => data
+          }
+
+          val toWebSocket = Flow[ByteString].map{bytes =>
+            BinaryMessage(bytes)
+          }
+
+          val backend = Uav().connect()
+
+          handleWebSocketMessages(fromWebSocket via backend via toWebSocket)
+        }
+      } ~
+      pathEndOrSingleSlash {
+        get {
+          withSocketUri { socket =>
+            val html = mavigator.views.html.app(
+              "Index",
+              "mavigator_index_Main",
+              Map(
+                "socketUrl" -> socket.toString
+              )
+            )
+            complete(html)
+          }
+        }
+      } ~
+      pathPrefix("assets") {
+        get {
+          encodeResponse {
+            getFromResourceDirectory("assets")
+          }
+        }
       }
-    }
   )
 
-  implicit val twirlHtml : ToEntityMarshaller[Html] = Marshaller.StringMarshaller.wrap(`text/html`){(h: Html) =>
-    h.toString
-  }
-  
+  /** Enables completing requests with html. */
+  implicit val twirlHtml : ToEntityMarshaller[Html] =
+    Marshaller.StringMarshaller.wrap(`text/html`){ h: Html =>
+      h.toString
+    }
+
 }

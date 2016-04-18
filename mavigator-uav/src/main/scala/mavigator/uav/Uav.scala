@@ -2,39 +2,37 @@ package mavigator
 package uav
 
 import java.lang.IllegalArgumentException
-import mock._
+
 import akka._
 import akka.actor._
-import akka.util._
+import akka.stream.ActorMaterializer
 import akka.stream.scaladsl._
+import akka.util._
 
+import mock._
+import serial._
+
+//TODO: the whole backend system feels hacky, it probably needs a major redesign
 class Uav(system: ExtendedActorSystem) extends Extension {
+
+  private val materializer = ActorMaterializer()(system)
 
   private lazy val config = system.settings.config.getConfig("mavigator.uav")
   private lazy val tpe = config.getString("type")
-  private lazy val componentId = config.getInt("componentId").toByte
-  private lazy val heartbeat = config.getInt("heartbeat")
-  private lazy val connection = config.getConfig(tpe)
 
-  lazy val source = tpe match {
-    case "mock" =>
-      new MockConnection(
-        connection.getInt("remote_system_id").toByte,
-        componentId,
-        connection.getDouble("prescaler")
-      )
+  private lazy val core = new Core()(system, materializer)
 
-    case "serial" => ???
-
+  lazy val backend: Backend = tpe match {
+    case "mock" => MockBackend
+    case "serial" => SerialBackend
     case _ => throw new IllegalArgumentException(s"Unsupported connection type: $tpe")
   }
 
-  def connect(): Flow[ByteString, ByteString, NotUsed] = {
-    Flow.fromSinkAndSource(
-      Sink.ignore,
-      (new MockConnection(0,0,1)).data //TODO: use source instead of hardcoded value
-    )
+  def init(): Unit = {
+    backend.init(core)
   }
+
+  def connect(): Flow[ByteString, ByteString, NotUsed] = core.connect()
 
 }
 

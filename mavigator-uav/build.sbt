@@ -7,5 +7,6 @@ libraryDependencies ++= Seq(
   Dependencies.akkaStream,
   Dependencies.flow,
   Dependencies.flowNative,
+  Dependencies.flowStream,
   Dependencies.reactiveStreams
 )
