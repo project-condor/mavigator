@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/project-condor/mavigator.svg?branch=master)](https://travis-ci.org/project-condor/mavigator)
+
 # Mavigator - Virtual Cockpit for Drones
 
 Mavigator is a web server and interface simulating a cockpit of an unmanned aerial vehicle.
