@@ -14,7 +14,7 @@ trait Layout { self: Page with Instruments =>
     img(src := asset("images/logo-invert.svg"), style:="height: 20px; margin: 5px;"),
     span(`class`:="mode warning")("Demo System"),
     div(`style` := "float: right")(
-      unstable.element
+      
     )
   )
 

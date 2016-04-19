@@ -118,16 +118,6 @@ trait Instruments { page: Page =>
     }"""
 
 
-  def mode(name: String, level: String) = new Instrument[Boolean] {
-    override val element: html.Element = div(`class` := s"mode $level off")(name).render
-    def update(newValue: Boolean): Unit = {
-      val classes = element.classList
-      if (newValue) classes.add("off") else classes.remove("off")
-    }
-  }
-
-  val unstable = mode("UNSTABLE", "danger")
-
   val modeStyle = """
 .mode {
     display: inline-block;

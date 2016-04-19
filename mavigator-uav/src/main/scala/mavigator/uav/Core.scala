@@ -35,14 +35,7 @@ class Core(implicit val system: ActorSystem, val materializer: Materializer) {
   )((toClient, fromClient) => (toClient, fromClient))
 
   private lazy val runnable: RunnableGraph[Publisher[ByteString]] = {
-    val timer = Source.tick(2.seconds, 2.seconds, ())
-    val generator: Source[ByteString, _] = timer.flatMapConcat{ _ =>
-      Util.barrelRoll via Util.assembler
-    }
-
-    val merged: Flow[ByteString, ByteString, _] =  Util.merge(generator, backend)
-
-    merged.joinMat(clients){case (_, (toClient, _)) =>
+    backend.joinMat(clients){case (_, (toClient, _)) =>
       toClient
     }
 
@@ -94,16 +87,6 @@ object Util {
     val (id, payload) = Message.pack(msg)
     val bytes = as.assemble(id, payload).toArray
     ByteString(bytes)
-  }
-
-  def barrelRoll(): Source[Message, _] = {
-    val angle: Source[Float, _] =
-      Source.tick(10.millis, 10.millis, 0.1f).scan(0.0f)(_+_).takeWhile(_ < 2 * math.Pi)
-    val attitude = angle.map{ a =>
-      Attitude(0,a,0,0,0,0,0)
-    }
-
-    Source.single(Stability(0)) concat attitude concat Source.single(Stability(1))
   }
 
 }
