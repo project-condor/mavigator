@@ -13,7 +13,9 @@ trait Layout { self: Page with Instruments =>
   def mcp = div(id := "mcp")(
     img(src := asset("images/logo-invert.svg"), style:="height: 20px; margin: 5px;"),
     span(`class`:="mode warning")("Demo System"),
-    modes
+    div(`style` := "float: right")(
+      unstable.element
+    )
   )
 
   /** Element to deisplay on heads-up display (main area). */
@@ -23,27 +25,26 @@ trait Layout { self: Page with Instruments =>
   )
 
   val layoutStyle = """
-    |#cockpit {
-    |    width: 100%;
-    |    height: 100%;
-    |    display: flex;
-    |    flex-direction: column;
-    |    justify-content: flex-start;
-    |    align-items: stretch;
-    |
-    |    background-color: pink;
-    |}
-    |
-    |#mcp {
-    |    flex: 0 1 0;
-    |    background-color: #222222;
-    |}
-    |
-    |#hud {
-    |    flex: 1 1 auto;
-    |    position: relative;
-    |    background-color: lightblue;
-    |}""".stripMargin
+    #cockpit {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+
+        background-color: pink;
+    }
+
+    #mcp {
+        flex: 0 1 0;
+        background-color: #222222;
+    }
+    #hud {
+        flex: 1 1 auto;
+        position: relative;
+        background-color: lightblue;
+    }"""
 
   override def styles = Seq(layoutStyle) ++ instrumentStyles
 

@@ -97,38 +97,36 @@ trait Instruments { page: Page =>
 
 
   val overlayStyle = """
-    |.hud-overlay {
-    |    position: absolute;
-    |    left: 0;
-    |    right: 0;
-    |    top: 0;
-    |    bottom: 0;
-    |
-    |    display: flex;
-    |    flex-direction: row;
-    |    justify-content: center;
-    |    align-items: center;
-    |}
-    |.hud-overlay > * {
-    |    flex: 1 1 0;
-    |    width: 100%;
-    |    height: 100%;
-    |    max-width: 100%;
-    |    max-height: 100%;
-    |}""".stripMargin
+    .hud-overlay {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    .hud-overlay > * {
+        flex: 1 1 0;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+    }"""
 
 
-  def mode(name: String, kind: String, on: Boolean = false) = {
-    div(`class` := s"mode $kind ${if (!on) "off"}")(name)
+  def mode(name: String, level: String) = new Instrument[Boolean] {
+    override val element: html.Element = div(`class` := s"mode $level off")(name).render
+    def update(newValue: Boolean): Unit = {
+      val classes = element.classList
+      if (newValue) classes.add("off") else classes.remove("off")
+    }
   }
 
-    //TODO make these into real instruments and lazy vals
-  def modes = div(style := "float: right;")(
-    mode("LINK", "danger", true),
-    mode("BAT", "warning", true),
-    mode("GPS", "warning", true),
-    mode("STABILIZED", "info", true)
-  )
+  val unstable = mode("UNSTABLE", "danger")
 
   val modeStyle = """
 .mode {

@@ -55,6 +55,11 @@ trait MavlinkWebSockets { self: Instruments =>
     case a: Attitude =>
       attitudeOverlay.update((a.pitch, a.roll))
       horizonOverlay.update((a.pitch, a.roll))
+    case Stability(v) => {
+      unstable.update(v != 0)
+      println("stability " + v)
+    }
+
 
     case _ => ()
   }

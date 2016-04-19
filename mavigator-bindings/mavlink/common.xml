@@ -3234,6 +3234,11 @@
             <field type="float" name="size_x">Size in radians of target along x-axis</field>
             <field type="float" name="size_y">Size in radians of target along y-axis</field>
         </message>
+	<message id="150" name="Stability">
+	  <description>Stability issues</description>
+	  <field type="uint8_t" name="stable">Is it stable?</field>
+	</message>
+
         <!-- MESSAGE IDs 180 - 240: Space for custom messages in individual projectname_messages.xml files -->
         <message id="241" name="VIBRATION">
             <description>Vibration levels and accelerometer clipping</description>
