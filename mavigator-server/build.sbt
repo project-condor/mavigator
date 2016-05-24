@@ -21,36 +21,34 @@ cancelable in Global := true
 /*
  * Deployment configuration
  */
-enablePlugins(UniversalPlugin, DebianPlugin, DockerPlugin)
-enablePlugins(JavaServerAppPackaging)
+enablePlugins(DockerPlugin)
 
-
-name in Universal := "mavigator"
-packageName in Universal := "mavigator"
-executableScriptName in Universal := "mavigator"
-
-name in Linux := (name in Universal).value
-packageName in Linux := (packageName in Universal).value
-executableScriptName in Linux := (executableScriptName in Universal).value
-
-maintainer in Linux := "Jakob Odersky <jakob@odersky.com>"
-packageSummary in Linux := "Virtual cockpit for drones."
-packageDescription in Linux := "Compatible with devices using the MAVLink protocol."
-
-version in Debian := version.value
-debianPackageDependencies in Debian ++= Seq(
-  "java8-runtime-headless",
-  "bash (>= 2.05a-11)"
+val filter = ScopeFilter(
+  inAnyProject,
+  inConfigurations(Compile)
 )
 
-import com.typesafe.sbt.packager.archetypes.ServerLoader
-serverLoading in Debian := ServerLoader.Systemd
+dockerfile in docker := {
+  val mainclass = (mainClass in Compile in packageBin).value.getOrElse(sys.error("Expected exactly one main class"))
 
+  val jarFiles: List[File] = packageBin.all(filter).value.toList :::
+    (fullClasspath in Compile).value.files.toList
 
-name in Docker := "mavigator"
-packageName in Docker := "mavigator"
-executableScriptName := "mavigator"
-maintainer in Docker := "Jakob Odersky <jakob@odersky.com>"
+  val cp = jarFiles.map{ file =>
+    s"/opt/mavigator/lib/${file.getName}"
+  }.mkString(":")
 
-dockerBaseImage := "java:8"
-dockerExposedPorts += 8080
+  new Dockerfile {
+    from("java:8")
+    add(jarFiles, "/opt/mavigator/lib/")
+    expose(8080)
+    entryPoint("java", "-cp", cp, mainclass)
+  }
+}
+
+buildOptions in docker := BuildOptions(
+  pullBaseImage = BuildOptions.Pull.Always,
+  removeIntermediateContainers = BuildOptions.Remove.Always
+)
+
+imageName in docker := ImageName(s"jodersky/mavigator:${version.value}")

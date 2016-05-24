@@ -31,4 +31,4 @@ addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.7.0")
 // generate documentation for all projects
 //addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.3.3")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.0-RC3")
+addSbtPlugin("se.marcuslonnberg" % "sbt-docker" % "1.4.0")

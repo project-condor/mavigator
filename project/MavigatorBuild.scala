@@ -29,22 +29,19 @@ object MavigatorBuild extends Build {
   // main akka http server project
   lazy val server = Project(
     id = "mavigator-server",
-    base = file("mavigator-server"),
-    dependencies = Seq(bindings, uav)
-  )
+    base = file("mavigator-server")
+  ).dependsOn(bindings, uav)
 
   // communication backend
   lazy val uav = Project(
     id = "mavigator-uav",
-    base = file("mavigator-uav"),
-    dependencies = Seq(bindings)
-  )
+    base = file("mavigator-uav")
+  ).dependsOn(bindings)
 
   // main cockpit front-end
   lazy val cockpit = Project(
     id = "mavigator-cockpit",
-    base = file("mavigator-cockpit"),
-    dependencies = Seq(bindings)
-  )
+    base = file("mavigator-cockpit")
+  ).dependsOn(bindings)
 
 }
