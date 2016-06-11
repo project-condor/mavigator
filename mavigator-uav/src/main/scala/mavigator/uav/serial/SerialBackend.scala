@@ -9,9 +9,9 @@ import scala.util.{Failure, Success}
 import akka.NotUsed
 import akka.stream.scaladsl.{Flow, Keep}
 import akka.util.ByteString
-import com.github.jodersky.flow.{Parity, SerialSettings}
-import com.github.jodersky.flow.stream.Serial
-import com.github.jodersky.flow.stream.Serial.Connection
+import ch.jodersky.flow.{Parity, SerialSettings}
+import ch.jodersky.flow.stream.Serial
+import ch.jodersky.flow.stream.Serial.Connection
 
 object SerialBackend extends Backend {
 
