@@ -9,7 +9,7 @@ resolvers += Resolver.jcenterRepo
  */
 
 // add support for scalajs
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.8")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.13")
 
 // twirl html templating
 addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.1.1")

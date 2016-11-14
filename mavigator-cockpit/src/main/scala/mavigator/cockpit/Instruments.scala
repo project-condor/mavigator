@@ -48,7 +48,7 @@ trait Instruments { page: Page =>
     /** Retrieves an SVG object element by its instrument's name. */
     def svgObject(path: String): html.Object = {
       val fullPath = page.asset("images/" + path)
-      `object`(`type` := "image/svg+xml", "data".attr := fullPath, width := 100.pct)(
+      `object`(`type` := "image/svg+xml", attr("data") := fullPath, width := 100.pct)(
         "Error loading instrument " + fullPath).render
     }
 
