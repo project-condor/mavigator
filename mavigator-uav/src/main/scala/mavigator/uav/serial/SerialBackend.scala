@@ -7,11 +7,11 @@ import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 
 import akka.NotUsed
+import akka.serial.{Parity, SerialSettings}
+import akka.serial.stream.Serial
+import akka.serial.stream.Serial.Connection
 import akka.stream.scaladsl.{Flow, Keep}
 import akka.util.ByteString
-import ch.jodersky.flow.{Parity, SerialSettings}
-import ch.jodersky.flow.stream.Serial
-import ch.jodersky.flow.stream.Serial.Connection
 
 object SerialBackend extends Backend {
 

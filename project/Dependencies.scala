@@ -6,21 +6,23 @@ import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 
 object Dependencies {
 
-  final val AkkaVersion = "2.4.12"
+  final val AkkaVersion = "2.4.16"
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % AkkaVersion
-  val akkaHttp = "com.typesafe.akka" %% "akka-http-experimental" % "2.4.11"
-  val akkaHttpCore = "com.typesafe.akka" %% "akka-http-core" % "2.4.11"
   val akkaStream = "com.typesafe.akka" %% "akka-stream" % AkkaVersion
+
+  final val AkkaHttpVersion = "10.0.1"
+  val akkaHttp = "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion
+  val akkaHttpCore = "com.typesafe.akka" %% "akka-http-core" % AkkaHttpVersion
+
+  final val AkkaSerialVersion = "4.0.0-RC1"
+  val akkaSerial = "ch.jodersky" %% "akka-serial-core" % AkkaSerialVersion
+  val akkaSerialNative = "ch.jodersky" % "akka-serial-native" % AkkaSerialVersion % Runtime
+  val akkaSerialStream = "ch.jodersky" %% "akka-serial-stream" % AkkaSerialVersion
 
   val reactiveStreams = "org.reactivestreams" % "reactive-streams" % "1.0.0"
 
-  final val FlowVersion = "3.0.3"
-  val flow = "ch.jodersky" %% "flow-core" % FlowVersion
-  val flowNative = "ch.jodersky" % "flow-native" % FlowVersion % Runtime
-  val flowStream = "ch.jodersky" %% "flow-stream" % FlowVersion
-
   val jsDom = Def.setting{"org.scala-js" %%% "scalajs-dom" % "0.9.1"}
-  val scalatags = Def.setting{"com.lihaoyi" %%% "scalatags" % "0.6.1"}
+  val scalatags = Def.setting{"com.lihaoyi" %%% "scalatags" % "0.6.2"}
   val scalarx = Def.setting{"com.lihaoyi" %%% "scalarx" % "0.3.2"}
 
 }

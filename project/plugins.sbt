@@ -9,13 +9,13 @@ resolvers += Resolver.jcenterRepo
  */
 
 // add support for scalajs
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.13")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.14")
 
 // twirl html templating
-addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.1.1")
+addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.3.0")
 
 // generate MAVLink protocol bindings
-addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.7.0")
+addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.8.0-SNAPSHOT")
 
 
 /*

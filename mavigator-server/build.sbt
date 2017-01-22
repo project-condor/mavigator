@@ -8,7 +8,7 @@ libraryDependencies ++= Seq(
   Dependencies.akkaHttp,
   Dependencies.akkaHttpCore,
   Dependencies.akkaStream,
-  Dependencies.flowNative //FIXME runtime dependencies from uav are not included, is this an sbt bug?
+  Dependencies.akkaSerialNative //FIXME runtime dependencies from uav are not included, is this an sbt bug?
 )
 
 Js.dependsOnJs(MavigatorBuild.cockpit)
@@ -23,7 +23,7 @@ cancelable in Global := true
  */
 enablePlugins(DockerPlugin)
 
-val filter = ScopeFilter(
+lazy val filter = ScopeFilter(
   inAnyProject,
   inConfigurations(Compile)
 )
