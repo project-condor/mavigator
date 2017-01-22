@@ -15,7 +15,7 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.14")
 addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.3.0")
 
 // generate MAVLink protocol bindings
-addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.8.0-SNAPSHOT")
+addSbtPlugin("com.github.jodersky" % "sbt-mavlink" % "0.8.0")
 
 
 /*
