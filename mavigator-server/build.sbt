@@ -17,6 +17,15 @@ fork in run := true
 connectInput in run := true
 cancelable in Global := true
 
+import sbtassembly.AssemblyPlugin.defaultShellScript
+//assemblyOption in assembly := (assemblyOption in assembly).value.copy(prependShellScript = Some(defaultShellScript))
+assemblyJarName in assembly := "mavigator.jar"
+
+assemblyMergeStrategy in assembly := {
+  case "JS_DEPENDENCIES" => MergeStrategy.discard
+  case other => (assemblyMergeStrategy in assembly).value(other)
+}
+
 
 /*
  * Deployment configuration

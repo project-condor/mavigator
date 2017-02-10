@@ -1,0 +1,11 @@
+[Unit]
+Description=mavigator daemon
+
+[Service]
+ExecStart=/usr/bin/mavigator
+Restart=on-failure
+User=mavigator
+Group=mavigator
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec java -cp /usr/share/mavigator/lib/mavigator.jar:/etc/mavigator/application.conf mavigator.Main

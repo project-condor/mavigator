@@ -1,0 +1,20 @@
+Source: mavigator
+Section: java
+Priority: optional
+Maintainer: Jakob Odersky <jakob@odersky.com>
+Build-Depends: debhelper (>= 9), dh-systemd, openjdk-8-jdk-headless | jdk8, sbt
+Standards-Version: 3.9.8
+Vcs-Git: https://github.com/project-condor/mavigator.git
+Vcs-Browser: https://github.com/project-condor/mavigator.git
+
+Package: mavigator-bin
+Architecture: all
+Depends: ${misc:Depends}, openjdk-8-jre-headless | java8-runtime-headless
+Description: Virtual cockpit for a UAV
+ View telemetry from a drone in a modern web interface.
+
+Package: mavigator
+Architecture: all
+Depends: ${misc:Depends}, mavigator-bin, adduser
+Description: Virtual cockpit for a UAV (with systemd init scripts)
+ View telemetry from a drone in a modern web interface.
